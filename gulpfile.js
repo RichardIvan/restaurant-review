@@ -2,7 +2,7 @@ var gulp        = require('gulp');
 var browserSync = require('browser-sync').create();
 var proxyMiddleware = require('http-proxy-middleware');
 
-var proxy = proxyMiddleware('/journey', {target: 'http://localhost:9003'});
+var proxy = proxyMiddleware('/data', {target: 'http://localhost:9003'});
 
 // process JS files and return the stream.
 gulp.task('js', function () {

@@ -1,0 +1,12 @@
+:global(*) {
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+}
+
+:global(body) {
+  margin: 0;
+  font-family: 'Roboto-light', sans-serif;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

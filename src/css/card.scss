@@ -1,0 +1,136 @@
+.list-item {
+  list-style: none;
+}
+
+.list-item > div {
+  background-repeat: no-repeat;
+}
+
+.card-container {
+  position: relative;
+
+  height: 255px;
+
+  margin: 8px 8px 0 8px;
+  
+  color: #DEDEDE;
+
+}
+
+/* Rectangle 73: */
+.heading-container {
+  top: 24px;
+}
+
+.heading-container2 {
+  top: 80px;
+}
+
+.heading-container, .heading-container2 {
+  position: absolute;
+
+  left: 24px;
+
+  height: 48px;
+
+  margin: 0;
+  padding-top: 7px;
+  padding-left: 16px;
+}
+
+
+
+
+.heading-container h1, .heading-container2 h1 {
+  font-weight: 400;
+  margin: 0;
+  z-index: 1;
+}
+
+.address-container {
+  font-size: 14px;
+
+  position: absolute;
+
+  bottom: 30px;
+  left: 24px;
+
+  height: 48px;
+}
+
+.address-line1 {
+  top: 0px;
+}
+
+.address-line2 {
+  top: 33px;
+}
+
+.address-line1, .address-line2 {
+  position: absolute;
+
+  // left: 24px;
+
+  height: 30px;
+  width: 100%;
+  // width: 185px;
+
+  margin: 0;
+  padding-top: 4px;
+  padding-left: 8px;
+}
+
+.address-line1 h3, .address-line2 h3 {
+  font-weight: 400;
+  position: absolute;
+
+  // height: 100%;
+  width: auto;
+
+  margin: 0;
+  z-index: 1;
+  height: 30px;
+}
+
+.heading-background1, .heading-background2, h1 {
+  position: absolute;
+
+  // top: 24px;
+  // left: 24px;
+
+  height: 100%;
+  width: 90%;
+
+  // height: 48px;
+  // width: 288px;
+
+  margin-top: -7px;
+  margin-left: -16px;
+}
+
+.heading-background1, .address-heading-background1, .rating-backgroung1 {  
+  background-image: linear-gradient(90deg, #000000 100%, #000000 78%);
+  opacity: 0.4
+}
+.heading-background2, .address-heading-background2, .rating-backgroung2 {  
+  background-image: linear-gradient(90deg, #000000 0%, #D8D8D8 45%);
+  opacity: 0.3
+}
+
+.address-heading-background1, .address-heading-background2, h3 {
+  position: absolute;
+
+  // top: 24px;
+  // left: 24px;
+
+  height: 30px;
+  width: 100%;
+
+  // height: 48px;
+  // width: 288px;
+
+  margin-top: -4px;
+  margin-left: -8px;
+  // margin-top: -7px;
+  // margin-left: -16px;
+}

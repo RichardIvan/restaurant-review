@@ -1,3 +1,5 @@
+'use strict'
+
 var path = require('path')
 var webpack = require('webpack')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
@@ -6,7 +8,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   // devtool: 'source-map',
   entry: {
-    s: './src/js/sw.js',
+    s: './src/js/s.js',
     index: './src/js/index.js'
   },
   output: {

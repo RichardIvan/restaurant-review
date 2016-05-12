@@ -20,6 +20,7 @@ module.exports = {
     // 'dev-server': 'webpack-dev-server/client?http://localhost:8080',
     // 'dev-server': 'webpack-dev-server/client?http://localhost:8080/',
     // 'hot-dev-server': 'webpack/hot/dev-server',
+    s: './src/js/s.js',
     index: './src/js/index.js'
     // common: [
     //   'lodash'
@@ -27,7 +28,7 @@ module.exports = {
     // ]
   },
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, './dist'),
     filename: './js/[name].js' // Template based on keys in entry above
   },
   resolve: {
@@ -80,14 +81,8 @@ module.exports = {
       include: path.join(__dirname, 'src')
     },
     {
-      test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'
+      test: /\.(png|jpg|ttf)$/, loader: 'url-loader?limit=8192'
     }]
-  },
-  postcss: [
-    require('postcss-cssnext'),
-  ],
-  sassLoader: {
-    includePaths: [path.resolve(__dirname, 'src')]
   },
   // devServer: {
   //   contentBase: './dist',
@@ -95,12 +90,12 @@ module.exports = {
   //   quiet: false,
   //   noInfo: false,
   // },
-  externals: {
-    jquery: {
-      root: 'jQuery',
-      commonjs: 'jquery',
-      commonjs2: 'jquery',
-      amd: 'jquery'
-    }
-  }
+  // externals: {
+  //   jquery: {
+  //     root: 'jQuery',
+  //     commonjs: 'jquery',
+  //     commonjs2: 'jquery',
+  //     amd: 'jquery'
+  //   }
+  // }
 }

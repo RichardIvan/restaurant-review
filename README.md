@@ -4,7 +4,6 @@ Udacity project #no. 3 - Restaurant review project focusing on accessibility
 ## Features
 
 * Gulp and Webpack build system.
-* Crx packaging.
 * Live reloading.
 * ES6 via Babel.
 * Linting via ESLint.

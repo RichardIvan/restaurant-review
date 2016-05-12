@@ -31,10 +31,12 @@ app.use('/js/', express.static('prod/js/'))
 app.use('/css/', express.static('prod/css/'))
 
 app.get('/', function(req, res) {
+  console.log('/ REQUESTED')
   res.sendFile(path.join(__dirname + '/prod/index.html'));
 })
 
 app.get('/*.serviceworker.js', function(req, res) {
+  console.log('serviceworker requested')
   res.sendFile(path.join(__dirname + `/prod${req.originalUrl}`));
 })
 
@@ -42,12 +44,18 @@ app.get('/*.html', function(req, res) {
   res.sendFile(path.join(__dirname + `/prod${req.originalUrl}`));
 })
 
-const data = firebase.child('data').child('places').once('value').then((snap) => snap.val())
+const data = firebase.child('data').child('places').once('value')
+  .then((snap) => snap.val())
   .then((data) => {
     return _.map(data, (item) => item)
   })
 
 app.get('/data/', (req, res) => {
+  console.log('DATA REQUESTED')
+  // data.then((data) => {
+  //   console.log(data)
+  //   return data
+  // })
   data.then((data) => res.json(data))
 })
 

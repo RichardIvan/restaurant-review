@@ -109,6 +109,12 @@ const renderRating = function(stars) {
     ])
 }
 
+const handleCardClick = function() {
+  const ctrl = this;
+  ctrl.expanded(!ctrl.expanded())
+  m.redraw()
+}
+
 const Card = {
   controller(args) {
 
@@ -135,7 +141,7 @@ const Card = {
     while(starsArr.length < 5) {
       starsArr.push('empty')
     }
-    
+
     const sss = _.map(starsArr, (st) => {
       switch(st) {
         case 'full':
@@ -175,10 +181,10 @@ const Card = {
     }
   },
   view(ctrl, args) {
-    return m(`li.${style['list-item']}`, { key: args.id }, [
+    return m(`li.${style['list-item']}`, { key: args.id, onclick: handleCardClick.bind(ctrl) }, [
         m(`.${style['card-container']}`,  {
           style: {
-            backgroundImage: `url('${args.data.photos[0].prefix}395x255${args.data.photos[0].suffix}')`
+            backgroundImage: `url('${args.data.photos[0].prefix}${args.data.dimensions.card.width()}x${args.data.dimensions.card.height()}${args.data.photos[0].suffix}')`
           }
         }, [
 

@@ -1,13 +1,20 @@
 'use strict'
 
 import m from 'mithril'
+import _ from 'lodash'
 
 import style from '../../css/card.scss'
 
 //stores
 import DataStore from '../stores/data-store.js'
 
-import fullStar from '../../icons/full-star.js'
+
+// const fullStar = require('../../icons/rr_full_star.js')
+// import fullStar from 'mmsvg/google/msvg/action/accessibility'
+// const halfStar = 
+import fullStar from '../../icons/rr_full_star.js'
+import halfStar from '../../icons/rr_half_star.js'
+import emptyStar from '../../icons/rr_empty_star.js'
 
 //export it
 const getRandomImage = (photos) => {
@@ -18,7 +25,6 @@ const getRandomImage = (photos) => {
 const renderHeading = function() {
   const ctrl = this
   return [  
-            fullStar,
             m(`.${style['heading-container']}`, { style: { width: ctrl.lineOneWidth() } }, [
                 m('h1', { config: (el, inited) => {
                   if(!inited) {
@@ -51,7 +57,7 @@ const renderHeading = function() {
                 m('h1', { config: (el, inited) => {
                   if(!inited) {
                     const h1Width = el.offsetWidth + 60
-                    // ctrl.lineTwoWidth(`${h1Width}px`)
+                    ctrl.lineTwoWidth(`${h1Width}px`)
                   }
                 }, style: { width: 'auto' } }, ctrl.titleLine2()),
                 m(`.${style['heading-background1']}`),
@@ -60,50 +66,47 @@ const renderHeading = function() {
             //
 }
 
-const renderAddress = function() {
-  const ctrl = this;
+const renderAddress = function(ctrl) {
   return [
-
     m(`.${style['address-container']}`, { style: { width: ctrl.addressLineWidth() } }, [
-                m(`.${style['address-line1']}`, [
-                  m('h3', { config: (el, inited) => {
-                    if(!inited) {
-                      const addressWidth = el.offsetWidth + 25
-                      ctrl.addressLineOneWidth(addressWidth)
-                      // ctrl.addressLineWidth(`${addressWidth}px`)
-                    }
-                  } }, ctrl.address),
-                  m(`.${style['address-heading-background1']}`),
-                  m(`.${style['address-heading-background2']}`)
-                ]),
-                m(`.${style['address-line2']}`, [
-                  m('h3', { config: (el, inited) => {
-                    if(!inited) {
-                      const addressWidth = el.offsetWidth + 25
-                      if ( ctrl.addressLineOneWidth() <= addressWidth ) {
-                        ctrl.addressLineWidth(`${addressWidth}px`)
-                      } else ctrl.addressLineWidth(`${ctrl.addressLineOneWidth()}px`)
-                    }
-                  } }, ctrl.sortCode),
-                  m(`.${style['address-heading-background1']}`),
-                  m(`.${style['address-heading-background2']}`)
-                ])
-              ])
+          m(`.${style['address-line1']}`, [
+            m('h3', { config: (el, inited) => {
+              if(!inited) {
+                const addressWidth = el.offsetWidth + 25
+                ctrl.addressLineOneWidth(addressWidth)
+              }
+            } }, ctrl.address),
+            m(`.${style['address-heading-background1']}`),
+            m(`.${style['address-heading-background2']}`)
+          ]),
+          m(`.${style['address-line2']}`, [
+            m('h3', { config: (el, inited) => {
+              if(!inited) {
+                const addressWidth = el.offsetWidth + 25
+                if ( ctrl.addressLineOneWidth() <= addressWidth ) {
+                  ctrl.addressLineWidth(`${addressWidth}px`)
+                } else {
+                  ctrl.addressLineWidth(`${ctrl.addressLineOneWidth()}px`)
+                }
+              }
+            } }, ctrl.sortCode),
+            m(`.${style['address-heading-background1']}`),
+            m(`.${style['address-heading-background2']}`)
+          ])
+        ])
 
   ]
 }
 
-const renderRating = function() {
-  const ctrl = this
-  return [
-    m(`.${style['rating-container']}`, [
-      m(`.${style['stars-container']}`, [
-
-      ]),
+const renderRating = function(stars) {
+  return m(`.${style['rating-container']}`, [
+      m(`ul.${style['stars-container']}`,
+        _.map(stars, (item, i) => {
+          return m('li', { key: i }, item)
+        })),
       m(`.${style['rating-background1']}`),
-      m(`.${style['rating-background2']}`)
+      m(`.${style['rating-background2']}`) 
     ])
-  ]
 }
 
 const Card = {
@@ -124,28 +127,36 @@ const Card = {
 
     const rating = args.data.rating
     const fullStars = parseInt(rating, 10)
-    const remainder = (rating - fullStars).toFixed(1)
-    console.log(fullStars)
-    console.log(remainder)
-    const starsArr = new Array(fullStars).fill('full Star')
+    const remainder = ((rating - fullStars).toFixed(1))/1
+    const starsArr = new Array(fullStars).fill('full')
     if (remainder >= 0.5) {
-      starsArr.push('half Star')
+      starsArr.push('half')
     }
     while(starsArr.length < 5) {
-      starsArr.push('empty star')
+      starsArr.push('empty')
     }
+    
+    const sss = _.map(starsArr, (st) => {
+      switch(st) {
+        case 'full':
+          return fullStar
+        case 'half':
+          return halfStar
+        default:
+          return emptyStar
+      }
+    })
 
     // Bullet.on('IMAGE_SIZE_CHANGE', updateSize)
-    const title = m.prop(args.data.name);
+    const title = m.prop(args.data.name)
     const titleLine2 = m.prop('')
-
 
     const addressArr = args.data.address.split(',')
     const address = addressArr[0]
     const sortCode = addressArr[1]
 
-    let lineOneWidth = m.prop('100%')
-    let lineTwoWidth = m.prop('100%')
+    const lineOneWidth = m.prop('100%')
+    const lineTwoWidth = m.prop('100%')
 
     return {
       title,
@@ -157,14 +168,13 @@ const Card = {
       addressLineWidth: m.prop('100%'),
       addressLineOneWidth: m.prop(0),
 
-      stars: m.prop(starsArr),
+      rating: m.prop(args.data.rating),
+      stars: m.prop(sss),
 
       expanded: m.prop(false)
     }
   },
   view(ctrl, args) {
-    // console.log(args)
-    // set the size of the image from the size store
     return m(`li.${style['list-item']}`, { key: args.id }, [
         m(`.${style['card-container']}`,  {
           style: {
@@ -173,12 +183,11 @@ const Card = {
         }, [
 
             renderHeading.call(ctrl),
-            
-            ctrl.expanded() ? renderAddress.call(ctrl) : renderRating.call(ctrl),
+
+            ctrl.expanded() ? renderAddress(ctrl) : renderRating(ctrl.stars())
 
             // ctrl.expanded() ? '' : renderExpandButton.call(ctrl)
 
-            
           ])
       ])
   }

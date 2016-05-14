@@ -109,13 +109,19 @@ const renderRating = function(stars) {
     ])
 }
 
-const handleCardClick = function() {
-  const ctrl = this;
-  console.log(ctrl.hide)
-  console.log(ctrl.elementInfo.index)
-  ctrl.hide(ctrl.elementInfo.index)
-  ctrl.expanded(!ctrl.expanded())
-  m.redraw()
+const listItemConfig = function(el, inited) {
+  const ctrl = this
+  if(!inited) {
+    el.onclick = function() {
+      // rename to hideOthers
+      ctrl.hide(ctrl.elementInfo.index, el)
+
+      // run animation
+      ctrl.expanded(!ctrl.expanded())
+      m.redraw()
+      m.redraw()
+    }
+  }
 }
 
 const handleScroll = function(e) {
@@ -190,7 +196,7 @@ const Card = {
     }
   },
   view(ctrl, args) {
-    return m(`li.${style['list-item']}`, { key: args.id, onclick: handleCardClick.bind(ctrl), class: args.data.elementInfo.visible() ? style['visible'] : '' }, [
+    return m(`li.${style['list-item']}`, { key: args.id, config: listItemConfig.bind(ctrl), class: args.data.elementInfo.visible() ? style['visible'] : '' }, [
         m(`.${style['card-container']}`,  {
           style: {
             backgroundImage: `url('${args.data.photos[0].prefix}${args.data.dimensions.card.width()}x${args.data.dimensions.card.height()}${args.data.photos[0].suffix}')`

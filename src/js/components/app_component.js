@@ -2,9 +2,11 @@
 
 import m from 'mithril'
 import _ from 'lodash'
+import Velocity from 'velocity-animate'
 
 //components
 import Card from './card_component'
+import Details from './details_component'
 import style from '../../css/app.scss'
 
 window.onresize = function(e) {
@@ -105,9 +107,57 @@ const App = {
       })
       .then(m.redraw)
 
-    return {
+    const Ctrl = {
       restaurants: state().data,
-      hide(clickedElementIndex) {
+      selectedRestaurant: m.prop(''),
+      hide(clickedElementIndex, el) {
+
+        Ctrl.selectedRestaurant(Ctrl.restaurants()[clickedElementIndex])
+        const d = el.getBoundingClientRect()
+
+        console.log(d)
+        const top = d.top - 8
+        const width = d.width + 16
+        const height = d.height + 16
+
+        console.dir(el)
+
+
+        // el.style.top = `${top}px`
+        // el.style.top = `-${top}px`
+
+        //set ul to overflowHidden
+        let secondAnimationStarted = false
+        Velocity(
+          el,
+          {"translateY": -top},
+          { duration: 300,
+            delay: 300,
+            easing: [0.4, 0.0, 0.2, 1],
+            progress(a, b, c, d) {
+              if ( b > 0.70 && !secondAnimationStarted ) {
+                secondAnimationStarted = true
+                Velocity(
+                  [a[0], a[0]['firstChild']],
+                  {
+                    width: width,
+                    height: height,
+                    margin: 0
+                  },
+                  { duration: 300,
+                    delay: 0,
+                    easing: [0.4, 0.0, 0.2, 1],
+                    queue: false,
+                    complete() {
+                      el.style.position = 'fixed'
+                    }
+                  });
+              }
+            }
+          }
+        );
+        
+
         const array = state().data()
         const before = _.slice(array, 0, clickedElementIndex)
         const beforeLenght = before.length
@@ -157,12 +207,16 @@ const App = {
 
         // console.log(before)
         // console.log(after)
-      }
+      },
+      details: m.prop(true)
     }
+
+    return Ctrl
   },
   view(ctrl) {
     return m('.main-container', { config: config.bind(ctrl) }, [
-      m(`ul.${style['list-container']}`, { config: ulConfig }, [
+      // THIS WHOLE UL MIGHT BECOME A COMPONENT!
+      m(`ul.${style['list-container']}`, { config: ulConfig, style: { overflowY: ctrl.details() ? 'hidden' : 'scroll' } }, [
         _.map(ctrl.restaurants(), (restaurant) => {
           const data = {
             address: restaurant.address,
@@ -176,8 +230,9 @@ const App = {
           }
           return m.component(Card, { data })
         })
-      ])
-      
+      ]),
+      ctrl.details() ? m.component( Details, { restaurant: ctrl.selectedRestaurant(), dimensions: ctrl.dimensions } ) : ''
+      //HERE WE NEED A DETAIL COMPONENT AFTER ITEM BEING CLICKED
     ])
   }
 }

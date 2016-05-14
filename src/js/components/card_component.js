@@ -111,8 +111,15 @@ const renderRating = function(stars) {
 
 const handleCardClick = function() {
   const ctrl = this;
+  console.log(ctrl.hide)
+  console.log(ctrl.elementInfo.index)
+  ctrl.hide(ctrl.elementInfo.index)
   ctrl.expanded(!ctrl.expanded())
   m.redraw()
+}
+
+const handleScroll = function(e) {
+  console.log('scrollin')
 }
 
 const Card = {
@@ -177,11 +184,13 @@ const Card = {
       rating: m.prop(args.data.rating),
       stars: m.prop(sss),
 
-      expanded: m.prop(false)
+      expanded: m.prop(false),
+      hide: args.data.hide,
+      elementInfo: args.data.elementInfo
     }
   },
   view(ctrl, args) {
-    return m(`li.${style['list-item']}`, { key: args.id, onclick: handleCardClick.bind(ctrl) }, [
+    return m(`li.${style['list-item']}`, { key: args.id, onclick: handleCardClick.bind(ctrl), class: args.data.elementInfo.visible() ? style['visible'] : '' }, [
         m(`.${style['card-container']}`,  {
           style: {
             backgroundImage: `url('${args.data.photos[0].prefix}${args.data.dimensions.card.width()}x${args.data.dimensions.card.height()}${args.data.photos[0].suffix}')`

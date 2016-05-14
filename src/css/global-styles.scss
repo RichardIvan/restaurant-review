@@ -5,8 +5,17 @@
 }
 
 :global(body) {
+  
   margin: 0;
   font-family: 'Roboto-light', sans-serif;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  // overflow-y: hidden;
+  // overflow-x: hidden;
+}
+
+:global(body), :global(.main-container) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }

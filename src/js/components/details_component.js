@@ -2,6 +2,7 @@
 
 import m from 'mithril'
 import _ from 'lodash'
+import moment from 'moment'
 
 //styles
 import style from '../../css/details.scss'
@@ -116,7 +117,7 @@ export default {
               return m(`li.${style['review-item']}`, { key: review.author_name }, [
                 m(`.${style['line-one']}`, [
                   m('h4', review.author_name),
-                  m(`h4`, review.time) 
+                  m(`h4`, moment(review.time * 1000).format('DD/MM/YYYY')) 
                 ]),
                 m(`.${style['line-two']}`, [
                   m(`.${style['clear']}`),

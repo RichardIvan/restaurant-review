@@ -149,7 +149,9 @@ const App = {
                     easing: [0.4, 0.0, 0.2, 1],
                     queue: false,
                     complete() {
-                      el.style.position = 'fixed'
+                      // el.style.top = '0px';
+                      // el.style.position = 'fixed'
+                      Ctrl.detailsOpen(true)
                     }
                   });
               }
@@ -208,7 +210,7 @@ const App = {
         // console.log(before)
         // console.log(after)
       },
-      details: m.prop(true)
+      detailsOpen: m.prop(false)
     }
 
     return Ctrl
@@ -216,7 +218,7 @@ const App = {
   view(ctrl) {
     return m('.main-container', { config: config.bind(ctrl) }, [
       // THIS WHOLE UL MIGHT BECOME A COMPONENT!
-      m(`ul.${style['list-container']}`, { config: ulConfig, style: { overflowY: ctrl.details() ? 'hidden' : 'scroll' } }, [
+      m(`ul.${style['list-container']}`, { config: ulConfig, style: { overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll' } }, [
         _.map(ctrl.restaurants(), (restaurant) => {
           const data = {
             address: restaurant.address,
@@ -231,7 +233,7 @@ const App = {
           return m.component(Card, { data })
         })
       ]),
-      ctrl.details() ? m.component( Details, { restaurant: ctrl.selectedRestaurant(), dimensions: ctrl.dimensions } ) : ''
+      ctrl.detailsOpen() ? m.component( Details, { restaurant: ctrl.selectedRestaurant(), dimensions: ctrl.dimensions } ) : ''
       //HERE WE NEED A DETAIL COMPONENT AFTER ITEM BEING CLICKED
     ])
   }

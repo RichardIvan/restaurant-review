@@ -114,6 +114,7 @@ const listItemConfig = function(el, inited) {
   if(!inited) {
     el.onclick = function() {
       // rename to hideOthers
+      console.log(ctrl.elementInfo.index)
       ctrl.hide(ctrl.elementInfo.index, el)
 
       // run animation

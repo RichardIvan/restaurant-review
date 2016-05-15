@@ -79,19 +79,35 @@ const generateStars = (rating) => {
   return stars
 } 
 
+const toggleHoursSection = function(hoursOpen) {
+  console.log(hoursOpen(!hoursOpen()))
+}
+
 export default {
   controller(args) {
-
+    return {
+      hoursOpen: m.prop(false)
+    }
   },
   view(ctrl, args) {
     console.log(args)
     return m(`.${style['details']}`, { style: getStyle.call(null, args.dimensions) }, [
         // m(`.${style['ptoto']}`, { style: getPhotoStyle.call(null, args.dimensions) }),
-        m(`.${style['header']}`, [
-          m('h3', 'Reviews'),
-          m(`.${style['header-opening-hours']}`, [
-            m('h3', 'Opening Hours'),
-            m('.down-arrow', downArrowIcon)
+        m(`.${style['header']}`, { class: ctrl.hoursOpen() ? 'open' : '' }, [
+          m(`.${style['line-one']}`, [
+            m('h3', 'Reviews'),
+            m(`.${style['header-opening-hours']}`, { onclick: toggleHoursSection.bind(null, ctrl.hoursOpen) } ,[
+              m('h3', 'Opening Hours'),
+              m('.down-arrow', downArrowIcon)
+            ])
+          ]),
+          m(`.${style['opening-hours-section']}`, { class: ctrl.hoursOpen() ? 'visible' : '' } ,[
+            m(`ul.${style['opening-hours']}`, [
+              _.map(args.restaurant.opening_hours, (line) => {
+                return m(`li.${style['time']}`, line)
+              })
+            ]),
+            m(`.${style['clear']}`)
           ])
         ]),
         m(`.${style['reviews']}`, [

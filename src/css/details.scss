@@ -8,9 +8,46 @@
 
 .details .header {
   position: relative;
-  height: 48px;
+  min-height: 48px;
+  max-height: 48px;
   width: 100%;
   border-bottom: 0.5px solid rgba( 151, 151, 151, 0.5);
+  transition: 0.35s max-height cubic-bezier(0.4, 0.0, 0.2, 1);
+
+  overflow-y: hidden;
+}
+
+.details .header:global(.open) {
+  max-height: 1000px;
+  transition: 0.35s max-height cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.header .line-one {
+  height: 48px;
+}
+
+.header .opening-hours-section {
+  
+  padding: 0 16px;
+  transition-delay: 0s;
+  transition: 0.3s opacity cubic-bezier(0.4, 0.0, 0.2, 1);
+  opacity: 0;
+
+  ul {
+    list-style: none;
+    display: block;
+    position: relative;
+    margin: 0px 0 8px 0;
+    text-align: center;
+    line-height: 24px;
+  }
+
+}
+
+.header .opening-hours-section:global(.visible) {
+  opacity: 1;
+  transition-delay: 0.9s;
+  transition: .6s opacity cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .header h3 {
@@ -59,7 +96,7 @@
   display: inline-block;
 }
 
-.line-one {
+.review-item .line-one {
   // margin-top: 9px;
   position: relative;
 

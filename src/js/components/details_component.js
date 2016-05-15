@@ -142,10 +142,10 @@ const reviewItemConfig = function(el, inited) {
     const children = el.children
     const childrenLenght = children.length
 
-    var i = 0;                     //  set your counter to 1
+    var i = 0
 
-    function afterLoop () {           //  create a loop function
-       setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+    function loop () {
+       setTimeout(function () {
           Velocity(
             children[i],
             {
@@ -153,20 +153,16 @@ const reviewItemConfig = function(el, inited) {
             },
             {
               duration: '300ms',
-              // stagger: '300ms',
             }
           )
-          i++;            //  your code here
-                              //  increment the counter
-          if (i < childrenLenght) {            //  if the counter < 10, call the loop function
-             afterLoop();             //  ..  again which will trigger another 
-          }                        //  ..  setTimeout()
+          i++
+          if (i < childrenLenght) {
+            loop()
+          }
        }, 75)
-       // m.redraw()
     }
 
-    afterLoop();
-    
+    loop()
   }
 }
 

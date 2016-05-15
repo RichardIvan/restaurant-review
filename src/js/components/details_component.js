@@ -98,7 +98,7 @@ export default {
             m('h3', 'Reviews'),
             m(`.${style['header-opening-hours']}`, { onclick: toggleHoursSection.bind(null, ctrl.hoursOpen) } ,[
               m('h3', 'Opening Hours'),
-              m('.down-arrow', downArrowIcon)
+              m(`.${style['down-arrow']}`, { class: ctrl.hoursOpen() ? 'open' : '' } ,downArrowIcon)
             ])
           ]),
           m(`.${style['opening-hours-section']}`, { class: ctrl.hoursOpen() ? 'visible' : '' } ,[

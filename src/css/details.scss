@@ -74,9 +74,22 @@
   
   height: 17px;
   width: 17px;
+}
 
-  top: 15px;
-  right: 15px;
+.header-opening-hours .down-arrow {
+  position: absolute;
+  height: 17px;
+  width: 17px;
+
+  top: 16px;
+  right: 16px;
+  transform:rotate( -0deg );
+  transition: transform 300ms ease;
+}
+
+.header-opening-hours .down-arrow:global(.open) {
+  transform:rotate( 180deg );
+  transition: transform 300ms ease;
 }
 
 .reviews {

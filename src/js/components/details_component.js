@@ -5,6 +5,8 @@ import _ from 'lodash'
 import moment from 'moment'
 import Velocity from 'velocity-animate'
 
+import runDelayedLoop from '../../js/helpers/delayed-loop.js'
+
 //styles
 import style from '../../css/details.scss'
 
@@ -160,7 +162,7 @@ const closeButtonHandler = function() {
       easing: [0.4, 0.0, 0.2, 1],
       complete() {
         ctrl.expanded(false)
-        ctrl.runDelayedLoop(ctrl.restaurants, ctrl.restaurant.elementInfo.index, true)
+        runDelayedLoop(ctrl.restaurants, ctrl.restaurant.elementInfo.index, true)
       }
     }
   )

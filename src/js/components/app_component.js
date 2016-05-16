@@ -4,6 +4,9 @@ import m from 'mithril'
 import _ from 'lodash'
 import Velocity from 'velocity-animate'
 
+//helpers
+import runDelayedLoop from '../../js/helpers/delayed-loop.js'
+
 //components
 import Card from './card_component'
 import Details from './details_component'
@@ -84,47 +87,6 @@ const ulConfig = function(el, inited) {
       requestTick()
     }
   }
-}
-
-const runDelayedLoop = function(data, index, status) {
-  const array = data
-  const before = _.slice(array, 0, index)
-  const beforeLenght = before.length
-  const after = _.slice(array, index)
-  const afterLenght = after.length
-
-  var bi = beforeLenght - 1 ;                     //  set your counter to 1
-
-  function beforeLoop () {           //  create a loop function
-     setTimeout(function () {    //  call a 3s setTimeout when the loop is called
-        before[bi].elementInfo.visible(status)  
-        m.redraw()
-        bi--;                     //  increment the counter
-        if (bi >= 0 ) {            //  if the counter < 10, call the loop function
-           beforeLoop();             //  ..  again which will trigger another 
-        }                        //  ..  setTimeout()
-     }, 75)
-     
-  }
-
-  beforeLoop();  
-
-  var ai = 1;                     //  set your counter to 1
-
-  function afterLoop () {           //  create a loop function
-     setTimeout(function () {    //  call a 3s setTimeout when the loop is called
-        after[ai].elementInfo.visible(status)
-        m.redraw()
-        ai++;            //  your code here
-                            //  increment the counter
-        if (ai < afterLenght) {            //  if the counter < 10, call the loop function
-           afterLoop();             //  ..  again which will trigger another 
-        }                        //  ..  setTimeout()
-     }, 75)
-     // m.redraw()
-  }
-
-  afterLoop();
 }
 
 const App = {
@@ -246,8 +208,7 @@ const App = {
         element: ctrl.selectedEl,
         originalDimensions: ctrl.originalDimensions,
         expanded: ctrl.expanded,
-        detailsOpen: ctrl.detailsOpen,
-        runDelayedLoop: ctrl.runDelayedLoop
+        detailsOpen: ctrl.detailsOpen
       } ) : ''
       //HERE WE NEED A DETAIL COMPONENT AFTER ITEM BEING CLICKED
     ])

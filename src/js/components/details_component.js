@@ -177,51 +177,53 @@ export default {
   },
   view(ctrl, args) {
     console.log(args)
-    return m(`.${style['details']}`, { style: getStyle.call(null, args.dimensions) }, [
-        // m(`.${style['ptoto']}`, { style: getPhotoStyle.call(null, args.dimensions) }),
-        m(`.${style['header']}`, { style: { opacity: 0 }, class: ctrl.hoursOpen() ? 'open' : '', config: headerConfig }, [
-          m(`.${style['line-one']}`, [
-            m('h3', 'Reviews'),
-            m(`.${style['header-opening-hours']}`, { onclick: toggleHoursSection.bind(null, ctrl.hoursOpen) } ,[
-              m('h3', 'Opening Hours'),
-              m(`.${style['down-arrow']}`, { class: ctrl.hoursOpen() ? 'open' : '' } ,downArrowIcon)
+    return m(`.${style['photo']}`, [
+        m(`.${style['details']}`, { style: getStyle.call(null, args.dimensions) }, [
+          // m(`.${style['ptoto']}`, { style: getPhotoStyle.call(null, args.dimensions) }),
+          m(`.${style['header']}`, { style: { opacity: 0 }, class: ctrl.hoursOpen() ? 'open' : '', config: headerConfig }, [
+            m(`.${style['line-one']}`, [
+              m('h3', 'Reviews'),
+              m(`.${style['header-opening-hours']}`, { onclick: toggleHoursSection.bind(null, ctrl.hoursOpen) } ,[
+                m('h3', 'Opening Hours'),
+                m(`.${style['down-arrow']}`, { class: ctrl.hoursOpen() ? 'open' : '' } ,downArrowIcon)
+              ])
+            ]),
+            m(`.${style['opening-hours-section']}`, { class: ctrl.hoursOpen() ? 'visible' : '' } ,[
+              m(`ul.${style['opening-hours']}`, [
+                _.map(args.restaurant.opening_hours, (line) => {
+                  return m(`li.${style['time']}`, line)
+                })
+              ]),
+              m(`.${style['clear']}`)
             ])
           ]),
-          m(`.${style['opening-hours-section']}`, { class: ctrl.hoursOpen() ? 'visible' : '' } ,[
-            m(`ul.${style['opening-hours']}`, [
-              _.map(args.restaurant.opening_hours, (line) => {
-                return m(`li.${style['time']}`, line)
-              })
-            ]),
-            m(`.${style['clear']}`)
-          ])
-        ]),
-        m(`.${style['reviews']}`, [
-          m(`ul.${style['reviews-container']}`, { config: reviewItemConfig } ,[
-            _.map(args.restaurant.reviews, (review) => {
-              return m(`li.${style['review-item']}.single-review`, { key: review.author_name, style: { opacity: 0 } }, [
-                m(`.${style['line-one']}`, [
-                  m('h4', review.author_name),
-                  m(`h4`, moment(review.time * 1000).format('DD/MM/YYYY')) 
-                ]),
-                m(`.${style['line-two']}`, [
-                  m(`.${style['clear']}`),
-                  m(`ul.${style['user-stars']}`, _.map(generateStars(review.rating), (star, i) => {
-                    switch(star) {
-                      case true:
-                        return m(`li.${style['star']}`, { key: i } ,fullStar)
-                      case false:
-                        return m(`li.${style['star']}`, { key: i } ,emptyStar)
-                    }
-                  })),
-                  m(`p`, review.text) 
+          m(`.${style['reviews']}`, [
+            m(`ul.${style['reviews-container']}`, { config: reviewItemConfig } ,[
+              _.map(args.restaurant.reviews, (review) => {
+                return m(`li.${style['review-item']}.single-review`, { key: review.author_name, style: { opacity: 0 } }, [
+                  m(`.${style['line-one']}`, [
+                    m('h4', review.author_name),
+                    m(`h4`, moment(review.time * 1000).format('DD/MM/YYYY')) 
+                  ]),
+                  m(`.${style['line-two']}`, [
+                    m(`.${style['clear']}`),
+                    m(`ul.${style['user-stars']}`, _.map(generateStars(review.rating), (star, i) => {
+                      switch(star) {
+                        case true:
+                          return m(`li.${style['star']}`, { key: i } ,fullStar)
+                        case false:
+                          return m(`li.${style['star']}`, { key: i } ,emptyStar)
+                      }
+                    })),
+                    m(`p`, review.text) 
+                  ])
                 ])
-              ])
-            })
-          ])
-        ]),
-        m(`.${style['close-button']}`, { onclick: closeButtonHandler.bind(args) }),
-        m(`.${style['close-icon']}`, closeIcon)
+              })
+            ])
+          ]),
+          m(`.${style['close-button']}`, { onclick: closeButtonHandler.bind(args) }),
+          m(`.${style['close-icon']}`, closeIcon)
+        ])
       ])
   }
 }

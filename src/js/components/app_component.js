@@ -184,17 +184,7 @@ const App = {
           width: d.width
         })
 
-        console.log(d)
-        console.log(od())
         const top = d.top - 8
-        const width = d.width + 16
-        const height = d.height + 16
-
-        console.dir(el)
-
-
-        // el.style.top = `${top}px`
-        // el.style.top = `-${top}px`
 
         //set ul to overflowHidden
         let secondAnimationStarted = false
@@ -204,33 +194,26 @@ const App = {
             "translateY": -top
           },
           { duration: 300,
-            delay: 300,
-            easing: [0.4, 0.0, 0.2, 1],
-            progress(a, b, c, d) {
-              if ( b > 0.70 && !secondAnimationStarted ) {
-                secondAnimationStarted = true
-                Velocity(
-                  [a[0]['firstChild']],
-                  {
-                    margin: 0
-                  },
-                  { duration: 300,
-                    delay: 0,
-                    easing: [0.4, 0.0, 0.2, 1],
-                    queue: false,
-                    complete() {
-                      // el.style.top = '0px';
-                      // el.style.position = 'fixed'
-                      Ctrl.detailsOpen(true)
-                      console.log(Ctrl.originalDimensions())
-                    }
-                  });
-              }
-            }
+            delay: 500,
+            easing: [0.4, 0.0, 0.2, 1]
           }
-        );
+        )
+        Velocity(
+          el['firstChild'],
+          {
+            margin: 0
+          },
+          { duration: 300,
+            delay: 600,
+            easing: [0.4, 0.0, 0.2, 1],
+            queue: false,
+            complete() {
+              Ctrl.detailsOpen(true)
+            }
+          });
         
         runDelayedLoop(state().data(), clickedElementIndex, false)
+
       },
       detailsOpen: m.prop(false),
       runDelayedLoop: runDelayedLoop

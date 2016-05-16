@@ -169,6 +169,7 @@
   top: -50px;
   right: -100px;
   transform: rotate(45deg);
+  z-index: 3;
 }
 
 .close-icon {
@@ -176,4 +177,13 @@
   top: 8px;
   right: 8px;
   fill: rgba(64, 64, 64, 0.5);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.photo {
+  height: 100%;
+  z-index: 2;
+  position: relative;
+  overflow-y: scroll;
 }

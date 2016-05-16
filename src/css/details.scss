@@ -160,3 +160,20 @@
   height: 0px;
   line-height:0px;
 }
+
+.close-button {
+  position: fixed;
+  background: white;
+  width: 200px;
+  height: 100px;
+  top: -50px;
+  right: -100px;
+  transform: rotate(45deg);
+}
+
+.close-icon {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  fill: rgba(64, 64, 64, 0.5);
+}

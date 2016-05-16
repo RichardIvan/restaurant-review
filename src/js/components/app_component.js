@@ -86,6 +86,47 @@ const ulConfig = function(el, inited) {
   }
 }
 
+const runDelayedLoop = function(data, index, status) {
+  const array = data
+  const before = _.slice(array, 0, index)
+  const beforeLenght = before.length
+  const after = _.slice(array, index)
+  const afterLenght = after.length
+
+  var bi = beforeLenght - 1 ;                     //  set your counter to 1
+
+  function beforeLoop () {           //  create a loop function
+     setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+        before[bi].elementInfo.visible(status)  
+        m.redraw()
+        bi--;                     //  increment the counter
+        if (bi >= 0 ) {            //  if the counter < 10, call the loop function
+           beforeLoop();             //  ..  again which will trigger another 
+        }                        //  ..  setTimeout()
+     }, 75)
+     
+  }
+
+  beforeLoop();  
+
+  var ai = 1;                     //  set your counter to 1
+
+  function afterLoop () {           //  create a loop function
+     setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+        after[ai].elementInfo.visible(status)
+        m.redraw()
+        ai++;            //  your code here
+                            //  increment the counter
+        if (ai < afterLenght) {            //  if the counter < 10, call the loop function
+           afterLoop();             //  ..  again which will trigger another 
+        }                        //  ..  setTimeout()
+     }, 75)
+     // m.redraw()
+  }
+
+  afterLoop();
+}
+
 const App = {
   controller() {
     const state = m.prop({
@@ -107,15 +148,44 @@ const App = {
       })
       .then(m.redraw)
 
+    const od = m.prop('')
+
     const Ctrl = {
       restaurants: state().data,
       selectedRestaurant: m.prop(''),
+      selectedEl: m.prop(''),
+      originalDimensions: od,
       hide(clickedElementIndex, el) {
 
+
+        // this is a controller from a card
+        const ctrl = this
+
+        console.log(ctrl.expanded())
+
+        if(ctrl.expanded())
+          return
+
+        ctrl.expanded(!ctrl.expanded())
+        m.redraw()
+        m.redraw()
+
         Ctrl.selectedRestaurant(Ctrl.restaurants()[clickedElementIndex])
+        Ctrl.selectedEl(el)
+        Ctrl.expanded = ctrl.expanded
         const d = el.getBoundingClientRect()
 
+        od({
+          bottom: d.bottom,
+          height: d.height,
+          left: d.left,
+          right: d.right,
+          top: d.top,
+          width: d.width
+        })
+
         console.log(d)
+        console.log(od())
         const top = d.top - 8
         const width = d.width + 16
         const height = d.height + 16
@@ -130,7 +200,9 @@ const App = {
         let secondAnimationStarted = false
         Velocity(
           el,
-          {"translateY": -top},
+          {
+            "translateY": -top
+          },
           { duration: 300,
             delay: 300,
             easing: [0.4, 0.0, 0.2, 1],
@@ -138,10 +210,8 @@ const App = {
               if ( b > 0.70 && !secondAnimationStarted ) {
                 secondAnimationStarted = true
                 Velocity(
-                  [a[0], a[0]['firstChild']],
+                  [a[0]['firstChild']],
                   {
-                    width: width,
-                    height: height,
                     margin: 0
                   },
                   { duration: 300,
@@ -152,6 +222,7 @@ const App = {
                       // el.style.top = '0px';
                       // el.style.position = 'fixed'
                       Ctrl.detailsOpen(true)
+                      console.log(Ctrl.originalDimensions())
                     }
                   });
               }
@@ -159,58 +230,10 @@ const App = {
           }
         );
         
-
-        const array = state().data()
-        const before = _.slice(array, 0, clickedElementIndex)
-        const beforeLenght = before.length
-        const after = _.slice(array, clickedElementIndex)
-        const afterLenght = after.length
-
-        var bi = beforeLenght - 1 ;                     //  set your counter to 1
-
-        // (function myLoop (i) {          
-        //    setTimeout(function () {   
-        //       before[i].elementInfo.visible(false)          //  your code here                
-        //       m.redraw()
-        //       if (--i) myLoop(i);      //  decrement i and call myLoop again if i > 0
-        //    }, 100)
-        // })(beforeLenght); 
-
-        function beforeLoop () {           //  create a loop function
-           setTimeout(function () {    //  call a 3s setTimeout when the loop is called
-              before[bi].elementInfo.visible(false)  
-              m.redraw()
-              bi--;                     //  increment the counter
-              if (bi >= 0 ) {            //  if the counter < 10, call the loop function
-                 beforeLoop();             //  ..  again which will trigger another 
-              }                        //  ..  setTimeout()
-           }, 75)
-           
-        }
-
-        beforeLoop();  
-
-        var ai = 1;                     //  set your counter to 1
-
-        function afterLoop () {           //  create a loop function
-           setTimeout(function () {    //  call a 3s setTimeout when the loop is called
-              after[ai].elementInfo.visible(false)
-              m.redraw()
-              ai++;            //  your code here
-                                  //  increment the counter
-              if (ai < afterLenght) {            //  if the counter < 10, call the loop function
-                 afterLoop();             //  ..  again which will trigger another 
-              }                        //  ..  setTimeout()
-           }, 75)
-           // m.redraw()
-        }
-
-        afterLoop();   
-
-        // console.log(before)
-        // console.log(after)
+        runDelayedLoop(state().data(), clickedElementIndex, false)
       },
-      detailsOpen: m.prop(false)
+      detailsOpen: m.prop(false),
+      runDelayedLoop: runDelayedLoop
     }
 
     return Ctrl
@@ -233,7 +256,16 @@ const App = {
           return m.component(Card, { data })
         })
       ]),
-      ctrl.detailsOpen() ? m.component( Details, { restaurant: ctrl.selectedRestaurant(), dimensions: ctrl.dimensions } ) : ''
+      ctrl.detailsOpen() ? m.component( Details, {
+        restaurants: ctrl.restaurants(),
+        restaurant: ctrl.selectedRestaurant(),
+        dimensions: ctrl.dimensions,
+        element: ctrl.selectedEl,
+        originalDimensions: ctrl.originalDimensions,
+        expanded: ctrl.expanded,
+        detailsOpen: ctrl.detailsOpen,
+        runDelayedLoop: ctrl.runDelayedLoop
+      } ) : ''
       //HERE WE NEED A DETAIL COMPONENT AFTER ITEM BEING CLICKED
     ])
   }

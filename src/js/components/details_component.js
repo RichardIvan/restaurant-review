@@ -12,6 +12,7 @@ import style from '../../css/details.scss'
 import downArrowIcon from '../../icons/rr_down_arrow.js'
 import fullStar from '../../icons/rr_review_full_star.js'
 import emptyStar from '../../icons/rr_review_empty_star.js'
+import closeIcon from 'mmsvg/google/msvg/content/clear'
 
 const getStyle = function(d) {
   if (!d)
@@ -30,8 +31,6 @@ const getStyle = function(d) {
 
   const zIndex = 1
 
-  
-
   return {
     position,
     height,
@@ -41,36 +40,6 @@ const getStyle = function(d) {
     background
   }
 }
-
-// const getPhotoStyle = (d) => {
-
-//   if (!d)
-//     return
-
-//   const dimensions = d
-
-//   const position = 'absolute'
-//   // const height = `${dimensions.card.height() + 16}px`
-//   const height = `${dimensions.card.height()}px`
-//   const width = `100%`
-//   // const top = 0
-//   const top = `-${dimensions.card.height()}px`
-
-//   // TODO - DELETE
-//   const background = 'white'
-
-//   const zIndex = 1
-
-//   return {
-//     position,
-//     height,
-//     width,
-//     top,
-//     zIndex,
-//     background
-//   }
-
-// }
 
 const generateStars = (rating) => {
 
@@ -166,13 +135,48 @@ const reviewItemConfig = function(el, inited) {
   }
 }
 
+const closeButtonHandler = function() {
+
+  const ctrl = this
+
+  this.detailsOpen(false)
+
+  const el = this.element()
+  
+  Velocity(
+    [el.firstChild],
+    {
+      margin: '8px 8px 0px 8px'
+    },
+    { duration: 300,
+      delay: 0,
+      easing: [0.4, 0.0, 0.2, 1]
+    });
+  Velocity(
+    el,
+    { 'translateY': 0 },
+    { duration: 300,
+      delay: 300,
+      easing: [0.4, 0.0, 0.2, 1],
+      complete() {
+        ctrl.expanded(false)
+        ctrl.runDelayedLoop(ctrl.restaurants, ctrl.restaurant.elementInfo.index, true)
+      }
+    }
+  )
+}
+
 export default {
   controller(args) {
     return {
-      hoursOpen: m.prop(false)
+      hoursOpen: m.prop(false),
+      onunload(el, inited, context) {
+        console.log(el)
+      }
     }
   },
   view(ctrl, args) {
+    console.log(args)
     return m(`.${style['details']}`, { style: getStyle.call(null, args.dimensions) }, [
         // m(`.${style['ptoto']}`, { style: getPhotoStyle.call(null, args.dimensions) }),
         m(`.${style['header']}`, { style: { opacity: 0 }, class: ctrl.hoursOpen() ? 'open' : '', config: headerConfig }, [
@@ -213,10 +217,11 @@ export default {
                   m(`p`, review.text) 
                 ])
               ])
-              console.log(review)
             })
           ])
-        ])
+        ]),
+        m(`.${style['close-button']}`, { onclick: closeButtonHandler.bind(args) }),
+        m(`.${style['close-icon']}`, closeIcon)
       ])
   }
 }

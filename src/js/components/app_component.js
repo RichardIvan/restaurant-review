@@ -10,6 +10,9 @@ import runDelayedLoop from '../../js/helpers/delayed-loop.js'
 //components
 import Card from './card_component'
 import Details from './details_component'
+import Filter from './filter_component'
+
+//style
 import style from '../../css/app.scss'
 
 window.onresize = function(e) {
@@ -40,54 +43,54 @@ const config = function(el, init) {
   }
 }
 
-const scrollHandler = function(e) {
-  console.log( 'scrollin' )
-  console.log(e)
-}
-
-var latestKnownScrollY = 0;
-
-function update() {
-  // reset the tick so we can
-  // capture the next onScroll
-  ticking = false;
-
-  var currentScrollY = latestKnownScrollY;
-
-
-  console.log(currentScrollY)
-  // read offset of DOM elements
-  // and compare to the currentScrollY value
-  // then apply some CSS classes
-  // to the visible items
-}
-
-// kick off - no longer needed! Woo.
-// update();
-
-var latestKnownScrollY = 0,
-  ticking = false;
-
-// function onScroll() {
-//   latestKnownScrollY = window.scrollY;
-//   requestTick();
+// const scrollHandler = function(e) {
+//   console.log( 'scrollin' )
+//   console.log(e)
 // }
 
-function requestTick() {
-  if(!ticking) {
-    requestAnimationFrame(update);
-  }
-  ticking = true;
-}
+// var latestKnownScrollY = 0;
 
-const ulConfig = function(el, inited) {
-  if(!inited) {
-    el.onscroll = function(e) {
-      latestKnownScrollY = el.scrollTop
-      requestTick()
-    }
-  }
-}
+// function update() {
+//   // reset the tick so we can
+//   // capture the next onScroll
+//   ticking = false;
+
+//   var currentScrollY = latestKnownScrollY;
+
+
+//   console.log(currentScrollY)
+//   // read offset of DOM elements
+//   // and compare to the currentScrollY value
+//   // then apply some CSS classes
+//   // to the visible items
+// }
+
+// // kick off - no longer needed! Woo.
+// // update();
+
+// var latestKnownScrollY = 0,
+//   ticking = false;
+
+// // function onScroll() {
+// //   latestKnownScrollY = window.scrollY;
+// //   requestTick();
+// // }
+
+// function requestTick() {
+//   if(!ticking) {
+//     requestAnimationFrame(update);
+//   }
+//   ticking = true;
+// }
+
+// const ulConfig = function(el, inited) {
+//   if(!inited) {
+//     el.onscroll = function(e) {
+//       latestKnownScrollY = el.scrollTop
+//       requestTick()
+//     }
+//   }
+// }
 
 const runAnimation = function(el, top) {
   //this is Ctrl of app_component
@@ -181,7 +184,8 @@ const App = {
   view(ctrl) {
     return m('.main-container', { config: config.bind(ctrl) }, [
       // THIS WHOLE UL MIGHT BECOME A COMPONENT!
-      m(`ul.${style['list-container']}`, { config: ulConfig, style: { overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll' } }, [
+      // config: ulConfig,
+      m(`ul.${style['list-container']}`, {  style: { overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll' } }, [
         _.map(ctrl.restaurants(), (restaurant) => {
           const data = {
             address: restaurant.address,
@@ -204,7 +208,8 @@ const App = {
         originalDimensions: ctrl.originalDimensions,
         expanded: ctrl.expanded,
         detailsOpen: ctrl.detailsOpen
-      } ) : ''
+      } ) : '',
+      m.component( Filter, { restaurants: ctrl.restaurants } )
       //HERE WE NEED A DETAIL COMPONENT AFTER ITEM BEING CLICKED
     ])
   }

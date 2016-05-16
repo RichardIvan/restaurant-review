@@ -89,6 +89,36 @@ const ulConfig = function(el, inited) {
   }
 }
 
+const runAnimation = function(el, top) {
+  //this is Ctrl of app_component
+  const ctrl = this
+
+  Velocity(
+    el,
+    {
+      "translateY": -top
+    },
+    { duration: 300,
+      delay: 500,
+      easing: [0.4, 0.0, 0.2, 1]
+    }
+  )
+  Velocity(
+    el['firstChild'],
+    {
+      margin: 0
+    },
+    { duration: 300,
+      delay: 600,
+      easing: [0.4, 0.0, 0.2, 1],
+      queue: false,
+      complete() {
+        ctrl.detailsOpen(true)
+      }
+    }
+  )
+}
+
 const App = {
   controller() {
     const state = m.prop({
@@ -110,20 +140,15 @@ const App = {
       })
       .then(m.redraw)
 
-    const od = m.prop('')
-
     const Ctrl = {
       restaurants: state().data,
       selectedRestaurant: m.prop(''),
       selectedEl: m.prop(''),
-      originalDimensions: od,
       hide(clickedElementIndex, el) {
 
 
         // this is a controller from a card
         const ctrl = this
-
-        console.log(ctrl.expanded())
 
         if(ctrl.expanded())
           return
@@ -134,45 +159,15 @@ const App = {
 
         Ctrl.selectedRestaurant(Ctrl.restaurants()[clickedElementIndex])
         Ctrl.selectedEl(el)
+
+        //copying expanded property so it is accessible in details component when passed
         Ctrl.expanded = ctrl.expanded
+
+
         const d = el.getBoundingClientRect()
+        const top = d.top
 
-        od({
-          bottom: d.bottom,
-          height: d.height,
-          left: d.left,
-          right: d.right,
-          top: d.top,
-          width: d.width
-        })
-
-        const top = d.top - 8
-
-        //set ul to overflowHidden
-        let secondAnimationStarted = false
-        Velocity(
-          el,
-          {
-            "translateY": -top
-          },
-          { duration: 300,
-            delay: 500,
-            easing: [0.4, 0.0, 0.2, 1]
-          }
-        )
-        Velocity(
-          el['firstChild'],
-          {
-            margin: 0
-          },
-          { duration: 300,
-            delay: 600,
-            easing: [0.4, 0.0, 0.2, 1],
-            queue: false,
-            complete() {
-              Ctrl.detailsOpen(true)
-            }
-          });
+        runAnimation.call(Ctrl, el, top)
         
         runDelayedLoop(state().data(), clickedElementIndex, false)
 

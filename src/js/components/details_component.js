@@ -26,7 +26,7 @@ const getStyle = function(d) {
   // const height = `${dimensions.card.height() + 16}px`
   const height = `calc(100% - ${dimensions.card.height()}px)`
   const width = `100%`
-  const top = `${dimensions.card.height()}px`
+  const top = `${dimensions.card.height() - 8}px`
 
   // TODO - DELETE
   const background = 'white'
@@ -43,7 +43,7 @@ const getStyle = function(d) {
   }
 }
 
-const generateStars = (rating) => {
+const renderStars = (rating) => {
 
   const stars = new Array(rating).fill(true)
 
@@ -158,7 +158,7 @@ const closeButtonHandler = function() {
     el,
     { 'translateY': 0 },
     { duration: 300,
-      delay: 300,
+      delay: 100,
       easing: [0.4, 0.0, 0.2, 1],
       complete() {
         ctrl.expanded(false)
@@ -209,7 +209,7 @@ export default {
                   ]),
                   m(`.${style['line-two']}`, [
                     m(`.${style['clear']}`),
-                    m(`ul.${style['user-stars']}`, _.map(generateStars(review.rating), (star, i) => {
+                    m(`ul.${style['user-stars']}`, _.map(renderStars(review.rating), (star, i) => {
                       switch(star) {
                         case true:
                           return m(`li.${style['star']}`, { key: i } ,fullStar)

@@ -5,6 +5,13 @@ import _ from 'lodash'
 
 export default function(data, index, status) {
   const array = data
+  const lastIndex = array.length - 1
+
+  console.log('INDEX')
+  console.log(index)
+  console.log('LAST INDEX')
+  console.log(lastIndex)
+
   const before = _.slice(array, 0, index)
   const beforeLenght = before.length
   const after = _.slice(array, index)
@@ -23,7 +30,8 @@ export default function(data, index, status) {
      }, 75)
   }
 
-  beforeLoop()  
+  if (index !== 0)
+    beforeLoop()  
 
   var ai = 1
 
@@ -38,5 +46,6 @@ export default function(data, index, status) {
      }, 75)
   }
 
-  afterLoop()
+  if(index !== lastIndex)
+    afterLoop()
 }

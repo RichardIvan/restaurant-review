@@ -162,7 +162,8 @@ const closeButtonHandler = function() {
       easing: [0.4, 0.0, 0.2, 1],
       complete() {
         ctrl.expanded(false)
-        runDelayedLoop(ctrl.restaurants, ctrl.restaurant.elementInfo.index, true)
+        runDelayedLoop(ctrl.restaurants(), ctrl.currentElementIndex(), true)
+        m.redraw()
       }
     }
   )
@@ -186,12 +187,12 @@ export default {
               m('h3', 'Reviews'),
               m(`.${style['header-opening-hours']}`, { onclick: toggleHoursSection.bind(null, ctrl.hoursOpen) } ,[
                 m('h3', 'Opening Hours'),
-                m(`.${style['down-arrow']}`, { class: ctrl.hoursOpen() ? 'open' : '' } ,downArrowIcon)
+                m(`.${style['down-arrow']}`, { class: ctrl.hoursOpen() ? 'open' : '' }, downArrowIcon)
               ])
             ]),
             m(`.${style['opening-hours-section']}`, { class: ctrl.hoursOpen() ? 'visible' : '' } ,[
               m(`ul.${style['opening-hours']}`, [
-                _.map(args.restaurant.opening_hours, (line) => {
+                _.map(args.restaurant().opening_hours, (line) => {
                   return m(`li.${style['time']}`, line)
                 })
               ]),
@@ -200,7 +201,7 @@ export default {
           ]),
           m(`.${style['reviews']}`, [
             m(`ul.${style['reviews-container']}`, { config: reviewItemConfig } ,[
-              _.map(args.restaurant.reviews, (review) => {
+              _.map(args.restaurant().reviews, (review) => {
                 return m(`li.${style['review-item']}.single-review`, { key: review.author_name, style: { opacity: 0 } }, [
                   m(`.${style['line-one']}`, [
                     m('h4', review.author_name),

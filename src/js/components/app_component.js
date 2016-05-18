@@ -117,6 +117,7 @@ const runAnimation = function(el, top) {
       queue: false,
       complete() {
         ctrl.detailsOpen(true)
+        m.redraw()
       }
     }
   )
@@ -170,9 +171,12 @@ const App = {
       categories,
       selectedRestaurant: m.prop(''),
       selectedEl: m.prop(''),
-      hide(clickedElementIndex, el) {
+      currentElementIndex: m.prop(''),
+      hide(clickedElementIndex) {
 
         // this is a controller from a card
+        
+
         const ctrl = this
 
         if(ctrl.expanded())
@@ -182,21 +186,22 @@ const App = {
         m.redraw()
         m.redraw()
 
-        Ctrl.selectedRestaurant(Ctrl.restaurants()[clickedElementIndex])
-        Ctrl.selectedEl(el)
+        Ctrl.selectedRestaurant(Ctrl.restaurants()[clickedElementIndex()])
+        Ctrl.selectedEl(ctrl.element())
+        Ctrl.currentElementIndex(clickedElementIndex())
 
         //copying expanded property so it is accessible in details component when passed
         Ctrl.expanded = ctrl.expanded
 
 
-        const d = el.getBoundingClientRect()
+        const d = ctrl.element().getBoundingClientRect()
         const top = d.top
 
-        runAnimation.call(Ctrl, el, top)
+        runAnimation.call(Ctrl, ctrl.element(), top)
         
         console.log(Ctrl.restaurants())
 
-        runDelayedLoop(Ctrl.restaurants(), clickedElementIndex, false)
+        runDelayedLoop(Ctrl.restaurants(), clickedElementIndex(), false)
 
       },
       detailsOpen: m.prop(false),
@@ -216,23 +221,24 @@ const App = {
             name: restaurant.name,
             photos: restaurant.photos,
             rating: restaurant.rating,
-            id: restaurant.place_id,
+            key: restaurant.place_id,
             dimensions: ctrl.dimensions,
             hide: ctrl.hide,
             elementInfo: restaurant.elementInfo,
-            elementIndex: index
+            elementIndex: m.prop(index)
           }
-          return m('', { key: restaurant.place_id }, m.component(Card, { data }))
+          return m.component(Card, data)
         })
       ]),
       ctrl.detailsOpen() ? m.component( Details, {
-        restaurants: ctrl.restaurants(),
-        restaurant: ctrl.selectedRestaurant(),
+        restaurants: ctrl.restaurants,
+        restaurant: ctrl.selectedRestaurant,
         dimensions: ctrl.dimensions,
         element: ctrl.selectedEl,
         originalDimensions: ctrl.originalDimensions,
         expanded: ctrl.expanded,
-        detailsOpen: ctrl.detailsOpen
+        detailsOpen: ctrl.detailsOpen,
+        currentElementIndex: ctrl.currentElementIndex
       } ) : '',
       m.component( Filter, {
         restaurants: ctrl.restaurants,

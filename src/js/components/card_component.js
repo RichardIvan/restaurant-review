@@ -113,14 +113,18 @@ const renderRating = function(stars) {
 const listItemConfig = function(index, el, inited) {
   const ctrl = this
   if(!inited) {
-    el.onclick = function() {
-      // rename to hideOthers
-      console.log(index)
-      ctrl.hide.call(ctrl, index, el)
+    ctrl.element(el)
+    // el.onclick = function() {
+    //   // rename to hideOthers
+    //   console.log('INDEX ON CLICK')
+    //   // console.log(index())
 
-      // run animation
+
+    //   // ctrl.hide.call(ctrl, index, el)
+
+    //   // run animation
       
-    }
+    // }
   }
 }
 
@@ -132,7 +136,7 @@ const Card = {
   controller(args) {
 
     const constructImageUrl = () => {
-      const randomImage = getRandomImage(args.data.photos)
+      const randomImage = getRandomImage(args.photos)
       //get card size from store
       const cardSize = `${395}${255}`
 
@@ -144,7 +148,7 @@ const Card = {
       // imageUrl: m.prop(constructImageUrl())
     })
 
-    const rating = args.data.rating
+    const rating = args.rating
     const fullStars = parseInt(rating, 10)
     const remainder = ((rating - fullStars).toFixed(1))/1
     const starsArr = new Array(fullStars).fill('full')
@@ -167,10 +171,10 @@ const Card = {
     })
 
     // Bullet.on('IMAGE_SIZE_CHANGE', updateSize)
-    const title = m.prop(args.data.name)
+    const title = m.prop(args.name)
     const titleLine2 = m.prop('')
 
-    const addressArr = args.data.address.split(',')
+    const addressArr = args.address.split(',')
     const address = addressArr[0]
     const sortCode = addressArr[1]
 
@@ -187,18 +191,20 @@ const Card = {
       addressLineWidth: m.prop('100%'),
       addressLineOneWidth: m.prop(0),
 
-      rating: m.prop(args.data.rating),
+      rating: m.prop(args.rating),
       stars: m.prop(sss),
 
       expanded: m.prop(false),
-      hide: args.data.hide,
-      elementInfo: args.data.elementInfo,
-      data: args.data,
-      id: args.data.id
+      hide: args.hide,
+      elementInfo: args.elementInfo,
+      data: args,
+      id: args.id,
+
+      element: m.prop('')
     }
   },
   view(ctrl, args) {
-    return m(`li.${style['list-item']}`, { key: ctrl.id, config: listItemConfig.bind(ctrl, args.data.elementIndex), class: ctrl.elementInfo.visible() ? style['visible'] : '' }, [
+    return m(`li.${style['list-item']}`, { config: listItemConfig.bind(ctrl, args.elementIndex), onclick: ctrl.hide.bind(ctrl, args.elementIndex), class: ctrl.elementInfo.visible() ? style['visible'] : '' }, [
         m(`.${style['card-container']}`,  {
           style: {
             backgroundImage: `url('${ctrl.data.photos[0].prefix}${ctrl.data.dimensions.card.width()}x${ctrl.data.dimensions.card.height()}${ctrl.data.photos[0].suffix}')`

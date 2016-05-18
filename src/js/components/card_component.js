@@ -110,13 +110,13 @@ const renderRating = function(stars) {
     ])
 }
 
-const listItemConfig = function(el, inited) {
+const listItemConfig = function(index, el, inited) {
   const ctrl = this
   if(!inited) {
     el.onclick = function() {
       // rename to hideOthers
-      console.log(ctrl.elementInfo.index)
-      ctrl.hide.call(ctrl, ctrl.elementInfo.index, el)
+      console.log(index)
+      ctrl.hide.call(ctrl, index, el)
 
       // run animation
       
@@ -197,7 +197,7 @@ const Card = {
     }
   },
   view(ctrl, args) {
-    return m(`li.${style['list-item']}`, { key: args.id, config: listItemConfig.bind(ctrl), class: ctrl.elementInfo.visible() ? style['visible'] : '' }, [
+    return m(`li.${style['list-item']}`, { key: args.data.id, config: listItemConfig.bind(ctrl, args.data.elementIndex), class: ctrl.elementInfo.visible() ? style['visible'] : '' }, [
         m(`.${style['card-container']}`,  {
           style: {
             backgroundImage: `url('${ctrl.data.photos[0].prefix}${ctrl.data.dimensions.card.width()}x${ctrl.data.dimensions.card.height()}${ctrl.data.photos[0].suffix}')`

@@ -210,7 +210,7 @@ const App = {
       // THIS WHOLE UL MIGHT BECOME A COMPONENT!
       // config: ulConfig,
       m(`ul.${style['list-container']}`, {  style: { overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll' } }, [
-        _.map(ctrl.restaurants(), (restaurant) => {
+        _.map(ctrl.restaurants(), (restaurant, index) => {
           const data = {
             address: restaurant.address,
             name: restaurant.name,
@@ -219,7 +219,8 @@ const App = {
             id: restaurant.place_id,
             dimensions: ctrl.dimensions,
             hide: ctrl.hide,
-            elementInfo: restaurant.elementInfo
+            elementInfo: restaurant.elementInfo,
+            elementIndex: index
           }
           return m.component(Card, { data })
         })

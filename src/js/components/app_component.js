@@ -222,7 +222,7 @@ const App = {
             elementInfo: restaurant.elementInfo,
             elementIndex: index
           }
-          return m.component(Card, { data })
+          return m('', { key: restaurant.place_id }, m.component(Card, { data }))
         })
       ]),
       ctrl.detailsOpen() ? m.component( Details, {

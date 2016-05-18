@@ -193,11 +193,12 @@ const Card = {
       expanded: m.prop(false),
       hide: args.data.hide,
       elementInfo: args.data.elementInfo,
-      data: args.data
+      data: args.data,
+      id: args.data.id
     }
   },
   view(ctrl, args) {
-    return m(`li.${style['list-item']}`, { key: args.data.id, config: listItemConfig.bind(ctrl, args.data.elementIndex), class: ctrl.elementInfo.visible() ? style['visible'] : '' }, [
+    return m(`li.${style['list-item']}`, { key: ctrl.id, config: listItemConfig.bind(ctrl, args.data.elementIndex), class: ctrl.elementInfo.visible() ? style['visible'] : '' }, [
         m(`.${style['card-container']}`,  {
           style: {
             backgroundImage: `url('${ctrl.data.photos[0].prefix}${ctrl.data.dimensions.card.width()}x${ctrl.data.dimensions.card.height()}${ctrl.data.photos[0].suffix}')`

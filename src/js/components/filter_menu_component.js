@@ -109,13 +109,7 @@ const fltr = function() {
     return _.filter(rests(), (restaurant) => {
             const activePriceFilter = filter.active().price()
             const price = restaurant.priceTier
-            console.log(activePriceFilter)
-            console.log(price)
-            console.log('---')
             if (price <= 3 && activePriceFilter === price) {
-              console.log(activePriceFilter)
-              console.log(price)
-              console.log(activePriceFilter === price)
               return 1
             } else if ( activePriceFilter > 3) {
               return price > 3
@@ -127,11 +121,11 @@ const fltr = function() {
     return _.filter(rests(), (restaurant) => {
             const rating = Math.floor(restaurant.rating)
             const activeRatingFilter = filter.active().rating()
-            if (rating < 3) {
-              if( activeRatingFilter <= rating && activeRatingFilter + 1 < rating ) {
-                return 1
-              }
-            } else {
+            console.log(restaurant)
+            console.log(rating)
+            if (rating <= 3 && activeRatingFilter === rating) {
+              return 1
+            } else if ( activeRatingFilter > 3) {
               return rating > 3
             }
           })

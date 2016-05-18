@@ -66,7 +66,8 @@ const renderHeading = function() {
             //
 }
 
-const renderAddress = function(ctrl) {
+const renderAddress = function() {
+  const ctrl = this
   return [
     m(`.${style['address-container']}`, { style: { width: ctrl.addressLineWidth() } }, [
           m(`.${style['address-line1']}`, [
@@ -191,20 +192,21 @@ const Card = {
 
       expanded: m.prop(false),
       hide: args.data.hide,
-      elementInfo: args.data.elementInfo
+      elementInfo: args.data.elementInfo,
+      data: args.data
     }
   },
   view(ctrl, args) {
-    return m(`li.${style['list-item']}`, { key: args.id, config: listItemConfig.bind(ctrl), class: args.data.elementInfo.visible() ? style['visible'] : '' }, [
+    return m(`li.${style['list-item']}`, { key: args.id, config: listItemConfig.bind(ctrl), class: ctrl.elementInfo.visible() ? style['visible'] : '' }, [
         m(`.${style['card-container']}`,  {
           style: {
-            backgroundImage: `url('${args.data.photos[0].prefix}${args.data.dimensions.card.width()}x${args.data.dimensions.card.height()}${args.data.photos[0].suffix}')`
+            backgroundImage: `url('${ctrl.data.photos[0].prefix}${ctrl.data.dimensions.card.width()}x${ctrl.data.dimensions.card.height()}${ctrl.data.photos[0].suffix}')`
           }
         }, [
 
             renderHeading.call(ctrl),
 
-            ctrl.expanded() ? renderAddress(ctrl) : renderRating(ctrl.stars())
+            ctrl.expanded() ? renderAddress.call(ctrl) : renderRating(ctrl.stars())
 
             // ctrl.expanded() ? '' : renderExpandButton.call(ctrl)
 

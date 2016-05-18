@@ -178,7 +178,6 @@ export default {
     }
   },
   view(ctrl, args) {
-    console.log(args)
     return m(`.${style['photo']}`, [
         m(`.${style['details']}`, { style: getStyle.call(null, args.dimensions) }, [
           // m(`.${style['ptoto']}`, { style: getPhotoStyle.call(null, args.dimensions) }),
@@ -212,9 +211,9 @@ export default {
                     m(`ul.${style['user-stars']}`, _.map(renderStars(review.rating), (star, i) => {
                       switch(star) {
                         case true:
-                          return m(`li.${style['star']}`, { key: i } ,fullStar)
+                          return m(`li.${style['star']}`, { key: i }, fullStar)
                         case false:
-                          return m(`li.${style['star']}`, { key: i } ,emptyStar)
+                          return m(`li.${style['star']}`, { key: i }, emptyStar)
                       }
                     })),
                     m(`p`, review.text) 

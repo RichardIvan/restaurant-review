@@ -2,7 +2,9 @@
 
 import m from 'mithril'
 import fab from 'polythene/fab/fab';
-import classnames from 'classnames'
+
+//components
+import FilterMenu from '../components/filter_menu_component'
 
 import style from '../../css/filter.scss'
 
@@ -108,7 +110,9 @@ const renderView = function(args) {
           // there we can be doing the filtering thereon and gain
           // prices options and types as to render options
           //
-          restaurants: parentCtrl.restaurants
+          restaurants: parentCtrl.restaurants,
+          categories: parentCtrl.categories,
+          filter: parentCtrl.filter
         } ) : ''
 
       ])

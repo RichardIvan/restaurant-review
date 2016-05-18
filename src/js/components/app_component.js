@@ -127,10 +127,10 @@ const App = {
     const state = m.prop({
       data: m.prop([])
     })
-    fetch('/data')
+    const data = fetch('/data')
       .then(data => data.json())
-      .then((json) => {
-
+      
+    data.then((json) => {
         _.forEach(json, (item, i) => {
           item.elementInfo = {
             visible: m.prop(true),
@@ -143,12 +143,34 @@ const App = {
       })
       .then(m.redraw)
 
+    const categories = m.prop('')
+    const unfilteredRestaurants = m.prop('')
+    data.then((json) => {
+
+      unfilteredRestaurants(_.cloneDeep(json))
+      categories(_.map(unfilteredRestaurants(), (restaurant) => {
+        return restaurant.categories
+      }))
+      categories(_.flatten(categories(), true))
+      categories(_.uniq(categories(), true))
+      categories(_.map(categories(), (category) => {
+          return {
+            name: m.prop(category),
+            active: m.prop(false)
+          }
+        }))
+      console.log(categories())
+    })
+
+    
+    
+
     const Ctrl = {
       restaurants: state().data,
+      categories,
       selectedRestaurant: m.prop(''),
       selectedEl: m.prop(''),
       hide(clickedElementIndex, el) {
-
 
         // this is a controller from a card
         const ctrl = this
@@ -172,11 +194,13 @@ const App = {
 
         runAnimation.call(Ctrl, el, top)
         
-        runDelayedLoop(state().data(), clickedElementIndex, false)
+        console.log(Ctrl.restaurants())
+
+        runDelayedLoop(Ctrl.restaurants(), clickedElementIndex, false)
 
       },
       detailsOpen: m.prop(false),
-      runDelayedLoop: runDelayedLoop
+      runDelayedLoop
     }
 
     return Ctrl
@@ -209,7 +233,11 @@ const App = {
         expanded: ctrl.expanded,
         detailsOpen: ctrl.detailsOpen
       } ) : '',
-      m.component( Filter, { restaurants: ctrl.restaurants } )
+      m.component( Filter, {
+        restaurants: ctrl.restaurants,
+        categories: ctrl.categories,
+        filter: ctrl.filter
+      } )
       //HERE WE NEED A DETAIL COMPONENT AFTER ITEM BEING CLICKED
     ])
   }

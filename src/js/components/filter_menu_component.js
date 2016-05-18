@@ -81,6 +81,8 @@ const renderFilterMenu = function(args) {
   const ctrl = this
   const parentCtrl = args
 
+  console.log(ctrl.clickedFilterSection())
+
   return m(`.${style['filter-menu']}`, [
     (ctrl.clickedFilterSection() === 'rating') ? renderOptions.call(ctrl, 'rating') : '',
     (ctrl.clickedFilterSection() === 'type') ? renderTypeMenu.call(ctrl, ctrl.categories) : '',
@@ -132,10 +134,6 @@ const fltr = function() {
 
     return _.filter(rests(), (restaurant) => {
             const index = _.indexOf(restaurant.categories, category)
-            console.log('restaurants categories')
-            console.log(restaurant.categories)
-            console.log('INDEX OF CATEGORY IN RESTARANTS CATEGORY ARRAY')
-            console.log(index)
             if(index !== -1) {
               return 1
             }
@@ -173,20 +171,17 @@ const fltr = function() {
 
   return {
     add(type, value) {
-      console.log( type, value )
       switch(type) {
         case 'price':
           if(filter.active().price()) {
             if(filter.active().price() !== value) {
               filter.active().price(value)
               applyFilter()
-            } else {
-              // applyFullFilter
             }
           } else {
             filter.active().price(value)
             // apply price filter give .. ctrl.restaurants()
-            filterPrice(ctrl.restaurants)
+            ctrl.restaurants(filterPrice(ctrl.restaurants))
             m.redraw()
           }
           break
@@ -195,22 +190,17 @@ const fltr = function() {
             if(filter.active().rating() !== value) {
               filter.active().rating(value)
               applyFilter()
-            } else {
-              // applyFullFilter
             }
           } else {
             filter.active().rating(value)
             // apply rating filter give .. ctrl.restaurants()
-            filterRating(ctrl.restaurants)
+            ctrl.restaurants(filterRating(ctrl.restaurants))
             m.redraw()
           }
           break
         case 'category':
-          console.log(filter.active().category().length)
           if (filter.active().category().length) {
             const index = _.indexOf(filter.active().category(), value)
-            console.log('INDEX OF CATEGORY IN ACTIVE FILTER CATEGORY')
-            console.log(index)
             if (index === -1) {
               // apply category filter
               filter.active().category().push(value)
@@ -224,9 +214,6 @@ const fltr = function() {
 
           } else {
             filter.active().category().push(value)
-            // apply category filter, pass ctrl.restaurnts()]
-            // filterCategory(ctrl.restaurants, value)
-            // console.log(filterCategory(ctrl.restaurants, value))
             ctrl.restaurants(filterCategory(ctrl.restaurants, value))
             m.redraw()
           }
@@ -244,7 +231,7 @@ const FilterMenu = {
     const Ctrl = {
       restaurants: args.restaurants,
       categories: args.categories,
-      clickedFilterSection: m.prop('type')
+      clickedFilterSection: args.clickedFilterSection
     }
     Ctrl.filter = fltr.call(Ctrl)
     return Ctrl

@@ -15,7 +15,8 @@ import foodIcon from '../../icons/rr_food_icon';
 import priceIcon from 'mmsvg/google/msvg/editor/attach-money';
 
 //polythene components
-const filterActionButton = (open, tooltipVisible) => {
+const filterActionButton = function() {
+  const ctrl = this
   return m.component(fab, {
     icon: {
       msvg: filterIcon
@@ -23,57 +24,88 @@ const filterActionButton = (open, tooltipVisible) => {
     class: style['filter-action-button'],
     events: {
       onclick: () => {
-        console.log('clicked')
-        open(!open())
-        tooltipVisible(!tooltipVisible())
+        ctrl.open(!ctrl.open())
+        ctrl.clickedFilterSection('')
+        // if (ctrl.open()) {
+          
+        // }
+        // tooltipVisible(!tooltipVisible())
         // console.log(o)
       }
     }
   });
 }
 
-const starActionButton = (open) => {
+const handleMiniButtonClick = function(type) {
+  const ctrl = this
+  if (type === ctrl.clickedFilterSection()) {
+    ctrl.clickedFilterSection('')
+  } else {
+    ctrl.clickedFilterSection(type)
+  }
+}
+
+const starActionButton = function() {
+  const ctrl = this
   return m.component(fab, {
     icon: {
       msvg: starIcon
     },
     mini: true,
-    class: style['filter-action-button-mini']
+    class: style['filter-action-button-mini'],
+    events: {
+      onclick: handleMiniButtonClick.bind(ctrl, 'rating')
+    }
   });
 }
 
   
 
-const typeActionButton = (open) => {
+const typeActionButton = function() {
+  const ctrl = this
   return m.component(fab, {
     icon: {
       msvg: foodIcon
     },
     class: style['filter-action-button-mini'],
-    mini: true
+    mini: true,
+    events: {
+      onclick: handleMiniButtonClick.bind(ctrl, 'type')
+    }
   });
 }
 
-const priceActionButton = (open) => {
+const priceActionButton = function() {
+  const ctrl = this
   return m.component(fab, {
     icon: {
       msvg: priceIcon
     },
     class: style['filter-action-button-mini'],
-    mini: true
+    mini: true,
+    events: {
+      onclick: handleMiniButtonClick.bind(ctrl, 'price')
+    }
   });
 }
 
+
+
 const renderMiniActionButtons = (ctrl) => {
   return [
-    m(`.${style['type-button-line']}`, { class: ctrl.open() ? style['open'] : '' },  [
-          typeActionButton(),
-          m(`.${style['tooltip']}`, { class: ctrl.tooltipVisible() ? style['visible'] : '' }, ['Type', m(`.${style['nod']}`)])
+        m(`.${style['star-button-line']}`, { class: ctrl.open() ? style['open'] : '' }, [
+          starActionButton.call(ctrl),
+          m(`.${style['tooltip']}`, { class: (!ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : '' }, ['Stars', m(`.${style['nod']}`)])
+          // parentCtrl.tooltips[0].visible() ? m(`.${style['tooltip']}`, 'Filter') : ''
+        ]),
+        m(`.${style['type-button-line']}`, { class: ctrl.open() ? style['open'] : '' },  [
+          typeActionButton.call(ctrl),
+          m(`.${style['tooltip']}`, { class: (!ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : '' }, ['Type', m(`.${style['nod']}`)])
           // parentCtrl.tooltips[0].visible() ? m(`.${style['tooltip']}`, 'Filter') : ''
         ]),
         m(`.${style['price-button-line']}`, { class: ctrl.open() ? style['open'] : '' },  [
-          priceActionButton(),
-          m(`.${style['tooltip']}`, { class: ctrl.tooltipVisible() ? style['visible'] : '' }, ['Price', m(`.${style['nod']}`)])
+          priceActionButton.call(ctrl),
+          m(`.${style['tooltip']}`, { class: (!ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : '' }, ['Price', m(`.${style['nod']}`)])
           // parentCtrl.tooltips[0].visible() ? m(`.${style['tooltip']}`, 'Filter') : ''
         ])
   ]
@@ -94,17 +126,12 @@ const renderView = function(args) {
   return m(`.${style['filter-section']}`, [
       m(`.${style['buttons']}`, [
         m(`.${style['main-button-line']}`, [
-          filterActionButton(ctrl.open, ctrl.tooltipVisible),
+          filterActionButton.call(ctrl),
           ctrl.filterToolTipActive() ? m(`.${style['tooltip']}`, ['Filter', m(`.${style['nod']}`)]) : ''
           // parentCtrl.tooltips[0].visible() ? m(`.${style['tooltip']}`, 'Filter') : ''
         ]),
-        m(`.${style['star-button-line']}`, { class: ctrl.open() ? style['open'] : '' }, [
-          starActionButton(),
-          m(`.${style['tooltip']}`, { class: ctrl.tooltipVisible() ? style['visible'] : '' }, ['Stars', m(`.${style['nod']}`)])
-          // parentCtrl.tooltips[0].visible() ? m(`.${style['tooltip']}`, 'Filter') : ''
-        ]),
         renderMiniActionButtons(ctrl),
-        ctrl.open() ? m.component( FilterMenu, {
+        ctrl.clickedFilterSection() ? m.component( FilterMenu, {
           // WE NEED TO GENERATE RESET FILTER FUNCTION THAT WILL STORE THE ORIGINAL VALUES
           // All we need to be passed to is all the restaurants
           // there we can be doing the filtering thereon and gain
@@ -112,7 +139,8 @@ const renderView = function(args) {
           //
           restaurants: parentCtrl.restaurants,
           categories: parentCtrl.categories,
-          filter: parentCtrl.filter
+          filter: parentCtrl.filter,
+          clickedFilterSection: ctrl.clickedFilterSection
         } ) : ''
 
       ])
@@ -132,7 +160,8 @@ const Filter = {
     return {
       open: m.prop(false),
       tooltipVisible: m.prop(false),
-      filterToolTipActive: filterToolTipActive
+      filterToolTipActive,
+      clickedFilterSection: m.prop('')
     }
   },
   view(ctrl, args) {

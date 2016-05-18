@@ -107,11 +107,18 @@ const fltr = function() {
 
   const filterPrice = function(rests) {
     return _.filter(rests(), (restaurant) => {
-            const price = filter.active().price()
-            if (price < 3) {
-              return restaurant.priceTier() === price
-            } else {
-              return restaurant.priceTier() > 3
+            const activePriceFilter = filter.active().price()
+            const price = restaurant.priceTier
+            console.log(activePriceFilter)
+            console.log(price)
+            console.log('---')
+            if (price <= 3 && activePriceFilter === price) {
+              console.log(activePriceFilter)
+              console.log(price)
+              console.log(activePriceFilter === price)
+              return 1
+            } else if ( activePriceFilter > 3) {
+              return price > 3
             }
           })
   }
@@ -119,9 +126,9 @@ const fltr = function() {
   const filterRating = function(rests) {
     return _.filter(rests(), (restaurant) => {
             const rating = Math.floor(restaurant.rating)
-            const activeRating = filter.active().rating()
+            const activeRatingFilter = filter.active().rating()
             if (rating < 3) {
-              if( activeRating <= rating && activeRating + 1 < rating ) {
+              if( activeRatingFilter <= rating && activeRatingFilter + 1 < rating ) {
                 return 1
               }
             } else {
@@ -173,26 +180,45 @@ const fltr = function() {
     add(type, value) {
       switch(type) {
         case 'price':
+          console.log('PRICE FILTER')
+          console.log('CURRENT FILTER')
+          console.log(filter.active().price())
+          console.log('NEW FILTER VALUE')
+          
+          const newPriceValue = value + 1
+          console.log(newPriceValue)
           if(filter.active().price()) {
-            if(filter.active().price() !== value) {
-              filter.active().price(value)
+            if(filter.active().price() !== newPriceValue) {
+              filter.active().price(newPriceValue)
               applyFilter()
+            } else {
+
+              filter.active().price(0)
+              applyFilter()
+
             }
           } else {
-            filter.active().price(value)
+            filter.active().price(newPriceValue)
             // apply price filter give .. ctrl.restaurants()
             ctrl.restaurants(filterPrice(ctrl.restaurants))
+            console.log(ctrl.restaurants())
             m.redraw()
           }
           break
         case 'rating':
+          const newRatingValue = value + 1
           if(filter.active().rating()) {
-            if(filter.active().rating() !== value) {
-              filter.active().rating(value)
+            if(filter.active().rating() !== newRatingValue) {
+              filter.active().rating(newRatingValue)
               applyFilter()
+            } else {
+
+              filter.active().rating(0)
+              applyFilter()
+              
             }
           } else {
-            filter.active().rating(value)
+            filter.active().rating(newRatingValue)
             // apply rating filter give .. ctrl.restaurants()
             ctrl.restaurants(filterRating(ctrl.restaurants))
             m.redraw()

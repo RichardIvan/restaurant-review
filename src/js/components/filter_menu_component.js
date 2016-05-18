@@ -132,6 +132,10 @@ const fltr = function() {
 
     return _.filter(rests(), (restaurant) => {
             const index = _.indexOf(restaurant.categories, category)
+            console.log('restaurants categories')
+            console.log(restaurant.categories)
+            console.log('INDEX OF CATEGORY IN RESTARANTS CATEGORY ARRAY')
+            console.log(index)
             if(index !== -1) {
               return 1
             }
@@ -139,9 +143,10 @@ const fltr = function() {
 
   }
 
-  const applyFilter = function(restaurants) {
+  const applyFilter = function() {
       
     const rests = m.prop(_.cloneDeep(unfilteredRestaurants()))
+    console.log(rests())
 
     if (filter.active().price()) {
       rests(filterPrice(rests))
@@ -153,11 +158,12 @@ const fltr = function() {
 
     if (filter.active().category().length) {
       _.forEach(filter.active().category(), (category) => {
+        console.log(category)
         rests(filterCategory(rests, category))
       })
     }
 
-    ctrl.restaurants(rests)
+    ctrl.restaurants(rests())
     m.redraw()
   }
 
@@ -203,11 +209,12 @@ const fltr = function() {
           console.log(filter.active().category().length)
           if (filter.active().category().length) {
             const index = _.indexOf(filter.active().category(), value)
-            console.log( index)
+            console.log('INDEX OF CATEGORY IN ACTIVE FILTER CATEGORY')
+            console.log(index)
             if (index === -1) {
               // apply category filter
               filter.active().category().push(value)
-              filterCategory(ctrl.restaurants, value)
+              ctrl.restaurants(filterCategory(ctrl.restaurants, value))
               m.redraw()
             } else {
               _.pullAt(filter.active().category(), index)
@@ -217,13 +224,10 @@ const fltr = function() {
 
           } else {
             filter.active().category().push(value)
-            console.log(filter.active().category())
             // apply category filter, pass ctrl.restaurnts()]
             // filterCategory(ctrl.restaurants, value)
             // console.log(filterCategory(ctrl.restaurants, value))
-            console.log(ctrl.restaurants())
             ctrl.restaurants(filterCategory(ctrl.restaurants, value))
-            console.log(ctrl.restaurants())
             m.redraw()
           }
           break

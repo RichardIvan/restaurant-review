@@ -15,17 +15,28 @@ import dollarIcon from 'mmsvg/google/msvg/editor/attach-money'
 
 const ratingClickHandler = function(index) {
   const ctrl = this
+  _.forEach(ctrl.ratingRows(), (row, i) => {
+    if (index === i) {
+      row(!row())
+    } else row(false)
+  })
   ctrl.filter.add('rating', index)
 }
 
 const priceClickHandler = function(index) {
   const ctrl = this
+  _.forEach(ctrl.priceRows(), (row, i) => {
+    if (index === i) {
+      row(!row())
+    } else row(false)
+  })
   ctrl.filter.add('price', index)
 }
 
 const categoryClickHandler = function(category) {
   const ctrl = this
-  ctrl.filter.add('category', category)
+  category.active(!category.active())
+  ctrl.filter.add('category', category.name())
 }
 
 const renderOptions = function(menuType) {
@@ -34,23 +45,25 @@ const renderOptions = function(menuType) {
   let icon
   let clickHandler
   let cls
+  let rows
   if (menuType === 'rating') {
     icon = starIcon
     clickHandler = ratingClickHandler
     cls = style['star-icon']
+    rows = ctrl.ratingRows
   } else {
     icon = dollarIcon
     clickHandler = priceClickHandler
     cls = style['price-icon']
+    rows = ctrl.priceRows
   }
-  const rows = new Array(4)
 
   return m(`ul.${style['menu-rows']}`, [
-    _.map(rows, (row, index) => {
+    _.map(rows(), (activeStatus, index) => {
       const numberOfIcons = index + 1
       const iconsArr = new Array(numberOfIcons)
-      return m(`li.${style['menu-row']}`, { onclick: clickHandler.bind(ctrl, index) }, [
-        m(`ul`, [
+      return m(`li.${style['menu-row']}`, { key: index, onclick: clickHandler.bind(ctrl, index) }, [
+        m(`ul`, { class: activeStatus() ? `${style['filter--active']}` : '' } ,[
           _.map(iconsArr, (_, i) => {
             if (i === 3)
               return m(`li.${style['plus-icon']}`, { key: i }, m('span', plusIcon))
@@ -68,7 +81,7 @@ const renderTypeMenu = function(categories) {
     _.map(categories(), (category, index) => {
       // const numberOfIcons = index + 1
       // const iconsArr = new Array(numberOfIcons)
-      return m(`li.${style['menu-row']}`, { onclick: categoryClickHandler.bind(ctrl, category.name()) }, m('span', { class: category.active() ? `${style['active']}` : '' }, category.name()))
+      return m(`li.${style['menu-row']}`, { onclick: categoryClickHandler.bind(ctrl,category) }, m('span', { class: category.active() ? `${style['active']}` : '' }, category.name()))
     })
   ])
 
@@ -100,7 +113,9 @@ const FilterMenu = {
       restaurants: args.restaurants,
       categories: args.categories,
       clickedFilterSection: args.clickedFilterSection,
-      filter: args.filter
+      filter: args.filter,
+      priceRows: m.prop([m.prop(false), m.prop(false), m.prop(false), m.prop(false)]),
+      ratingRows: m.prop([m.prop(false), m.prop(false), m.prop(false), m.prop(false)])
     }
     
     return Ctrl

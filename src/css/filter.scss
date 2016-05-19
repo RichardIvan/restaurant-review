@@ -207,8 +207,11 @@
 
     :global(svg) {
       height: 18px;
-
       fill: #404040;
+    }
+
+    .filter--active :global(svg) {
+      fill: #FC2950 !important;
     }
 
     .price-icon {
@@ -227,15 +230,13 @@
     }
 
     :global(span).active {
-      width: 100%;
-      background: aqua;
-      display: block;
-      padding: 3px;
+      font-weight: 700;
     }
   }
-
 }
 
 .rating-fab--active, .type-fab--active, .price-fab--active {
   color: #FC2950 !important;
 }
+
+

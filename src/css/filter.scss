@@ -17,7 +17,7 @@
     padding: 3px;
   }
 
-  .main-button-line, .star-button-line, .type-button-line, .price-button-line {
+  .main-button-line, .star-button-line, .type-button-line, .price-button-line, .clear-button-line  {
     position: absolute;
     // width: 100%;
   }
@@ -25,7 +25,8 @@
     bottom: 0px;
     z-index: 6;
   }
-  .star-button-line, .type-button-line, .price-button-line {
+
+  .star-button-line, .type-button-line, .price-button-line, .clear-button-line {
     height: 56px;
     color: white;
     z-index: 5;
@@ -50,8 +51,14 @@
     bottom: 56px;
     z-index: 4;
     
-    transition: transform 150ms cubic-bezier(0.4, 0.0, 0.2, 1), opacity 200ms cubic-bezier(0.4, 0.0, 0.2, 1);;
+    transition: transform 150ms cubic-bezier(0.4, 0.0, 0.2, 1), opacity 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
     transition-delay: 0.1s;
+  }
+
+  .clear-button-line {
+    bottom: 224px;
+    transition: opacity 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition-delay: 0.15s;
   }
 
   .price-button-line.open {
@@ -67,6 +74,10 @@
   .star-button-line.open {
     // bottom: 168px;
     transform: translateY(-112px);
+    opacity: 1;
+  }
+  .clear-button-line.open {
+    // bottom: 168px;
     opacity: 1;
   }
   
@@ -118,7 +129,7 @@
   }
 }
 
-.star-button-line, .type-button-line, .price-button-line {
+.star-button-line, .type-button-line, .price-button-line, .clear-button-line {
   .tooltip {
     bottom: 28px;
     right: 67px;
@@ -158,6 +169,8 @@
   width: 150px;
   right: 64px;
   bottom: 56px;
+
+  z-index: 6;
 
   .menu-rows {
     list-style: none;

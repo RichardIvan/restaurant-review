@@ -14,38 +14,55 @@ export default function(data, index, status) {
 
   const before = _.slice(array, 0, index)
   const beforeLenght = before.length
-  const after = _.slice(array, index)
+  const after = _.slice(array, index + 1)
   const afterLenght = after.length
 
-  var bi = beforeLenght - 1
+  let bi = beforeLenght - 1
 
   function beforeLoop () {
-     setTimeout(function () {
-        before[bi].elementInfo.visible(status)  
-        m.redraw()
-        bi--
-        if (bi >= 0 ) {
-          beforeLoop()
+    setTimeout(() => {
+      before[bi].elementInfo.visible(status)  
+      m.redraw()
+      bi--
+      if (bi >= beforeLenght - 4 && bi >= 0) {
+        beforeLoop()
+      } else {
+        // if the bi is higher than length - 3
+        // show the rest of the items all at once
+        console.log(bi >= 0 )
+        for(bi; bi >= 0; bi--) {
+          if (bi >= 0)
+            break
+          before[bi].elementInfo.visible(status)
         }
-     }, 75)
+        m.redraw()
+      }
+    }, 25)
   }
-
-  if (index !== 0)
+  if(index !== 0)
     beforeLoop()  
 
-  var ai = 1
+  let ai = 0
 
   function afterLoop () {
-     setTimeout(function () {
-        after[ai].elementInfo.visible(status)
-        m.redraw()
-        ai++
-        if (ai < afterLenght) {
-           afterLoop()
+    setTimeout(() => {
+      after[ai].elementInfo.visible(status)
+      m.redraw()
+      ai++
+      if (ai < 3 && ai < afterLenght) {
+        afterLoop()
+         // if the ai is greater than 3
+         // show the rest of the items all at once
+      } else {
+        for(ai; ai < afterLenght; ai++) {
+          if(ai < afterLenght)
+            break
+          after[ai].elementInfo.visible(status)
         }
-     }, 75)
+        m.redraw()
+      }
+    }, 25)
   }
-
   if(index !== lastIndex)
     afterLoop()
 }

@@ -163,12 +163,13 @@ const App = {
       console.log(categories())
     })
 
-    
+    console.log(unfilteredRestaurants())
     
 
     const Ctrl = {
       restaurants: state().data,
       categories,
+      unfilteredRestaurants,
       selectedRestaurant: m.prop(''),
       selectedEl: m.prop(''),
       currentElementIndex: m.prop(''),
@@ -242,6 +243,7 @@ const App = {
       } ) : '',
       m.component( Filter, {
         restaurants: ctrl.restaurants,
+        unfilteredRestaurants: ctrl.unfilteredRestaurants,
         categories: ctrl.categories,
         filter: ctrl.filter
       } )

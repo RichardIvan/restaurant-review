@@ -164,6 +164,8 @@
   
   background: #FAFAFA;
 
+  opacity: 0;
+
   position: absolute;
   height: 172px;
   width: 150px;
@@ -239,4 +241,15 @@
   color: #FC2950 !important;
 }
 
+.shadow {
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
 

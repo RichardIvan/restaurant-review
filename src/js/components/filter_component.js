@@ -177,8 +177,8 @@ const renderView = function(args) {
           categories: parentCtrl.categories,
           filter: ctrl.filter,
           clickedFilterSection: ctrl.clickedFilterSection
-        } ) : ''
-
+        } ) : '',
+        ctrl.open() ? m(`.${style['overlay']}`, { onclick: () => ctrl.closeFilterSection() }) : '',
       ])
     ])
 
@@ -382,7 +382,11 @@ const Filter = {
       restaurants: args.restaurants,
       unfilteredRestaurants: args.unfilteredRestaurants, 
       categories: args.categories,
-      clickedFilterSection: m.prop('')
+      clickedFilterSection: m.prop(''),
+      closeFilterSection() {
+        Ctrl.open(false)
+        Ctrl.clickedFilterSection('')
+      }
     }
     Ctrl.filter = fltr.call(Ctrl)
 

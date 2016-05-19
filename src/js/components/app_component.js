@@ -246,7 +246,15 @@ const App = {
         unfilteredRestaurants: ctrl.unfilteredRestaurants,
         categories: ctrl.categories,
         filter: ctrl.filter
-      } )
+      } ),
+      ctrl.restaurants().length === 0 ? m(`.${style['no-restults-overlay']}`, [
+        m(''),
+        m(`.${style['content']}`, [
+          m('h1', 'No restaurants found'),
+          m('p', "Hey, why don't you try removing some filters!")
+        ]),
+        m('')
+      ]) : ''
       //HERE WE NEED A DETAIL COMPONENT AFTER ITEM BEING CLICKED
     ])
   }

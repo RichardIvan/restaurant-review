@@ -3,6 +3,7 @@
 //libraries
 import m from 'mithril'
 import _ from 'lodash'
+import Velocity from 'velocity-animate'
 
 //stles
 import style from '../../css/filter.scss'
@@ -90,13 +91,28 @@ const renderTypeMenu = function(categories) {
   // })
 }
 
+const filterMenuConfig = function(el, inited) {
+  if(!inited) {
+    Velocity(
+      el,
+      {
+        opacity: 1
+      },
+      {
+        duration: '150ms'
+      }
+    )
+  } 
+}
+
+
 const renderFilterMenu = function(args) {
   const ctrl = this
   const parentCtrl = args
 
   console.log(ctrl.clickedFilterSection())
 
-  return m(`.${style['filter-menu']}`, [
+  return m(`.${style['filter-menu']}.${style['shadow']}`, { config: filterMenuConfig } ,[
     (ctrl.clickedFilterSection() === 'rating') ? renderOptions.call(ctrl, 'rating') : '',
     (ctrl.clickedFilterSection() === 'type') ? renderTypeMenu.call(ctrl, ctrl.categories) : '',
     (ctrl.clickedFilterSection() === 'price') ? renderOptions.call(ctrl, 'price') : ''

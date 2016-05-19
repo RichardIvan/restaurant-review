@@ -2,6 +2,7 @@
 
 import m from 'mithril'
 import _ from 'lodash'
+import classnames from 'classnames'
 
 //polythene
 import fab from 'polythene/fab/fab';
@@ -82,7 +83,7 @@ const starActionButton = function() {
       msvg: starIcon
     },
     mini: true,
-    class: style['filter-action-button-mini'],
+    class: classnames(style['filter-action-button-mini'], ctrl.filter.status('rating') ? style['rating-fab--active'] : '' ),
     events: {
       onclick: handleMiniButtonClick.bind(ctrl, 'rating')
     }
@@ -97,7 +98,7 @@ const typeActionButton = function() {
     icon: {
       msvg: foodIcon
     },
-    class: style['filter-action-button-mini'],
+    class: classnames(style['filter-action-button-mini'], ctrl.filter.status('category') ? style['type-fab--active'] : '' ),
     mini: true,
     events: {
       onclick: handleMiniButtonClick.bind(ctrl, 'type')
@@ -111,7 +112,7 @@ const priceActionButton = function() {
     icon: {
       msvg: priceIcon
     },
-    class: style['filter-action-button-mini'],
+    class: classnames(style['filter-action-button-mini'], ctrl.filter.status('price') ? style['price-fab--active'] : '' ),
     mini: true,
     events: {
       onclick: handleMiniButtonClick.bind(ctrl, 'price')
@@ -187,9 +188,26 @@ const fltr = function() {
   const ctrl = this
 
   // const unfilteredRestaurants = m.prop(_.cloneDeep(ctrl.restaurants()))
-
+  let status
   const filter = {
-    status: m.prop(0),
+    status(type) {
+      
+      if ( typeof type === 'number') {
+        status = type
+      } else if (typeof type === 'string') {
+        switch( type ) {
+          case 'price':
+            return filter.active().price()
+          case 'rating':
+            return filter.active().rating()
+          case 'category':
+            return filter.active().category().length
+          default:
+            return false;
+        }
+      }
+      return status
+    },
     active: m.prop({
       price: m.prop(0),
       rating: m.prop(0),
@@ -342,8 +360,8 @@ const fltr = function() {
       filter.active().category([])
       ctrl.restaurants(ctrl.unfilteredRestaurants())
     },
-    status() {
-      return filter.status()
+    status(type) {
+      return filter.status(type)
     }
   }
 }

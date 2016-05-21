@@ -102,7 +102,7 @@ const runAnimation = function(el, top) {
       "translateY": -top
     },
     { duration: 300,
-      delay: 500,
+      delay: 350,
       easing: [0.4, 0.0, 0.2, 1]
     }
   )
@@ -112,7 +112,7 @@ const runAnimation = function(el, top) {
       margin: 0
     },
     { duration: 300,
-      delay: 600,
+      delay: 450,
       easing: [0.4, 0.0, 0.2, 1],
       queue: false,
       complete() {
@@ -160,11 +160,7 @@ const App = {
             active: m.prop(false)
           }
         }))
-      console.log(categories())
     })
-
-    console.log(unfilteredRestaurants())
-    
 
     const Ctrl = {
       restaurants: state().data,
@@ -199,8 +195,6 @@ const App = {
         const top = d.top
 
         runAnimation.call(Ctrl, ctrl.element(), top)
-        
-        console.log(Ctrl.restaurants())
 
         runDelayedLoop(Ctrl.restaurants(), clickedElementIndex(), false)
 
@@ -241,12 +235,17 @@ const App = {
         detailsOpen: ctrl.detailsOpen,
         currentElementIndex: ctrl.currentElementIndex
       } ) : '',
-      m.component( Filter, {
-        restaurants: ctrl.restaurants,
-        unfilteredRestaurants: ctrl.unfilteredRestaurants,
-        categories: ctrl.categories,
-        filter: ctrl.filter
-      } ),
+
+      // this is the whole filter component, that means the filter button also
+      // if the details are opened there is the writign button wihtin
+      !ctrl.detailsOpen() ? 
+        m.component( Filter, {
+          restaurants: ctrl.restaurants,
+          unfilteredRestaurants: ctrl.unfilteredRestaurants,
+          categories: ctrl.categories,
+          filter: ctrl.filter,
+          detailsOpen: ctrl.detailsOpen
+        } ) : '',
       ctrl.restaurants().length === 0 ? m(`.${style['no-restults-overlay']}`, [
         m(''),
         m(`.${style['content']}`, [

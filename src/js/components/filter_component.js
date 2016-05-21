@@ -5,7 +5,7 @@ import _ from 'lodash'
 import classnames from 'classnames'
 
 //polythene
-import fab from 'polythene/fab/fab';
+import fab from 'polythene/fab/fab'
 
 //components
 import FilterMenu from '../components/filter_menu_component'
@@ -13,10 +13,10 @@ import FilterMenu from '../components/filter_menu_component'
 import style from '../../css/filter.scss'
 
 //polythene
-import filterIcon from 'mmsvg/google/msvg/content/filter-list';
-import starIcon from 'mmsvg/google/msvg/toggle/star';
-import foodIcon from '../../icons/rr_food_icon';
-import priceIcon from 'mmsvg/google/msvg/editor/attach-money';
+import filterIcon from 'mmsvg/google/msvg/content/filter-list'
+import starIcon from 'mmsvg/google/msvg/toggle/star'
+import foodIcon from '../../icons/rr_food_icon'
+import priceIcon from 'mmsvg/google/msvg/editor/attach-money'
 import clearIcon from 'mmsvg/google/msvg/content/clear'
 
 //polythene components

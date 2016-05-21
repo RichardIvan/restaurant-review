@@ -1,0 +1,30 @@
+.writing-container {
+  padding: 16px;
+}
+
+.rating-banner {
+  position: fixed;
+  bottom: 32px;
+  left: 40px;
+  
+  :global(ul) {
+    list-style: none;
+  }
+
+  :global(svg) {
+    height: 32px;
+    width: 32px;
+  }
+
+  .star {
+    display: inline-block;
+    margin-right: 16px;
+    fill: #a0a0a0;
+  }
+
+  .star.selected {
+    fill: #fbc50d;
+  }
+
+}
+

@@ -7,11 +7,6 @@ export default function(data, index, status) {
   const array = data
   const lastIndex = array.length - 1
 
-  console.log('INDEX')
-  console.log(index)
-  console.log('LAST INDEX')
-  console.log(lastIndex)
-
   const before = _.slice(array, 0, index)
   const beforeLenght = before.length
   const after = _.slice(array, index + 1)
@@ -29,7 +24,6 @@ export default function(data, index, status) {
       } else {
         // if the bi is higher than length - 3
         // show the rest of the items all at once
-        console.log(bi >= 0 )
         for(bi; bi >= 0; bi--) {
           if (bi >= 0)
             break

@@ -16,10 +16,16 @@
   :global(.pe-button--fab-mini) :global(.pe-button__content) {
     padding: 3px;
   }
-
-  .main-button-line, .star-button-line, .type-button-line, .price-button-line, .clear-button-line  {
+  
+  .main-button-line {
     position: absolute;
-    // width: 100%;
+  }
+  .star-button-line, .type-button-line, .price-button-line, .clear-button-line  {
+    position: absolute;
+    pointer-events: none;
+  }
+  .star-button-line.open, .type-button-line.open, .price-button-line.open, .clear-button-line.open {
+    pointer-events: auto;
   }
   .main-button-line {
     bottom: 0px;

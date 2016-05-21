@@ -187,3 +187,16 @@
   position: relative;
   overflow-y: scroll;
 }
+
+.writing-action-button {
+  position: fixed !important;
+  background: #FC2950;
+  color: #FCF7F4;
+  bottom: 24px;
+  right: 24px;
+  z-index: 5;
+}
+
+.done {
+  background: #58DD44;
+}

@@ -110,8 +110,6 @@ const renderFilterMenu = function(args) {
   const ctrl = this
   const parentCtrl = args
 
-  console.log(ctrl.clickedFilterSection())
-
   return m(`.${style['filter-menu']}.${style['shadow']}`, { config: filterMenuConfig } ,[
     (ctrl.clickedFilterSection() === 'rating') ? renderOptions.call(ctrl, 'rating') : '',
     (ctrl.clickedFilterSection() === 'type') ? renderTypeMenu.call(ctrl, ctrl.categories) : '',

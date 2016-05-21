@@ -2,10 +2,11 @@
 
 import m from 'mithril'
 import _ from 'lodash'
-import Velocity from 'velocity-animate'
+
 
 //helpers
 import runDelayedLoop from '../../js/helpers/delayed-loop.js'
+import { runAnimation } from '../../js/helpers/card-animation.js'
 
 //components
 import Card from './card_component'
@@ -15,6 +16,8 @@ import Filter from './filter_component'
 //style
 import style from '../../css/app.scss'
 
+
+//TODO
 window.onresize = function(e) {
   console.log(e)
   // capturing the size of window and serving appropriate image Sizes
@@ -22,8 +25,7 @@ window.onresize = function(e) {
 }
 
 
-
-const config = function(el, init) {
+const mainContainerConfig = function(el, init) {
   const ctrl = this
   if(!init) {
     const d = el.getBoundingClientRect()
@@ -43,85 +45,7 @@ const config = function(el, init) {
   }
 }
 
-// const scrollHandler = function(e) {
-//   console.log( 'scrollin' )
-//   console.log(e)
-// }
 
-// var latestKnownScrollY = 0;
-
-// function update() {
-//   // reset the tick so we can
-//   // capture the next onScroll
-//   ticking = false;
-
-//   var currentScrollY = latestKnownScrollY;
-
-
-//   console.log(currentScrollY)
-//   // read offset of DOM elements
-//   // and compare to the currentScrollY value
-//   // then apply some CSS classes
-//   // to the visible items
-// }
-
-// // kick off - no longer needed! Woo.
-// // update();
-
-// var latestKnownScrollY = 0,
-//   ticking = false;
-
-// // function onScroll() {
-// //   latestKnownScrollY = window.scrollY;
-// //   requestTick();
-// // }
-
-// function requestTick() {
-//   if(!ticking) {
-//     requestAnimationFrame(update);
-//   }
-//   ticking = true;
-// }
-
-// const ulConfig = function(el, inited) {
-//   if(!inited) {
-//     el.onscroll = function(e) {
-//       latestKnownScrollY = el.scrollTop
-//       requestTick()
-//     }
-//   }
-// }
-
-const runAnimation = function(el, top) {
-  //this is Ctrl of app_component
-  const ctrl = this
-
-  Velocity(
-    el,
-    {
-      "translateY": -top
-    },
-    { duration: 300,
-      delay: 350,
-      easing: [0.4, 0.0, 0.2, 1]
-    }
-  )
-  Velocity(
-    el['firstChild'],
-    {
-      margin: 0
-    },
-    { duration: 300,
-      delay: 450,
-      easing: [0.4, 0.0, 0.2, 1],
-      queue: false,
-      complete() {
-        ctrl.detailsOpen(true)
-        m.redraw()
-      }
-    }
-  )
-}
 
 const App = {
   controller() {
@@ -206,7 +130,7 @@ const App = {
     return Ctrl
   },
   view(ctrl) {
-    return m('.main-container', { config: config.bind(ctrl) }, [
+    return m('.main-container', { config: mainContainerConfig.bind(ctrl) }, [
       // THIS WHOLE UL MIGHT BECOME A COMPONENT!
       // config: ulConfig,
       m(`ul.${style['list-container']}`, {  style: { overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll' } }, [
@@ -225,13 +149,17 @@ const App = {
           return m.component(Card, data)
         })
       ]),
-      ctrl.detailsOpen() ? m.component( Details, {
+      ctrl.detailsOpen() ? m.component(Details, {
         restaurants: ctrl.restaurants,
         restaurant: ctrl.selectedRestaurant,
         dimensions: ctrl.dimensions,
+        //element for incard animations
         element: ctrl.selectedEl,
         originalDimensions: ctrl.originalDimensions,
+        //expanded for swapping rating for address in card
         expanded: ctrl.expanded,
+
+
         detailsOpen: ctrl.detailsOpen,
         currentElementIndex: ctrl.currentElementIndex
       } ) : '',
@@ -239,12 +167,11 @@ const App = {
       // this is the whole filter component, that means the filter button also
       // if the details are opened there is the writign button wihtin
       !ctrl.detailsOpen() ? 
-        m.component( Filter, {
+        m.component(Filter, {
           restaurants: ctrl.restaurants,
           unfilteredRestaurants: ctrl.unfilteredRestaurants,
-          categories: ctrl.categories,
-          filter: ctrl.filter,
-          detailsOpen: ctrl.detailsOpen
+          categories: ctrl.categories
+          //details open for swithin fab edit/done within the filter comp.
         } ) : '',
       ctrl.restaurants().length === 0 ? m(`.${style['no-restults-overlay']}`, [
         m(''),

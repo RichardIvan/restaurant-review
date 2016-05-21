@@ -150,9 +150,9 @@ const closeButtonHandler = function() {
 
   const ctrl = this
 
-  this.detailsOpen(false)
+  ctrl.detailsOpen(false)
 
-  const el = this.element()
+  const el = ctrl.element()
   
   Velocity(
     [el.firstChild],
@@ -172,7 +172,6 @@ const closeButtonHandler = function() {
       complete() {
         ctrl.expanded(false)
         runDelayedLoop(ctrl.restaurants(), ctrl.currentElementIndex(), true)
-        m.redraw()
       }
     }
   )
@@ -180,8 +179,6 @@ const closeButtonHandler = function() {
 
 const handleWritingFabClick = function(type) {
   const ctrl = this
-
-  console.log(ctrl)
   // if edit -> do something
   if (type === 'edit') {
     ctrl.writingSectionActive(true)
@@ -232,6 +229,7 @@ const handleClearClick = function() {
   ctrl.closeWritingSection()
 }
 
+// TODO finish this button
 const cancelActionButton = function() {
   const ctrl = this
   return m.component(fab, {
@@ -288,15 +286,11 @@ const closeWritingSection = function() {
 
 export default {
   controller(args) {
-    console.log(args.restaurant())
-
     const indexDBReviews = m.prop([])
     DB.getReviews()
       .then((reviews) => {
-        console.log(reviews)
         _.forEach(reviews, (r) => {
           const review = JSON.parse(r.payload)
-          console.log(review)
           if(review.place_id === args.restaurant().place_id) {
             console.log(review)
             const newArr = indexDBReviews()
@@ -354,7 +348,7 @@ export default {
           ]),
 
 
-          ctrl.writingSectionActive() ? m.component( Writing, { review: ctrl.review }) :
+          ctrl.writingSectionActive() ? m.component(Writing, { review: ctrl.review }) :
             
             //REVIEWS
             m(`.${style['reviews']}`, [

@@ -266,7 +266,6 @@ const fltr = function() {
 
     if (filter.active().category().length) {
       _.forEach(filter.active().category(), (category) => {
-        console.log(category)
         rests(filterCategory(rests, category))
       })
     }

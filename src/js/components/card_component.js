@@ -5,6 +5,7 @@ import _ from 'lodash'
 
 //helpers
 import hide from '../helpers/hide-elements.js'
+import dimensionsHelper from '../helpers/screen-dimensions.js'
 
 import style from '../../css/card.scss'
 
@@ -208,21 +209,30 @@ const Card = {
     }
   },
   view(ctrl, args) {
+//     console.log(ctrl.data.dimensions.card.height())
+//     console.log(ctrl.data.dimensions.card.width())
+    const width = dimensionsHelper.getDimensions().width()
+    const height = (dimensionsHelper.getDimensions().width() > 766) ? dimensionsHelper.getDimensions().height() / 2 : dimensionsHelper.getDimensions().height()
     !ctrl.isCardExpanded() ? ctrl.thisCardExpanded(false) : null
     return m(`li.${style['list-item']}`, { config: listItemConfig.bind(ctrl), onclick: hide.bind(ctrl, args.elementIndex), class: ctrl.elementInfo.visible() ? style['visible'] : '' }, [
         m(`.${style['card-container']}`,  {
           style: {
-            backgroundImage: `url('${ctrl.restaurant().photos[0].prefix}${ctrl.data.dimensions.card.width()}x${ctrl.data.dimensions.card.height()}${ctrl.restaurant().photos[0].suffix}')`
+
+            //the dimensions or height might be comming dynamically from the args
+            // instead of the initiated conponent
+            backgroundImage: `url('${ctrl.restaurant().photos[0].prefix}${width}x${height}${ctrl.restaurant().photos[0].suffix}')`,
+
+            height: `${height}px`
           }
         }, [
 
-            renderHeading.call(ctrl),
+          renderHeading.call(ctrl),
 
-            ctrl.isCardExpanded() && ctrl.thisCardExpanded() ? renderAddress.call(ctrl) : renderRating(ctrl.stars())
+          ctrl.isCardExpanded() && ctrl.thisCardExpanded() ? renderAddress.call(ctrl) : renderRating(ctrl.stars())
 
-            // ctrl.expanded() ? '' : renderExpandButton.call(ctrl)
+          // ctrl.expanded() ? '' : renderExpandButton.call(ctrl)
 
-          ])
+        ])
       ])
   }
 }

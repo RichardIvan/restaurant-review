@@ -7,6 +7,7 @@ import Velocity from 'velocity-animate'
 
 //helpers
 import DB from '../services/db.js'
+import dimensionsHelper from '../helpers/screen-dimensions.js'
 
 import runDelayedLoop from '../../js/helpers/delayed-loop.js'
 
@@ -28,30 +29,29 @@ import fullStar from '../../icons/rr_review_full_star.js'
 import emptyStar from '../../icons/rr_review_empty_star.js'
 import closeIcon from 'mmsvg/google/msvg/content/clear'
 
-const getStyle = function(d) {
-  if (!d)
-    return
 
-  const dimensions = d
+// dimensiosn are applied dynamically in css rather than on initiation
+// the rest of the styles is set with CSS file
+const setStyle = function() {
+  // if (!d)
+  //   return
 
-  const position = 'absolute'
+  const dimensions = dimensionsHelper.getDimensions()
+
+  // const position = 'absolute'
+  // const background = 'white'
+  // const zIndex = 1
   // const height = `${dimensions.card.height() + 16}px`
-  const height = `calc(100% - ${dimensions.card.height()}px)`
+  const height = `calc(100% - ${dimensions.height()}px)`
   const width = `100%`
-  const top = `${dimensions.card.height() - 8}px`
+  const top = `${dimensions.height() - 8}px`
 
   // TODO - DELETE
-  const background = 'white'
-
-  const zIndex = 1
 
   return {
-    position,
     height,
     width,
     top,
-    zIndex,
-    background
   }
 }
 
@@ -331,7 +331,7 @@ export default {
   },
   view(ctrl, args) {
     return m(`.${style['photo']}`, [
-        m(`.${style['details']}`, { style: getStyle.call(null, args.dimensions) }, [
+        m(`.${style['details']}`, { style: setStyle() }, [
           // m(`.${style['ptoto']}`, { style: getPhotoStyle.call(null, args.dimensions) }),
 
           // HEADER

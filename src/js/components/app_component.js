@@ -5,6 +5,7 @@ import _ from 'lodash'
 
 //helpers
 import runDelayedLoop from '../../js/helpers/delayed-loop.js'
+import dimensionsHelper from '../../js/helpers/screen-dimensions.js'
 
 //components
 import Card from './card_component'
@@ -18,6 +19,9 @@ import style from '../../css/app.scss'
 //TODO
 window.onresize = function(e) {
   console.log(e)
+
+  console.log('setting dimensions on resize!')
+  dimensionsHelper.setDimensions()
   // capturing the size of window and serving appropriate image Sizes
   // withing element size store
 }
@@ -26,23 +30,8 @@ window.onresize = function(e) {
 const mainContainerConfig = function(el, init) {
   const ctrl = this
   if(!init) {
-
-    //this is on load
-    // we are running pretty much the same function on window resize after..
-    const d = el.getBoundingClientRect()
-    const windowWidth = m.prop(d.width)
-    const ratio = m.prop(1.55)
-    const height = m.prop(Math.round((windowWidth()) / ratio()))
-    const width = m.prop(Math.round(height() * ratio()))
-
-    ctrl.dimensions = {
-      windowWidth,
-      ratio,
-      card: {
-        width,
-        height
-      }
-    }
+    dimensionsHelper.setElement(el)
+    dimensionsHelper.setDimensions()
   }
 }
 
@@ -56,17 +45,16 @@ const App = {
       .then(data => data.json())
       
     data.then((json) => {
-        _.forEach(json, (item, i) => {
-          item.elementInfo = {
-            visible: m.prop(true),
-            index: i
-          }
-        })
-
-        state().data(json)
-
+      _.forEach(json, (item, i) => {
+        item.elementInfo = {
+          visible: m.prop(true),
+          index: i
+        }
       })
-      .then(m.redraw)
+
+      state().data(json)
+    })
+    .then(m.redraw)
 
     const categories = m.prop('')
     const unfilteredRestaurants = m.prop('')
@@ -79,11 +67,11 @@ const App = {
       categories(_.flatten(categories(), true))
       categories(_.uniq(categories(), true))
       categories(_.map(categories(), (category) => {
-          return {
-            name: m.prop(category),
-            active: m.prop(false)
-          }
-        }))
+        return {
+          name: m.prop(category),
+          active: m.prop(false)
+        }
+      }))
     })
 
     const Ctrl = {

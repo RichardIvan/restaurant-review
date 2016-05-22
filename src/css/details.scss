@@ -1,6 +1,13 @@
 .details {
-  z-index: 0;
+  position: absolute;
+  background: 'white';
+
+  z-index: 1;
   height: 100% !important;
+
+  // const position = 'absolute'
+  // const background = 'white'
+  // const zIndex = 1
 }
 
 .details * {

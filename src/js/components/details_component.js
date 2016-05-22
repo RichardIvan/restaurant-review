@@ -148,6 +148,7 @@ const reviewItemConfig = function(el, inited) {
 
 const closeButtonHandler = function() {
 
+  // this is args passed from parent component
   const ctrl = this
 
   ctrl.detailsOpen(false)
@@ -170,7 +171,7 @@ const closeButtonHandler = function() {
       delay: 100,
       easing: [0.4, 0.0, 0.2, 1],
       complete() {
-        ctrl.expanded(false)
+        ctrl.isCardExpanded(false)
         runDelayedLoop(ctrl.restaurants(), ctrl.currentElementIndex(), true)
       }
     }
@@ -179,18 +180,18 @@ const closeButtonHandler = function() {
 
 const handleWritingFabClick = function(type) {
   const ctrl = this
+
   // if edit -> do something
   if (type === 'edit') {
     ctrl.writingSectionActive(true)
   } else {
     // post reveiw to indexDB
     DB.saveReview(ctrl.review().props).then(_ => {
-
       ctrl.closeWritingSection()
-
-    }).catch(_ => {
+    }).catch(err => {
 
       console.log('YO BRO, NO GOOD!')
+      console.log(err)
 
     })
   }
@@ -292,10 +293,8 @@ export default {
         _.forEach(reviews, (r) => {
           const review = JSON.parse(r.payload)
           if(review.place_id === args.restaurant().place_id) {
-            console.log(review)
             const newArr = indexDBReviews()
             newArr.push(review)
-            console.log(newArr)
             indexDBReviews(newArr)
           }
         })

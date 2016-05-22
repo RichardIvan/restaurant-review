@@ -1,10 +1,10 @@
 'use strict'
 
 const _db = new Promise((resolve, reject) => {
-  const request = window.indexedDB.open('rrdb', 1)
+  const request = window.indexedDB.open('rrdb')
 
   request.onerror = (event) => {
-    console.log("error: ");
+    console.log(`error: ${event}`);
   };
    
   request.onsuccess = (event) => {

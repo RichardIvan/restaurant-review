@@ -22,8 +22,6 @@ const handleStarClick = function(index) {
       str(flag)
     } else str(false)
   })
-  
-  console.log(ctrl)
 
   ctrl.changeReviewProp('rating', index + 1)
   
@@ -106,33 +104,21 @@ const verifyReview = function() {
 
 const changeReviewProp = function(type, value) {
   const ctrl = this
-
-  console.log(ctrl)
-
-  console.log(ctrl.review())
-  console.log(ctrl.review().props())
-  console.log(ctrl.review().props())
+  
   switch(type) {
     case 'author_name':
-      console.log('CHANGE IN AUTHOR_NAME TO: ')
-      console.log(value)
       ctrl.review().props().author_name(value)
       break
     case 'text':
-      console.log('CHANGE IN TEXT TO: ')
-      console.log(value)
       ctrl.review().props().text(value)
       break
     case 'rating':
-      console.log('CHANGE IN RATING TO: ')
-      console.log(value)
       ctrl.review().props().rating(value)
       break
     default:
       break
   }
 
-  console.log(ctrl)
   verifyReview.call(ctrl)
 }
 

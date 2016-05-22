@@ -91,38 +91,10 @@ const App = {
       categories,
       unfilteredRestaurants,
       selectedRestaurant: m.prop(''),
-      selectedEl: m.prop(''),
+      element: m.prop(''),
       currentElementIndex: m.prop(''),
-      hide(clickedElementIndex) {
-
-        // this is a controller from a card
-        
-
-        const ctrl = this
-
-        if(ctrl.expanded())
-          return
-
-        ctrl.expanded(!ctrl.expanded())
-        m.redraw()
-        m.redraw()
-
-        Ctrl.selectedRestaurant(Ctrl.restaurants()[clickedElementIndex()])
-        Ctrl.selectedEl(ctrl.element())
-        Ctrl.currentElementIndex(clickedElementIndex())
-
-        //copying expanded property so it is accessible in details component when passed
-        Ctrl.expanded = ctrl.expanded
-
-
-        const d = ctrl.element().getBoundingClientRect()
-        const top = d.top
-
-        runAnimation.call(Ctrl, ctrl.element(), top)
-
-        runDelayedLoop(Ctrl.restaurants(), clickedElementIndex(), false)
-
-      },
+      isCardExpanded: m.prop(''),
+      
       detailsOpen: m.prop(false),
       runDelayedLoop
     }
@@ -135,16 +107,28 @@ const App = {
       // config: ulConfig,
       m(`ul.${style['list-container']}`, {  style: { overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll' } }, [
         _.map(ctrl.restaurants(), (restaurant, index) => {
+
+          // pass restaurant object here
           const data = {
-            address: restaurant.address,
-            name: restaurant.name,
-            photos: restaurant.photos,
-            rating: restaurant.rating,
+            restaurants: ctrl.restaurants,
+            restaurant: m.prop(restaurant),
             key: restaurant.place_id,
+
+            element: ctrl.element,
+            selectedRestaurant: ctrl.selectedRestaurant,
+            //dimensions is set via main container config
+            // needs to be changed
             dimensions: ctrl.dimensions,
             hide: ctrl.hide,
             elementInfo: restaurant.elementInfo,
-            elementIndex: m.prop(index)
+            elementIndex: m.prop(index),
+
+            isCardExpanded: ctrl.isCardExpanded,
+            detailsOpen: ctrl.detailsOpen,
+
+            // clickedElementIndex: index,
+            currentElementIndex: ctrl.currentElementIndex
+
           }
           return m.component(Card, data)
         })
@@ -154,13 +138,14 @@ const App = {
         restaurant: ctrl.selectedRestaurant,
         dimensions: ctrl.dimensions,
         //element for incard animations
-        element: ctrl.selectedEl,
+        element: ctrl.element,
         originalDimensions: ctrl.originalDimensions,
         //expanded for swapping rating for address in card
-        expanded: ctrl.expanded,
-
+        isCardExpanded: ctrl.isCardExpanded,
 
         detailsOpen: ctrl.detailsOpen,
+        // current element index is required so that we knwo what items are
+        // we hidiing in the animation loop, this way we set before/after elements
         currentElementIndex: ctrl.currentElementIndex
       } ) : '',
 
@@ -171,7 +156,6 @@ const App = {
           restaurants: ctrl.restaurants,
           unfilteredRestaurants: ctrl.unfilteredRestaurants,
           categories: ctrl.categories
-          //details open for swithin fab edit/done within the filter comp.
         } ) : '',
       ctrl.restaurants().length === 0 ? m(`.${style['no-restults-overlay']}`, [
         m(''),

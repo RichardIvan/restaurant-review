@@ -170,3 +170,10 @@
 .stars-container li {
   margin-left: -8px;
 }
+
+
+@media (min-width: 768px) {
+  .list-item {
+    width: 50%;
+  }
+}

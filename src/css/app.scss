@@ -37,3 +37,12 @@
     }
   }
 }
+
+@media (min-width: 768px) {
+  .list-container {
+    overflow-y: scroll !important;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}

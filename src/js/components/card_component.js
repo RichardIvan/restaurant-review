@@ -190,6 +190,8 @@ const Card = {
       stars: m.prop(sss),
 
       isCardExpanded: args.isCardExpanded,
+      thisCardExpanded: m.prop(false),
+
       detailsOpen: args.detailsOpen,
       // hide: args.hide,
       elementInfo: args.elementInfo,
@@ -206,6 +208,7 @@ const Card = {
     }
   },
   view(ctrl, args) {
+    !ctrl.isCardExpanded() ? ctrl.thisCardExpanded(false) : null
     return m(`li.${style['list-item']}`, { config: listItemConfig.bind(ctrl), onclick: hide.bind(ctrl, args.elementIndex), class: ctrl.elementInfo.visible() ? style['visible'] : '' }, [
         m(`.${style['card-container']}`,  {
           style: {
@@ -215,7 +218,7 @@ const Card = {
 
             renderHeading.call(ctrl),
 
-            ctrl.isCardExpanded() ? renderAddress.call(ctrl) : renderRating(ctrl.stars())
+            ctrl.isCardExpanded() && ctrl.thisCardExpanded() ? renderAddress.call(ctrl) : renderRating(ctrl.stars())
 
             // ctrl.expanded() ? '' : renderExpandButton.call(ctrl)
 

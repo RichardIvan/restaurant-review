@@ -14,6 +14,7 @@ const hide = function(clickedElementIndex, element) {
     return
 
   ctrl.isCardExpanded(!ctrl.isCardExpanded())
+  ctrl.thisCardExpanded(true)
   m.redraw()
   m.redraw()
 

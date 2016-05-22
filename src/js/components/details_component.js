@@ -225,8 +225,6 @@ const writingMainActionButton = function(type) {
 // THIS CAN PROBABLY BE INCLUDED INTHE CANTECACTIONBUTTON DECLARATION BELLOW
 const handleClearClick = function() {
   const ctrl = this
-
-  // ctrl.resetReview()
   ctrl.closeWritingSection()
 }
 
@@ -283,6 +281,15 @@ const closeWritingSection = function() {
   ctrl.writingSectionActive(false)
 
   m.redraw()  
+}
+
+const cancelButtonConfig = (el, inited) => {
+  if(!inited) {
+    el.style.transition = 'opacity .3s ease-in-out'
+    setTimeout(() => {
+      el.style.opacity = 1
+    }, 500)
+  }
 }
 
 export default {
@@ -370,7 +377,7 @@ export default {
             ctrl.review().valid() ? writingMainActionButton.call(ctrl, 'done') : writingMainActionButton.call(ctrl, 'edit'),
             // cancel fab is displaying with little delay, 
             // set in config
-            ctrl.writingSectionActive() ? cancelActionButton.call(ctrl) : ''
+            ctrl.writingSectionActive() ? m('', { config: cancelButtonConfig, style: { opacity: 0 } }, cancelActionButton.call(ctrl)) : ''
           ]) : ''
         ])
       ])

@@ -8,6 +8,7 @@ import Velocity from 'velocity-animate'
 //helpers
 import DB from '../services/db.js'
 import dimensionsHelper from '../helpers/screen-dimensions.js'
+import animationHelper from '../helpers/animation-helper.js'
 
 import runDelayedLoop from '../../js/helpers/delayed-loop.js'
 
@@ -154,11 +155,15 @@ const closeButtonHandler = function() {
   ctrl.detailsOpen(false)
 
   const el = ctrl.element()
+
+  const { height, width } =  animationHelper.getSize()
   
   Velocity(
-    [el.firstChild],
+    el.firstChild,
     {
-      margin: '8px 8px 0px 8px'
+      margin: '8px 8px 0px 8px',
+      height: `${height() - 8}px`,
+      width: `${width() - 16}px`
     },
     { duration: 300,
       delay: 0,
@@ -166,7 +171,7 @@ const closeButtonHandler = function() {
     });
   Velocity(
     el,
-    { 'translateY': 0 },
+    { 'translateY': 0, translateX: 0 },
     { duration: 300,
       delay: 100,
       easing: [0.4, 0.0, 0.2, 1],
@@ -225,6 +230,7 @@ const writingMainActionButton = function(type) {
 // THIS CAN PROBABLY BE INCLUDED INTHE CANTECACTIONBUTTON DECLARATION BELLOW
 const handleClearClick = function() {
   const ctrl = this
+
   ctrl.closeWritingSection()
 }
 
@@ -267,11 +273,13 @@ const renderReview = (review, indexDB) => {
 const closeWritingSection = function() {
   const ctrl = this
 
-  const review = JSON.stringify(ctrl.review().props())
-  const arr = ctrl.indexDBReviews()
-  arr.push(JSON.parse(review))
-  ctrl.indexDBReviews(arr)
-
+  if(ctrl.review().valid()) {
+    const review = JSON.stringify(ctrl.review().props())
+    const arr = ctrl.indexDBReviews()
+    arr.push(JSON.parse(review))
+    ctrl.indexDBReviews(arr)
+  }
+  
   ctrl.review().valid(false)
   ctrl.review().props().author_name('')
   ctrl.review().props().text('')

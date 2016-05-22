@@ -9,10 +9,6 @@ import dimensionsHelper from '../helpers/screen-dimensions.js'
 
 import style from '../../css/card.scss'
 
-//stores
-import DataStore from '../stores/data-store.js'
-
-
 // const fullStar = require('../../icons/rr_full_star.js')
 // import fullStar from 'mmsvg/google/msvg/action/accessibility'
 // const halfStar = 

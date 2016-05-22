@@ -226,7 +226,7 @@ const writingMainActionButton = function(type) {
 const handleClearClick = function() {
   const ctrl = this
 
-  ctrl.resetReview()
+  // ctrl.resetReview()
   ctrl.closeWritingSection()
 }
 
@@ -238,11 +238,11 @@ const cancelActionButton = function() {
       msvg: clearIcon
     },
     mini: true,
-    class: classnames(style['filter-action-button-mini'], ctrl.filter.status('rating') ? style['rating-fab--active'] : '' ),
+    class: style['cancel-action-button-mini'],
     events: {
       onclick: handleClearClick.bind(ctrl)
     }
-  });
+  })
 }
 
 const renderReview = (review, indexDB) => {
@@ -370,7 +370,7 @@ export default {
             ctrl.review().valid() ? writingMainActionButton.call(ctrl, 'done') : writingMainActionButton.call(ctrl, 'edit'),
             // cancel fab is displaying with little delay, 
             // set in config
-            cancelActionButton
+            ctrl.writingSectionActive() ? cancelActionButton.call(ctrl) : ''
           ]) : ''
         ])
       ])

@@ -3,10 +3,8 @@
 import m from 'mithril'
 import _ from 'lodash'
 
-
 //helpers
 import runDelayedLoop from '../../js/helpers/delayed-loop.js'
-import { runAnimation } from '../../js/helpers/card-animation.js'
 
 //components
 import Card from './card_component'
@@ -28,6 +26,9 @@ window.onresize = function(e) {
 const mainContainerConfig = function(el, init) {
   const ctrl = this
   if(!init) {
+
+    //this is on load
+    // we are running pretty much the same function on window resize after..
     const d = el.getBoundingClientRect()
     const windowWidth = m.prop(d.width)
     const ratio = m.prop(1.55)
@@ -44,7 +45,6 @@ const mainContainerConfig = function(el, init) {
     }
   }
 }
-
 
 
 const App = {

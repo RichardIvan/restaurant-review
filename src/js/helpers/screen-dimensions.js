@@ -37,8 +37,8 @@ const dimensions = {
 
     const windowWidth = m.prop(d.width)
 
-    _dimensions().height(Math.round((windowWidth()) / _ratio()))
-    _dimensions().width(Math.round(_dimensions().height() * _ratio()))
+    _dimensions().height(Math.floor((windowWidth()) / _ratio()))
+    _dimensions().width(Math.floor(_dimensions().height() * _ratio()))
     
   },
   getDimensions() {

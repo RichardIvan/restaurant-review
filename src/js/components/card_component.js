@@ -208,7 +208,7 @@ const Card = {
 //     console.log(ctrl.data.dimensions.card.height())
 //     console.log(ctrl.data.dimensions.card.width())
     const width = dimensionsHelper.getDimensions().width()
-    const height = (dimensionsHelper.getDimensions().width() > 766) ? Math.floor(dimensionsHelper.getDimensions().height() / 2) : dimensionsHelper.getDimensions().height()
+    const height = (width > 766) ? Math.floor(dimensionsHelper.getDimensions().height() / 2) : dimensionsHelper.getDimensions().height()
     !ctrl.isCardExpanded() ? ctrl.thisCardExpanded(false) : null
     return m(`li.${style['list-item']}`, { config: listItemConfig.bind(ctrl), onclick: hide.bind(ctrl, args.elementIndex), class: ctrl.elementInfo.visible() ? style['visible'] : '' }, [
         m(`.${style['card-container']}`,  {
@@ -218,7 +218,8 @@ const Card = {
             // instead of the initiated conponent
             backgroundImage: `url('${ctrl.restaurant().photos[0].prefix}${width}x${dimensionsHelper.getDimensions().height()}${ctrl.restaurant().photos[0].suffix}')`,
 
-            height: `${height}px`
+            height: `${height}px`,
+            width: (width > 766) ? `${width / 2 - 16}px` : `${width - 16}px`
           }
         }, [
 

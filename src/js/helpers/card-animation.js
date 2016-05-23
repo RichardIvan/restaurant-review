@@ -10,8 +10,8 @@ export function runAnimation(el, top) {
   //this is Ctrl of app_component
   const ctrl = this
 
-  let height = dimensionsHelper.getDimensions().height()
-  let width = dimensionsHelper.getDimensions().width()
+  const height = dimensionsHelper.getDimensions().height()
+  const width = dimensionsHelper.getDimensions().width()
 
   animationHelper.setDimensions(el.firstChild)
 
@@ -19,19 +19,6 @@ export function runAnimation(el, top) {
   if(animationHelper.getPosition().translateX()) {
     translateX = animationHelper.getPosition().translateX()
   }
-
-  console.log(dimensionsHelper.getDimensions().width())
-  console.log(dimensionsHelper.getDimensions().height())
-
-  // if (dimensionsHelper.getDimensions().width() > 766) {
-  //   height = dimensionsHelper.getDimensions().height()
-  //   width = dimensionsHelper.getDimensions().width()
-  // }
-
-  // console.log(height)
-  // console.log(width)
-
-  // console.log(translateX)
 
   Velocity(
     el,

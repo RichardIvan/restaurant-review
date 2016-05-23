@@ -25,7 +25,7 @@ export default function(data, index, status) {
         // if the bi is higher than length - 3
         // show the rest of the items all at once
         for(bi; bi >= 0; bi--) {
-          if (bi >= 0)
+          if (bi < 0)
             break
           before[bi].elementInfo.visible(status)
         }
@@ -49,7 +49,7 @@ export default function(data, index, status) {
          // show the rest of the items all at once
       } else {
         for(ai; ai < afterLenght; ai++) {
-          if(ai < afterLenght)
+          if(ai > afterLenght)
             break
           after[ai].elementInfo.visible(status)
         }

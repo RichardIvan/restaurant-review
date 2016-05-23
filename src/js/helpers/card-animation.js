@@ -37,7 +37,7 @@ export function runAnimation(el, top) {
     el,
     {
       "translateY": -top,
-      translateX: -translateX
+      translateX: -translateX + 8.5
     },
     { duration: 300,
       delay: 350,

@@ -18,13 +18,8 @@ import style from '../../css/app.scss'
 
 //TODO
 window.onresize = function(e) {
-  console.log(e)
-
-  console.log('setting dimensions on resize!')
   dimensionsHelper.setDimensions()
   m.redraw()
-  // capturing the size of window and serving appropriate image Sizes
-  // withing element size store
 }
 
 

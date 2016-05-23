@@ -162,8 +162,8 @@ const closeButtonHandler = function() {
     el.firstChild,
     {
       margin: '8px 8px 0px 8px',
-      height: `${height() - 8}px`,
-      width: `${width() - 16}px`
+      height: `${height()}px`,
+      width: `${width()}px`
     },
     { duration: 300,
       delay: 0,

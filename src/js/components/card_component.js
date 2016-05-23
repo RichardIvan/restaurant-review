@@ -39,7 +39,6 @@ const renderHeading = function() {
                       setTimeout(() => {
                         h1Width = el.offsetWidth + 60
                         ctrl.lineOneWidth(`${h1Width}px`)
-                        console.log( ctrl.lineOneWidth() )
                       }, 0)
                     } else {
                       ctrl.lineOneWidth(`${h1Width}px`)
@@ -210,7 +209,7 @@ const Card = {
     const width = dimensionsHelper.getDimensions().width()
     const height = (width > 766) ? Math.floor(dimensionsHelper.getDimensions().height() / 2) : dimensionsHelper.getDimensions().height()
     !ctrl.isCardExpanded() ? ctrl.thisCardExpanded(false) : null
-    return m(`li.${style['list-item']}`, { config: listItemConfig.bind(ctrl), onclick: hide.bind(ctrl, args.elementIndex), class: ctrl.elementInfo.visible() ? style['visible'] : '' }, [
+    return m(`li.${style['list-item']}`, { config: listItemConfig.bind(ctrl), onclick: hide.bind(ctrl, args.elementIndex), class: ctrl.elementInfo.visible() ? style['visible'] : '', tabIndex: 0 }, [
         m(`.${style['card-container']}`,  {
           style: {
 

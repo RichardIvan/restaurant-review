@@ -120,7 +120,6 @@ const priceActionButton = function() {
 
 const renderMiniActionButtons = (ctrl) => {
   return [
-        console.log(ctrl.filter.status()),
         m(`.${style['clear-button-line']}`, { class: (ctrl.open() && ctrl.filter.status()) ? style['open'] : '' }, [
           clearActionButton.call(ctrl),
           m(`.${style['tooltip']}`, { class: (ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : '' }, ['Clear', m(`.${style['nod']}`)])

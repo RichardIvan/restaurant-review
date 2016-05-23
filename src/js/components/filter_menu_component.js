@@ -75,13 +75,11 @@ const renderOptions = function(menuType) {
   ])
 } 
 
-const renderTypeMenu = function(categories) {
+const renderTypeMenu = function() {
   const ctrl = this
 
   return m(`ul.${style['food-menu']}`, [
-    _.map(categories(), (category, index) => {
-      // const numberOfIcons = index + 1
-      // const iconsArr = new Array(numberOfIcons)
+    _.map(ctrl.categories(), (category) => {
       return m(`li.${style['menu-row']}`, { onclick: categoryClickHandler.bind(ctrl,category) }, m('span', { class: category.active() ? `${style['active']}` : '' }, category.name()))
     })
   ])
@@ -108,11 +106,12 @@ const filterMenuConfig = function(el, inited) {
 
 const renderFilterMenu = function(args) {
   const ctrl = this
-  const parentCtrl = args
+  // const parentCtrl = args
+
 
   return m(`.${style['filter-menu']}.${style['shadow']}`, { config: filterMenuConfig } ,[
     (ctrl.clickedFilterSection() === 'rating') ? renderOptions.call(ctrl, 'rating') : '',
-    (ctrl.clickedFilterSection() === 'type') ? renderTypeMenu.call(ctrl, ctrl.categories) : '',
+    (ctrl.clickedFilterSection() === 'type') ? renderTypeMenu.call(ctrl) : '',
     (ctrl.clickedFilterSection() === 'price') ? renderOptions.call(ctrl, 'price') : ''
       
     ])

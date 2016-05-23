@@ -87,10 +87,8 @@ const starActionButton = function() {
     events: {
       onclick: handleMiniButtonClick.bind(ctrl, 'rating')
     }
-  });
-}
-
-  
+  })
+} 
 
 const typeActionButton = function() {
   const ctrl = this
@@ -117,13 +115,12 @@ const priceActionButton = function() {
     events: {
       onclick: handleMiniButtonClick.bind(ctrl, 'price')
     }
-  });
+  })
 }
-
-
 
 const renderMiniActionButtons = (ctrl) => {
   return [
+        console.log(ctrl.filter.status()),
         m(`.${style['clear-button-line']}`, { class: (ctrl.open() && ctrl.filter.status()) ? style['open'] : '' }, [
           clearActionButton.call(ctrl),
           m(`.${style['tooltip']}`, { class: (ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : '' }, ['Clear', m(`.${style['nod']}`)])
@@ -147,19 +144,12 @@ const renderMiniActionButtons = (ctrl) => {
   ]
 }
 
-const renderFilterMenu = (ctrl) => {
-  return m(`.${style['filter-menu']}`, [
-      m('.menu-bro')
-    ])
-}
-
-
 const renderView = function(args) {
   const ctrl = this
   const parentCtrl = args
 
 
-  return m(`.${style['filter-section']}`, [
+  return m(`.${style['filter-section']}`, { style: { zIndex: !ctrl.detailsOpen() ? 20 : 0 } }, [
       m(`.${style['buttons']}`, [
         m(`.${style['main-button-line']}`, [
           filterActionButton.call(ctrl),
@@ -188,7 +178,7 @@ const fltr = function() {
   const ctrl = this
 
   // const unfilteredRestaurants = m.prop(_.cloneDeep(ctrl.restaurants()))
-  let status
+  let status = 0
   const filter = {
     status(type) {
       
@@ -243,6 +233,14 @@ const fltr = function() {
 
   const filterCategory = function(rests, category) {
     filter.status(1)
+    // ctrl.categories()
+    //find category name in categories array for the filter menu,
+    // and set it's flag to true
+    const filterListCateroryIndex = _.find(ctrl.categories(), (item) => {
+      return item.name() === category
+    })
+    console.log(filterListCateroryIndex.active())
+
     return _.filter(rests(), (restaurant) => {
             const index = _.indexOf(restaurant.categories, category)
             if(index !== -1) {
@@ -353,11 +351,20 @@ const fltr = function() {
       }
     },
     reset() {
+      filter.active().category()
+      // console.log(filter.status())
+      // console.log(filter.active().price())
+      // console.log(filter.active().rating())
+      // console.log(filter.active().category())
+
       filter.status(0)
       filter.active().price(0)
       filter.active().rating(0)
       filter.active().category([])
       ctrl.restaurants(ctrl.unfilteredRestaurants())
+      _.forEach(ctrl.categories(), (category) => {
+        category.active(false)
+      })
     },
     status(type) {
       return filter.status(type)
@@ -385,7 +392,8 @@ const Filter = {
       closeFilterSection() {
         Ctrl.open(false)
         Ctrl.clickedFilterSection('')
-      }
+      },
+      detailsOpen: args.detailsOpen
     }
     Ctrl.filter = fltr.call(Ctrl)
 

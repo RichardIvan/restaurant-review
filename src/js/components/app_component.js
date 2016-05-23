@@ -135,12 +135,15 @@ const App = {
 
       // this is the whole filter component, that means the filter button also
       // if the details are opened there is the writign button wihtin
-      !ctrl.detailsOpen() ? 
-        m.component(Filter, {
-          restaurants: ctrl.restaurants,
-          unfilteredRestaurants: ctrl.unfilteredRestaurants,
-          categories: ctrl.categories
-        } ) : '',
+
+      m.component(Filter, {
+        restaurants: ctrl.restaurants,
+        unfilteredRestaurants: ctrl.unfilteredRestaurants,
+        categories: ctrl.categories,
+        detailsOpen: ctrl.detailsOpen
+      } ),
+      // !ctrl.detailsOpen() ? 
+      //    : '',
       ctrl.restaurants().length === 0 ? m(`.${style['no-restults-overlay']}`, [
         m(''),
         m(`.${style['content']}`, [

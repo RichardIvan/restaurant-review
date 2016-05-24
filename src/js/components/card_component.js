@@ -120,25 +120,13 @@ const handleScroll = function(e) {
   console.log('scrollin')
 }
 
+let width, height
+
 const Card = {
   controller(args) {
-
-    const constructImageUrl = () => {
-      const randomImage = getRandomImage(args.restaurant().photos)
-      //get card size from store
-      const cardSize = `${395}${255}`
-
-      console.log(getRandomImage())
-
-    }
-
-    const state = m.prop({
-      // imageUrl: m.prop(constructImageUrl())
-    })
-
     const rating = args.restaurant().rating
     const fullStars = parseInt(rating, 10)
-    const remainder = ((rating - fullStars).toFixed(1))/1
+    const remainder = ((rating - fullStars).toFixed(1)) / 1
     const starsArr = new Array(fullStars).fill('full')
     if (remainder >= 0.5) {
       starsArr.push('half')
@@ -206,30 +194,51 @@ const Card = {
   view(ctrl, args) {
 //     console.log(ctrl.data.dimensions.card.height())
 //     console.log(ctrl.data.dimensions.card.width())
-    const width = dimensionsHelper.getDimensions().width()
-    const height = (width > 766) ? Math.floor(dimensionsHelper.getDimensions().height() / 2) : dimensionsHelper.getDimensions().height()
+
+//     console.log(Math.floor(dimensionsHelper.getDimensions('list-container').height() / 2))
+
+    width = dimensionsHelper.getDimensions('list-container').width()
+    // console.log(width)
+    // console.log(dimensionsHelper.isMobile())
+    // console.log(dimensionsHelper.isDesktop())
+    // console.log((!dimensionsHelper.isMobile() || dimensionsHelper.isDesktop()))
+    if (width > 1024) {
+      // dimensionsHelper.setDimension('list-container')
+      dimensionsHelper.setDimensions('list-container')
+      m.redraw()
+    }
+
+    height = (!dimensionsHelper.isMobile() || dimensionsHelper.isDesktop()) ? Math.floor(dimensionsHelper.getDimensions('list-container').height() / 2) : dimensionsHelper.getDimensions('list-container').height()
     !ctrl.isCardExpanded() ? ctrl.thisCardExpanded(false) : null
-    return m(`li.${style['list-item']}`, { config: listItemConfig.bind(ctrl), onclick: hide.bind(ctrl, args.elementIndex), class: ctrl.elementInfo.visible() ? style['visible'] : '', tabIndex: 0 }, [
-        m(`.${style['card-container']}`,  {
-          style: {
+    return m(`li.${style['list-item']}`,
+      { 
+        config: listItemConfig.bind(ctrl),
+        onclick: hide.bind(ctrl, args.elementIndex),
+        class: ctrl.elementInfo.visible() ? style['visible'] : '',
+        tabIndex: 0
+      },
+      [
+        m(`.${style['card-container']}`,
+          {
+            style: {
+              //the dimensions or height might be comming dynamically from the args
+              // instead of the initiated conponent
+              backgroundImage: `url('${ctrl.restaurant().photos[0].prefix}${width}x${dimensionsHelper.getDimensions('list-container').height()}${ctrl.restaurant().photos[0].suffix}')`,
 
-            //the dimensions or height might be comming dynamically from the args
-            // instead of the initiated conponent
-            backgroundImage: `url('${ctrl.restaurant().photos[0].prefix}${width}x${dimensionsHelper.getDimensions().height()}${ctrl.restaurant().photos[0].suffix}')`,
+              height: `${height}px`,
+              width: (!dimensionsHelper.isMobile() || dimensionsHelper.isDesktop()) ? `${width / 2 - 16}px` : `${width - 16}px`
+            }
+          },
+          [
+            renderHeading.call(ctrl),
 
-            height: `${height}px`,
-            width: (width > 766) ? `${width / 2 - 16}px` : `${width - 16}px`
-          }
-        }, [
+            ctrl.isCardExpanded() && ctrl.thisCardExpanded() ? renderAddress.call(ctrl) : renderRating(ctrl.stars())
 
-          renderHeading.call(ctrl),
-
-          ctrl.isCardExpanded() && ctrl.thisCardExpanded() ? renderAddress.call(ctrl) : renderRating(ctrl.stars())
-
-          // ctrl.expanded() ? '' : renderExpandButton.call(ctrl)
-
-        ])
-      ])
+            // ctrl.expanded() ? '' : renderExpandButton.call(ctrl)
+          ]
+        )
+      ]
+    )
   }
 }
 

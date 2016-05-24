@@ -37,7 +37,7 @@ const setStyle = function() {
   // if (!d)
   //   return
 
-  const dimensions = dimensionsHelper.getDimensions()
+  const dimensions = dimensionsHelper.getDimensions('list-container')
 
   // const position = 'absolute'
   // const background = 'white'

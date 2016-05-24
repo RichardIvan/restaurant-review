@@ -9,6 +9,7 @@ import dimensionsHelper from '../../js/helpers/screen-dimensions.js'
 
 //components
 import Card from './card_component'
+import DesktopDetailsComponent from './desktop_details_component'
 import Details from './details_component'
 import Filter from './filter_component'
 
@@ -18,19 +19,19 @@ import style from '../../css/app.scss'
 
 //TODO
 window.onresize = function(e) {
-  dimensionsHelper.setDimensions()
+  dimensionsHelper.setDimensions('main-container')
+  dimensionsHelper.setDimensions('list-container')
+  m.redraw()
   m.redraw()
 }
 
 
-const mainContainerConfig = function(el, init) {
-  const ctrl = this
+const captureElement = function(namespace, el, init) {
   if(!init) {
-    dimensionsHelper.setElement(el)
-    dimensionsHelper.setDimensions()
+    dimensionsHelper.setElement(namespace, el)
+    dimensionsHelper.setDimensions(namespace)
   }
 }
-
 
 const App = {
   controller() {
@@ -86,37 +87,55 @@ const App = {
     return Ctrl
   },
   view(ctrl) {
-    return m('.main-container', { config: mainContainerConfig.bind(ctrl) }, [
+    return m('.main-container', {
+      config: captureElement.bind(null, 'main-container')
+    },
+    [
       // THIS WHOLE UL MIGHT BECOME A COMPONENT!
       // config: ulConfig,
-      m(`ul.${style['list-container']}`, {  style: { overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll' } }, [
-        _.map(ctrl.restaurants(), (restaurant, index) => {
 
-          // pass restaurant object here
-          const data = {
-            restaurants: ctrl.restaurants,
-            restaurant: m.prop(restaurant),
-            key: restaurant.place_id,
+      dimensionsHelper.isDesktop() ? m.component(DesktopDetailsComponent, {}) : '',
 
-            element: ctrl.element,
-            selectedRestaurant: ctrl.selectedRestaurant,
-            //dimensions is set via main container config
-            // needs to be changed
-            dimensions: ctrl.dimensions,
-            hide: ctrl.hide,
-            elementInfo: restaurant.elementInfo,
-            elementIndex: m.prop(index),
+      m(`ul.${style['list-container']}`,
+        {
+          style: {
+            overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll',
+            position: dimensionsHelper.isMobile() ? 'absolute' : 'relative'
+          },
+          config: captureElement.bind(null, 'list-container')
+        },
+        [
+          _.map(ctrl.restaurants(), (restaurant, index) => {
 
-            isCardExpanded: ctrl.isCardExpanded,
-            detailsOpen: ctrl.detailsOpen,
+            // pass restaurant object here
+            const data = {
+              restaurants: ctrl.restaurants,
+              restaurant: m.prop(restaurant),
+              key: restaurant.place_id,
 
-            // clickedElementIndex: index,
-            currentElementIndex: ctrl.currentElementIndex
+              element: ctrl.element,
+              selectedRestaurant: ctrl.selectedRestaurant,
+              //dimensions is set via main container config
+              // needs to be changed
+              dimensions: ctrl.dimensions,
+              hide: ctrl.hide,
+              elementInfo: restaurant.elementInfo,
+              elementIndex: m.prop(index),
 
-          }
-          return m.component(Card, data)
-        })
-      ]),
+              isCardExpanded: ctrl.isCardExpanded,
+              detailsOpen: ctrl.detailsOpen,
+
+              // clickedElementIndex: index,
+              currentElementIndex: ctrl.currentElementIndex
+
+            }
+            return m.component(Card, data)
+          })
+        ]
+      ),
+
+      m.redraw(),
+
       ctrl.detailsOpen() ? m.component(Details, {
         restaurants: ctrl.restaurants,
         restaurant: ctrl.selectedRestaurant,

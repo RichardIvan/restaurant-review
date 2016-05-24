@@ -10,8 +10,10 @@ export function runAnimation(el, top) {
   //this is Ctrl of app_component
   const ctrl = this
 
-  const height = dimensionsHelper.getDimensions().height()
-  const width = dimensionsHelper.getDimensions().width()
+  console.log('runAnimation')
+
+  const height = dimensionsHelper.getDimensions('list-container').height()
+  const width = dimensionsHelper.getDimensions('list-container').width()
 
   animationHelper.setDimensions(el.firstChild)
 

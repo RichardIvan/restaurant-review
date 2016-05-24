@@ -13,6 +13,9 @@
 }
 
 :global(body), :global(.main-container) {
+  display: flex;
+  flex-direction: row;
+
   position: absolute;
   top: 0;
   right: 0;

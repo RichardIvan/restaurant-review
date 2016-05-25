@@ -26,6 +26,8 @@ window.onresize = function(e) {
 }
 
 
+
+//Export as it's own helper!
 const captureElement = function(namespace, el, init) {
   if(!init) {
     dimensionsHelper.setElement(namespace, el)
@@ -36,7 +38,8 @@ const captureElement = function(namespace, el, init) {
 const App = {
   controller() {
     const state = m.prop({
-      data: m.prop([])
+      data: m.prop([]),
+      selectedRestaurant: m.prop('')
     })
     const data = fetch('/data')
       .then(data => data.json())
@@ -50,6 +53,7 @@ const App = {
       })
 
       state().data(json)
+      state().selectedRestaurant(json[0])
     })
     .then(m.redraw)
 
@@ -75,7 +79,7 @@ const App = {
       restaurants: state().data,
       categories,
       unfilteredRestaurants,
-      selectedRestaurant: m.prop(''),
+      selectedRestaurant: state().selectedRestaurant,
       element: m.prop(''),
       currentElementIndex: m.prop(''),
       isCardExpanded: m.prop(''),
@@ -83,18 +87,23 @@ const App = {
       detailsOpen: m.prop(false),
       runDelayedLoop
     }
+    // Ctrl.selectedRestaurant = m.prop(Ctrl.restaurants)
 
     return Ctrl
   },
   view(ctrl) {
+    console.log('hey')
     return m('.main-container', {
       config: captureElement.bind(null, 'main-container')
     },
     [
       // THIS WHOLE UL MIGHT BECOME A COMPONENT!
       // config: ulConfig,
+      // console.log(ctrl.selectedRestaurant()),
 
-      dimensionsHelper.isDesktop() ? m.component(DesktopDetailsComponent, {}) : '',
+
+
+      (dimensionsHelper.isDesktop() && ctrl.selectedRestaurant()) ? m.component(DesktopDetailsComponent, { restaurant: ctrl.selectedRestaurant() }) : '',
 
 
       m(`.${style['list-container']}`, {

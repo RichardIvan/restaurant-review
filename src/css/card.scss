@@ -99,7 +99,7 @@
   height: 30px;
 }
 
-.heading-background1, .heading-background2, h1 {
+.heading-background1, .heading-background2 {
   position: absolute;
 
   // top: 24px;
@@ -113,6 +113,11 @@
 
   margin-top: -7px;
   margin-left: -16px;
+}
+
+.heading-container h1 {
+  position: absolute;
+  height: 100%;
 }
 
 .heading-background1, .address-heading-background1, .rating-background1 {  

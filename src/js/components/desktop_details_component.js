@@ -10,7 +10,6 @@ import style from '../../css/desktop-details.scss'
 
 const DD = {
   view(ctrl, args) {
-    console.log('DESKTOP VIEW LOADED')
     return m(`.${style['desktop-details-container']}`)
   }
 }

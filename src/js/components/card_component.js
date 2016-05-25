@@ -198,11 +198,9 @@ const Card = {
 //     console.log(Math.floor(dimensionsHelper.getDimensions('list-container').height() / 2))
 
     width = dimensionsHelper.getDimensions('list-container').width()
-    // console.log(width)
     // console.log(dimensionsHelper.isMobile())
-    // console.log(dimensionsHelper.isDesktop())
     // console.log((!dimensionsHelper.isMobile() || dimensionsHelper.isDesktop()))
-    if (width > 1024) {
+    if (width >= 1023 || !dimensionsHelper.isDesktop()) {
       // dimensionsHelper.setDimension('list-container')
       dimensionsHelper.setDimensions('list-container')
       m.redraw()

@@ -8,6 +8,7 @@ import runDelayedLoop from '../../js/helpers/delayed-loop.js'
 import dimensionsHelper from '../../js/helpers/screen-dimensions.js'
 
 //components
+import Toolbar from './toolbar_component'
 import Card from './card_component'
 import DesktopDetailsComponent from './desktop_details_component'
 import Details from './details_component'
@@ -21,7 +22,6 @@ import style from '../../css/app.scss'
 window.onresize = function(e) {
   dimensionsHelper.setDimensions('main-container')
   dimensionsHelper.setDimensions('list-container')
-  m.redraw()
   m.redraw()
 }
 
@@ -96,45 +96,52 @@ const App = {
 
       dimensionsHelper.isDesktop() ? m.component(DesktopDetailsComponent, {}) : '',
 
-      m(`ul.${style['list-container']}`,
-        {
-          style: {
-            overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll',
-            position: dimensionsHelper.isMobile() ? 'absolute' : 'relative'
+
+      m(`.${style['list-container']}`, {
+        style: {
+          overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll',
+          position: dimensionsHelper.isMobile() ? 'absolute' : 'relative'
+        }
+      } ,[
+        dimensionsHelper.isDesktop() ? m(Toolbar) : '',
+        m(`ul`,
+          {
+            style: {
+              // overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll',
+            },
+            config: captureElement.bind(null, 'list-container')
           },
-          config: captureElement.bind(null, 'list-container')
-        },
-        [
-          _.map(ctrl.restaurants(), (restaurant, index) => {
+          [
+            _.map(ctrl.restaurants(), (restaurant, index) => {
 
-            // pass restaurant object here
-            const data = {
-              restaurants: ctrl.restaurants,
-              restaurant: m.prop(restaurant),
-              key: restaurant.place_id,
+              // pass restaurant object here
+              const data = {
+                restaurants: ctrl.restaurants,
+                restaurant: m.prop(restaurant),
+                key: restaurant.place_id,
 
-              element: ctrl.element,
-              selectedRestaurant: ctrl.selectedRestaurant,
-              //dimensions is set via main container config
-              // needs to be changed
-              dimensions: ctrl.dimensions,
-              hide: ctrl.hide,
-              elementInfo: restaurant.elementInfo,
-              elementIndex: m.prop(index),
+                element: ctrl.element,
+                selectedRestaurant: ctrl.selectedRestaurant,
+                //dimensions is set via main container config
+                // needs to be changed
+                dimensions: ctrl.dimensions,
+                hide: ctrl.hide,
+                elementInfo: restaurant.elementInfo,
+                elementIndex: m.prop(index),
 
-              isCardExpanded: ctrl.isCardExpanded,
-              detailsOpen: ctrl.detailsOpen,
+                isCardExpanded: ctrl.isCardExpanded,
+                detailsOpen: ctrl.detailsOpen,
 
-              // clickedElementIndex: index,
-              currentElementIndex: ctrl.currentElementIndex
+                // clickedElementIndex: index,
+                currentElementIndex: ctrl.currentElementIndex
 
-            }
-            return m.component(Card, data)
-          })
-        ]
-      ),
+              }
+              return m.component(Card, data)
+            })
+          ]
+        )
 
-      m.redraw(),
+      ]),
 
       ctrl.detailsOpen() ? m.component(Details, {
         restaurants: ctrl.restaurants,

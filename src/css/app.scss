@@ -13,6 +13,23 @@
   overflow-x: hidden;
 }
 
+.list-container > :global(ul) {
+  display: flex;
+  flex-wrap: wrap;
+
+  height: 100%;
+  width: 100%
+
+  // flex: 1.5;
+  // position: absolute;
+  // top: 0;
+  // right: 0;
+  // bottom: 0;
+  // left: 0;
+  // overflow-y: scroll;
+  // overflow-x: hidden;
+}
+
 
 .no-restults-overlay {
   display: flex;
@@ -48,3 +65,11 @@
     flex-wrap: wrap;
   }
 }
+
+@media (min-width: 1024px) {
+  .list-container {
+    position: relative;
+    border-left: 0.5px solid rgba(151, 151, 151, 0.5);
+  }
+}
+

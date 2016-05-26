@@ -3,8 +3,33 @@
 
   padding: 16px;
 
+
+  overflow-x: hidden;
+  overflow-y: scroll;
+
   flex: 1;
 
   background: white;
-  color: pink;
+  color: black;
+
+  .fab-button {
+    
+    position: fixed;
+    // right: 24px;
+    bottom: 24px;
+
+    z-index: 5;
+
+    .writing-action-button {
+      background: #FC2950;
+      color: #FCF7F4;
+    }
+
+  }
+
+  .desktop-cancel-writing {
+    left: 8px;
+    bottom: 72px;
+    position: absolute
+  }
 }

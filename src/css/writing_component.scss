@@ -1,10 +1,22 @@
 .writing-container {
+  position: relative;
+  
   padding: 16px;
+
+  background: white;
+
+  .text-section :global(textarea) {
+    border: 0 !important;
+  }
+
+  .text-section :global(.pe-textfield__input-area:after) {
+    opacity: 0 !important;
+  }
 }
 
 .rating-banner {
-  position: fixed;
-  bottom: 32px;
+  position: absolute;
+  bottom: 24px;
   left: 40px;
   
   :global(ul) {

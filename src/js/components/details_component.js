@@ -56,6 +56,8 @@ const setStyle = function() {
   }
 }
 
+
+// export as helper!
 const renderStars = (rating) => {
 
   const stars = new Array(rating).fill(true)
@@ -249,6 +251,8 @@ const cancelActionButton = function() {
   })
 }
 
+
+//export as helper!
 const renderReview = (review, indexDB) => {
   return m(`li.${style['review-item']}.single-review`, { key: review.time, style: { opacity: indexDB ? 1 : 0 } }, [
                     m(`.${style['line-one']}`, [
@@ -270,6 +274,8 @@ const renderReview = (review, indexDB) => {
                   ])
 }
 
+
+//extract as helper
 const closeWritingSection = function() {
   const ctrl = this
 

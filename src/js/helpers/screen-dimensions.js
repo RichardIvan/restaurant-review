@@ -89,6 +89,10 @@ const dimensions = {
   },
   isDesktop() {
     return _dimensions['main-container'].width() >= 1024
+  },
+
+  scrollTop(namespace) {
+    _dimensions[namespace].el().scrollTop = 0
   }
 }
 

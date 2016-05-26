@@ -92,7 +92,6 @@ const App = {
     return Ctrl
   },
   view(ctrl) {
-    console.log('hey')
     return m('.main-container', {
       config: captureElement.bind(null, 'main-container')
     },
@@ -171,12 +170,13 @@ const App = {
       // this is the whole filter component, that means the filter button also
       // if the details are opened there is the writign button wihtin
 
-      m.component(Filter, {
-        restaurants: ctrl.restaurants,
-        unfilteredRestaurants: ctrl.unfilteredRestaurants,
-        categories: ctrl.categories,
-        detailsOpen: ctrl.detailsOpen
-      } ),
+      !dimensionsHelper.isDesktop() ?
+        m.component(Filter, {
+          restaurants: ctrl.restaurants,
+          unfilteredRestaurants: ctrl.unfilteredRestaurants,
+          categories: ctrl.categories,
+          detailsOpen: ctrl.detailsOpen
+        } ) : '',
       // !ctrl.detailsOpen() ? 
       //    : '',
       ctrl.restaurants().length === 0 ? m(`.${style['no-restults-overlay']}`, [

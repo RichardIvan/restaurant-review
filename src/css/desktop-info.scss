@@ -1,0 +1,111 @@
+.desktop-info-container {
+
+  background: white;
+  color: black;
+
+  border-bottom: 0.5px solid rgba( 151, 151, 151, 0.5);
+
+  .header {
+    position: relative;
+    height: 64px;
+
+    display: flex;
+    flex-direction: row;
+  }
+
+  .info {
+    background: white;
+  }
+
+  .flex {
+    flex-grow: 1;
+  }
+
+  :global(h3) {
+    float: left;
+    margin-left: 24px;
+    font-weight: 400;
+  }
+
+  .header-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .icon-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .info-icon {
+    float: right;
+    margin-right: 16px;
+
+    padding: 16px;
+  }
+
+  .content {
+    opacity: 0;
+    max-height: 0px;
+
+    height: auto;
+
+    transition: max-height 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) 0.3s, opacity 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    
+    // translateY: -100%;
+
+    padding: 0px 24px 0px;
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    .clear {
+      clear: both;
+    }
+
+    .label {
+      flex: 2;
+    }
+
+    .info {
+      flex: 4;
+    }
+
+    // .label, .info {
+    //   float: left;
+
+    // }
+
+    .address, .opening-hours, .categories {
+      width: 100%;
+      display: flex;
+      margin-top: 16px;
+    }
+
+    .categories :global(li:last-child) {
+      margin-bottom: 16px;
+    }
+
+    :global(ul) {
+      list-style: none;
+    }
+
+
+    :global(li) {
+      line-height: 1.5;
+    }
+  }
+
+  .content.open {
+    transition: max-height 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    max-height: 1000px;
+  }
+
+  .content.visible {
+    // transition-delay: 0.3s;
+    transition: opacity 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) 0.2s;
+    opacity: 1;
+  }
+}

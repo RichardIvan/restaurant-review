@@ -56,7 +56,7 @@ const captureElement = function(namespace, el, init) {
 const handleClearClick = function() {
   const ctrl = this
 
-  ctrl.writingActive(false)
+  ctrl.closeWritingSection()
 }
 
 const handleWritingFabClick = function(type) {

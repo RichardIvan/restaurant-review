@@ -5,10 +5,20 @@ import m from 'mithril'
 import { runAnimation } from './card-animation.js'
 import runDelayedLoop from './delayed-loop.js'
 
+import dimensionsHelper from './screen-dimensions.js'
+
 const hide = function(clickedElementIndex, element) {
 
   // this is a controller from a card
   const ctrl = this
+
+  if (dimensionsHelper.isDesktop()) {
+    ctrl.selectedRestaurant(ctrl.restaurant())
+    ctrl.element(ctrl.cardElement())
+    ctrl.currentElementIndex(clickedElementIndex())
+    m.redraw()
+    return
+  }
 
   if(ctrl.isCardExpanded())
     return

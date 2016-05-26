@@ -162,7 +162,7 @@ const DD = {
       {
         config: captureElement.bind(null, 'desktop-details-container'),
         style: {
-          overflowY: ctrl.writingActive() ? 'hidden' : 'scroll'
+          // overflowY: ctrl.writingActive() ? 'hidden' : 'scroll'
         }
       },
       [

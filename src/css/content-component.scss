@@ -1,7 +1,7 @@
 .content-component {
   
   background: white;
-  height: 100%;
+/*   height: 100%; */
 
   .writing-component-container, .reviews-component-container {
     position: absolute;
@@ -13,7 +13,8 @@
     // padding-right: 16px;
 
     width: 100%;
-    height: 100%;
+/*     height: 100%; */
+    height: auto;
 
     background: white;
     opacity: 1;
@@ -21,15 +22,18 @@
 
   .writing-component-container, .reviews-component-container {
     opacity: 1;
-    transform: translateX(-100%);
+    // transform: translateX(-100%);
+    display: none;
   }
 
   .writing-component-container.visible {
-    transform: translateX(0);
+    // transform: translateX(0);
+    display: block;
   }
 
   .reviews-component-container.visible {
-    transform: translateX(0);
+    // transform: translateX(0);
+    display: block;
   }
 
   .reviews-component-container {

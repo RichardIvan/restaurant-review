@@ -368,7 +368,10 @@ export default {
           ]),
 
 
-          ctrl.writingSectionActive() ? m.component(Writing, { review: ctrl.review }) :
+          ctrl.writingSectionActive() ? m.component(Writing, {
+            review: ctrl.review,
+            writingActive: ctrl.writingSectionActive
+          }) :
             
             //REVIEWS
             m(`.${style['reviews']}`, [

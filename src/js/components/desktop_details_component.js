@@ -1,6 +1,7 @@
 'use strict'
 
 import m from 'mithril'
+import _ from 'lodash'
 
 import PhotosComponent from './desktop_photos_component'
 import InfoComponent from './desktop_info_component'
@@ -10,6 +11,7 @@ import ContentComponent from './content_component.js'
 //helpers
 import dimensionsHelper from '../helpers/screen-dimensions.js'
 import DB from '../services/db.js'
+import loadIndexedDBreviews from '../helpers/load-indexed-db-reviews.js'
 
 //styles
 import style from '../../css/desktop-details.scss'
@@ -125,21 +127,23 @@ const cancelActionButton = function() {
 const DD = {
 
 
-  controller( {restaurant} ) {
+  controller( { restaurant } ) {
     const indexDBReviews = m.prop([])
-    DB.getReviews()
-      .then((reviews) => {
-        _.forEach(reviews, (r) => {
-          const review = JSON.parse(r.payload)
-          if(review.place_id === restaurant.place_id) {
-            const newArr = indexDBReviews()
-            newArr.push(review)
-            indexDBReviews(newArr)
-          }
-        })
-        // indexDBReviews()
-        m.redraw()
-      })
+
+    loadIndexedDBreviews(restaurant, indexDBReviews)
+    // DB.getReviews()
+    //   .then((reviews) => {
+    //     _.forEach(reviews, (r) => {
+    //       const review = JSON.parse(r.payload)
+    //       if(review.place_id === restaurant.place_id) {
+    //         const newArr = indexDBReviews()
+    //         newArr.push(review)
+    //         indexDBReviews(newArr)
+    //       }
+    //     })
+    //     // indexDBReviews()
+    //     m.redraw()
+    //   })
 
     return {
       writingActive: m.prop(false),
@@ -154,10 +158,20 @@ const DD = {
         valid: m.prop(false)
       }),
       closeWritingSection,
-      indexDBReviews
+      indexDBReviews,
+      currentPlaceID: m.prop(restaurant.place_id)
     }
   },
   view(ctrl, { restaurant }) {
+
+    console.log(restaurant.place_id)
+    console.log(ctrl.currentPlaceID)
+    if (restaurant.place_id !== ctrl.currentPlaceID()) {
+      //reloadIndexedDBReviews()
+      ctrl.currentPlaceID(restaurant.place_id)
+      loadIndexedDBreviews(restaurant, ctrl.indexDBReviews)
+    }
+
     return m(`.${style['desktop-details-container']}`,
       {
         config: captureElement.bind(null, 'desktop-details-container'),

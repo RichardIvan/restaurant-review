@@ -111,7 +111,11 @@ const App = {
           position: dimensionsHelper.isMobile() ? 'absolute' : 'relative'
         }
       } ,[
-        dimensionsHelper.isDesktop() ? m(Toolbar) : '',
+        dimensionsHelper.isDesktop() ?
+          m(Toolbar, {
+            restaurant: ctrl.restaurants
+          }) : '',
+        
         m(`ul`,
           {
             style: {

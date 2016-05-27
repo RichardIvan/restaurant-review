@@ -163,11 +163,7 @@ const DD = {
     }
   },
   view(ctrl, { restaurant }) {
-
-    console.log(restaurant.place_id)
-    console.log(ctrl.currentPlaceID)
     if (restaurant.place_id !== ctrl.currentPlaceID()) {
-      //reloadIndexedDBReviews()
       ctrl.currentPlaceID(restaurant.place_id)
       loadIndexedDBreviews(restaurant, ctrl.indexDBReviews)
     }
@@ -199,7 +195,7 @@ const DD = {
         m(`.${style['fab-button']}`,
           {
             style: {
-              right: `${dimensionsHelper.getDimensions('list-container').width() + 24}px`
+              right: `${dimensionsHelper.getDimensions('list-container').width() + 44 }px`
             }
           },
           [

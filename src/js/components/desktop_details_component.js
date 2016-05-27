@@ -153,7 +153,7 @@ const DD = {
           text: m.prop(''),
           time: m.prop(''),
           rating: m.prop(''),
-          place_id: restaurant.place_id
+          place_id: m.prop(restaurant.place_id)
         }),
         valid: m.prop(false)
       }),
@@ -165,15 +165,13 @@ const DD = {
   view(ctrl, { restaurant }) {
     if (restaurant.place_id !== ctrl.currentPlaceID()) {
       ctrl.currentPlaceID(restaurant.place_id)
+      ctrl.review().props().place_id(restaurant.place_id) 
       loadIndexedDBreviews(restaurant, ctrl.indexDBReviews)
     }
 
     return m(`.${style['desktop-details-container']}`,
       {
-        config: captureElement.bind(null, 'desktop-details-container'),
-        style: {
-          // overflowY: ctrl.writingActive() ? 'hidden' : 'scroll'
-        }
+        config: captureElement.bind(null, 'desktop-details-container')
       },
       [
         m(PhotosComponent, {
@@ -196,7 +194,8 @@ const DD = {
           {
             style: {
               right: `${dimensionsHelper.getDimensions('list-container').width() + 44 }px`
-            }
+            },
+            focused: true
           },
           [
             ctrl.review().valid() ? writingMainActionButton.call(ctrl, 'done') : writingMainActionButton.call(ctrl, 'edit'),

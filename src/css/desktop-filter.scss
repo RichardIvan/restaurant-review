@@ -41,4 +41,31 @@
 
     pointer-events: auto;
   }
+
+  .back-tile {
+    display: flex;
+    flex-direction: row;
+
+    .icon-container {
+      flex: 1;
+    }
+
+    .text-container {
+      display: flex;
+      flex-direction: column;
+      flex: 2;
+
+      .flex {
+        flex-grow: 1;
+      }
+
+      :global(span) {
+        flex: 1
+      }
+    }
+  }
+
+  #overflow-visible {
+    overflow: visible;
+  }
 }

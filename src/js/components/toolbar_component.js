@@ -10,8 +10,6 @@ import DesktopFilter from './desktop_filter_component.js'
 
 const Toolbar = {
   view(ctrl, { restaurants, categories, unfilteredRestaurants }) {
-    console.log(categories)
-    console.log(categories())
     return m(`.${style['toolbar-container']}`,
       [
         m(`.${style['flex']}`),

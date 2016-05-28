@@ -14,6 +14,9 @@ import menu from 'polythene/menu/menu'
 import list from 'polythene/list/list'
 import listTile from 'polythene/list-tile/list-tile'
 import btn from 'polythene/button/button'
+import iconBtn from 'polythene/icon-button/icon-button'
+
+import gIconBack from 'mmsvg/google/msvg/hardware/keyboard-backspace';
 
 import FilterMenuComponent from './filter_menu_component.js'
 
@@ -53,7 +56,7 @@ const filterMenu = function() {
   return m.component(list, {
           tiles: [
             m.component(listTile, {
-              title: 'Type',
+              title: 'Rating',
               ink: true,
               events: {
                 onclick: handleMiniButtonClick.bind(ctrl, 'rating')
@@ -82,42 +85,6 @@ const filterMenu = function() {
             })
           ]
         })
-}
-
-const listOfFilters = function() {
-  const ctrl = this
-  return m.component(list, {
-        tiles: [
-          m.component(listTile, {
-            title: 'Type',
-            ink: true,
-            events: {
-              onclick: handleMiniButtonClick.bind(ctrl, 'rating')
-            }
-          }),
-          m.component(listTile, {
-            title: 'Type',
-            ink: true,
-            events: {
-              onclick: handleMiniButtonClick.bind(ctrl, 'type')
-            }
-          }),
-          m.component(listTile, {
-            title: 'Price',
-            ink: true,
-            events: {
-              onclick: handleMiniButtonClick.bind(ctrl, 'price')
-            }
-          }),
-          m.component(listTile, {
-            title: 'Reset',
-            ink: true,
-            events: {
-              onclick: handleMiniButtonClick.bind(ctrl, 'rating')
-            }
-          })
-        ]
-      })
 }
 
 const DesktopFilter = {
@@ -159,12 +126,40 @@ const DesktopFilter = {
           show: ctrl.open(), // should the menu be open or closed?
           didHide: () => (ctrl.open(false)), // called after closing
           permanent: m.prop(true),
-          size: 7,
+          size: 4,
           origin: 'top-left',
           class: !ctrl.open() ? `${style['closed']}` : '',
           content: ctrl.clickedFilterSection() ?
             m(list, {
               tiles: [
+                m(listTile, {
+                  ink: true,
+                  id: `${style['overflow-visible']}`,
+                  content: [
+                    m(`.${style['back-tile']}`,
+                      [
+                        m(`.${style['icon-container']}`,
+                          m.component(iconBtn, {
+                            icon: {
+                              msvg: gIconBack
+                            },
+                            events: {
+                              onclick: () => ctrl.clickedFilterSection('')
+                            }
+                          })
+                        ),
+                        m(`.${style['text-container']}`,
+                          [
+                            m(`.${style['flex']}`),
+                            m('span', 'Back'),
+                            m(`.${style['flex']}`)
+                          ]
+                        )
+                        
+                      ]
+                    )
+                  ]
+                }),
                 m(listTile, {
                   id: 'filter-component-container',
                   content: m(FilterMenuComponent,

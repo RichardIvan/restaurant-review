@@ -113,7 +113,10 @@ const App = {
       } ,[
         dimensionsHelper.isDesktop() ?
           m(Toolbar, {
-            restaurant: ctrl.restaurants
+            restaurants: ctrl.restaurants,
+            categories: ctrl.categories,
+            unfilteredRestaurants: ctrl.unfilteredRestaurants
+            // restaurant: ctrl.restaurants
           }) : '',
         
         m(`ul`,

@@ -9,6 +9,13 @@
 
   border-bottom: 0.5px solid rgba( 151, 151, 151, 0.5);
 
+  .content-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    position: relative;
+  }
+
   .flex {
     flex-grow: 1;
   }
@@ -24,5 +31,30 @@
   :global(h3:nth-child(2)) {
     float: right;
     margin-right: 80px;
+  }
+
+  .h3-container {
+    display: flex;
+    flex-direction: column;
+
+    margin-left: 80px;
+    position: relative;
+    width: 100%;
+  }
+
+  :global(#filter-component-container) :global(.pe-list-tile__content) {
+    padding: 0;    
+  }
+
+  :global(#filter-menu) {
+    position: relative;
+    opacity: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
   }
 }

@@ -113,6 +113,9 @@ const listItemConfig = function(el, inited) {
   const ctrl = this
   if(!inited) {
     ctrl.cardElement(el)
+    if (dimensionsHelper.isDesktop()) {
+      dimensionsHelper.setDimensions('list-container')
+    }
   }
 }
 
@@ -200,12 +203,12 @@ const Card = {
     width = dimensionsHelper.getDimensions('list-container').width()
     // console.log(dimensionsHelper.isMobile())
     // console.log((!dimensionsHelper.isMobile() || dimensionsHelper.isDesktop()))
-    if (width >= 1023 ) {
-      if (dimensionsHelper.isDesktop()) {
-        dimensionsHelper.setDimensions('list-container')
-        console.log('run')
-      }
-    }
+    // if (width >= 1023 ) {
+    //   if (dimensionsHelper.isDesktop()) {
+    //     dimensionsHelper.setDimensions('list-container')
+    //     console.log('run')
+    //   }
+    // }
 
     height = (!dimensionsHelper.isMobile() || dimensionsHelper.isDesktop()) ? Math.floor(dimensionsHelper.getDimensions('list-container').height() / 2) : dimensionsHelper.getDimensions('list-container').height()
     !ctrl.isCardExpanded() ? ctrl.thisCardExpanded(false) : null

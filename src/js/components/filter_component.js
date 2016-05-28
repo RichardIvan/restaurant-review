@@ -123,24 +123,67 @@ const priceActionButton = function() {
 
 const renderMiniActionButtons = (ctrl) => {
   return [
-        m(`.${style['clear-button-line']}`, { class: (ctrl.open() && ctrl.filter.status()) ? style['open'] : '' }, [
-          clearActionButton.call(ctrl),
-          m(`.${style['tooltip']}`, { class: (ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : '' }, ['Clear', m(`.${style['nod']}`)])
+        m(`.${style['clear-button-line']}`,
+          {
+            class: (ctrl.open() && ctrl.filter.status()) ? style['open'] : ''
+          }, 
+          [
+            clearActionButton.call(ctrl),
+            m(`.${style['tooltip']}`,
+              {
+                class: (ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : ''
+              },
+              [
+                'Clear', m(`.${style['nod']}`)
+              ]
+            )
           // parentCtrl.tooltips[0].visible() ? m(`.${style['tooltip']}`, 'Filter') : ''
         ]),
-        m(`.${style['star-button-line']}`, { class: ctrl.open() ? style['open'] : '' }, [
-          starActionButton.call(ctrl),
-          m(`.${style['tooltip']}`, { class: (!ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : '' }, ['Stars', m(`.${style['nod']}`)])
+        m(`.${style['star-button-line']}`,
+          {
+            class: ctrl.open() ? style['open'] : ''
+          },
+          [
+            starActionButton.call(ctrl),
+            m(`.${style['tooltip']}`,
+              {
+                class: (!ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : ''
+              },
+              [
+                'Stars', m(`.${style['nod']}`)
+              ]
+            )
           // parentCtrl.tooltips[0].visible() ? m(`.${style['tooltip']}`, 'Filter') : ''
         ]),
-        m(`.${style['type-button-line']}`, { class: ctrl.open() ? style['open'] : '' },  [
-          typeActionButton.call(ctrl),
-          m(`.${style['tooltip']}`, { class: (!ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : '' }, ['Type', m(`.${style['nod']}`)])
+        m(`.${style['type-button-line']}`,
+          {
+            class: ctrl.open() ? style['open'] : ''
+          },
+          [
+            typeActionButton.call(ctrl),
+            m(`.${style['tooltip']}`,
+              {
+                class: (!ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : ''
+              },
+              [
+                'Type', m(`.${style['nod']}`)
+              ]
+            )
           // parentCtrl.tooltips[0].visible() ? m(`.${style['tooltip']}`, 'Filter') : ''
         ]),
-        m(`.${style['price-button-line']}`, { class: ctrl.open() ? style['open'] : '' },  [
-          priceActionButton.call(ctrl),
-          m(`.${style['tooltip']}`, { class: (!ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : '' }, ['Price', m(`.${style['nod']}`)])
+        m(`.${style['price-button-line']}`,
+          {
+            class: ctrl.open() ? style['open'] : ''
+          },
+          [
+            priceActionButton.call(ctrl),
+            m(`.${style['tooltip']}`,
+              {
+                class: (!ctrl.clickedFilterSection() && ctrl.open()) ? style['visible'] : ''
+              },
+              [
+                'Price', m(`.${style['nod']}`)
+              ])
           // parentCtrl.tooltips[0].visible() ? m(`.${style['tooltip']}`, 'Filter') : ''
         ])
   ]

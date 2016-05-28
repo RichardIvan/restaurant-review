@@ -109,17 +109,12 @@ const renderFilterMenu = function(args) {
   // const parentCtrl = args
 
 
-  return m(`.${style['filter-menu']}.${style['shadow']}`,
-    {
-      config: filterMenuConfig,
-      id: 'filter-menu'
-    },
-    [
-      (ctrl.clickedFilterSection() === 'rating') ? renderOptions.call(ctrl, 'rating') : '',
-      (ctrl.clickedFilterSection() === 'type') ? renderTypeMenu.call(ctrl) : '',
-      (ctrl.clickedFilterSection() === 'price') ? renderOptions.call(ctrl, 'price') : ''
-    ]
-    )
+  return m(`.${style['filter-menu']}.${style['shadow']}`, { config: filterMenuConfig } ,[
+    (ctrl.clickedFilterSection() === 'rating') ? renderOptions.call(ctrl, 'rating') : '',
+    (ctrl.clickedFilterSection() === 'type') ? renderTypeMenu.call(ctrl) : '',
+    (ctrl.clickedFilterSection() === 'price') ? renderOptions.call(ctrl, 'price') : ''
+      
+    ])
 }
 
 

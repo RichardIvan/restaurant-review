@@ -42,6 +42,12 @@
     pointer-events: auto;
   }
 
+  :global(#filter-menu-container).closed {
+    z-index: 1001;
+
+    pointer-events: none;
+  }
+
   .back-tile {
     display: flex;
     flex-direction: row;
@@ -67,5 +73,13 @@
 
   #overflow-visible {
     overflow: visible;
+  }
+
+  .filter-menu-open {
+    pointer-events: auto;
+  }
+
+  .filter-menu-closed {
+    pointer-events: none;
   }
 }

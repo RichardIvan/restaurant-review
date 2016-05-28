@@ -125,9 +125,10 @@ const DesktopFilter = {
           id: 'filter-menu-container',
           show: ctrl.open(), // should the menu be open or closed?
           didHide: () => (ctrl.open(false)), // called after closing
-          permanent: m.prop(true),
+          permanent: ctrl.open(),
           size: 4,
           origin: 'top-left',
+          // class: ctrl.open() ? `${style['filter-menu-open']}` : `${style['filter-menu-closed']}`,
           class: !ctrl.open() ? `${style['closed']}` : '',
           content: ctrl.clickedFilterSection() ?
             m(list, {

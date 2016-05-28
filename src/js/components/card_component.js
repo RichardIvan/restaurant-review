@@ -210,7 +210,7 @@ const Card = {
     //   }
     // }
 
-    height = (!dimensionsHelper.isMobile() || dimensionsHelper.isDesktop()) ? Math.floor(dimensionsHelper.getDimensions('list-container').height() / 2) : dimensionsHelper.getDimensions('list-container').height()
+    height = (!dimensionsHelper.isMobile()) ? Math.floor(dimensionsHelper.getDimensions('list-container').height() / 2) : dimensionsHelper.getDimensions('list-container').height()
     !ctrl.isCardExpanded() ? ctrl.thisCardExpanded(false) : null
     return m(`li.${style['list-item']}`,
       { 

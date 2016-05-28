@@ -80,7 +80,7 @@ const filterMenu = function() {
               title: 'Reset',
               ink: true,
               events: {
-                onclick: handleMiniButtonClick.bind(ctrl, 'rating')
+                onclick: handleMiniButtonClick.bind(ctrl, 'clear')
               }
             })
           ]

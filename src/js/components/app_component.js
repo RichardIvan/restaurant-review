@@ -7,6 +7,9 @@ import _ from 'lodash'
 import runDelayedLoop from '../../js/helpers/delayed-loop.js'
 import dimensionsHelper from '../../js/helpers/screen-dimensions.js'
 
+//services
+import Aria from '../services/aria.js'
+
 //components
 import Toolbar from './toolbar_component'
 import Card from './card_component'
@@ -30,6 +33,21 @@ window.onresize = function(e) {
 //Export as it's own helper!
 const captureElement = function(namespace, el, init) {
   if(!init) {
+    dimensionsHelper.setElement(namespace, el)
+    dimensionsHelper.setDimensions(namespace)
+  }
+}
+
+const listContainerConfig = function( ariaObject, el, init) {
+  if(!init) {
+    Aria.register(ariaObject)
+    Aria.tabIndexDir[ariaObject.ariaParent][ariaObject.ariaChild] = 0
+  }
+}
+
+const appContainerConfig = function(ariaObject, namespace, el, init) {
+  if(!init) {
+    Aria.register(ariaObject)
     dimensionsHelper.setElement(namespace, el)
     dimensionsHelper.setDimensions(namespace)
   }
@@ -85,117 +103,156 @@ const App = {
       isCardExpanded: m.prop(''),
       
       detailsOpen: m.prop(false),
-      runDelayedLoop
+      runDelayedLoop,
+
+      ariaParent: 'root',
+      ariaChild: 'root'
     }
     // Ctrl.selectedRestaurant = m.prop(Ctrl.restaurants)
 
     return Ctrl
   },
   view(ctrl) {
-    return m('.main-container', {
-      config: captureElement.bind(null, 'main-container')
-    },
-    [
-      // THIS WHOLE UL MIGHT BECOME A COMPONENT!
-      // config: ulConfig,
-      // console.log(ctrl.selectedRestaurant()),
-
-
-
-      (dimensionsHelper.isDesktop() && ctrl.selectedRestaurant()) ? m.component(DesktopDetailsComponent, { restaurant: ctrl.selectedRestaurant() }) : '',
-
-
-      m(`.${style['list-container']}`, {
-        style: {
-          overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll',
-          position: dimensionsHelper.isMobile() ? 'absolute' : 'relative'
-        }
-      } ,[
-        dimensionsHelper.isDesktop() ?
-          m(Toolbar, {
-            restaurants: ctrl.restaurants,
-            categories: ctrl.categories,
-            unfilteredRestaurants: ctrl.unfilteredRestaurants
-            // restaurant: ctrl.restaurants
-          }) : '',
-        
-        m(`ul`,
+    return m('.main-container',
+      {
+        config: appContainerConfig.bind(null,
           {
+            ariaParent: ctrl.ariaParent,
+            ariaChild: ctrl.ariaChild
+          },
+          'main-container'
+        )
+      },
+      [
+        // THIS WHOLE UL MIGHT BECOME A COMPONENT!
+        // config: ulConfig,
+        // console.log(ctrl.selectedRestaurant()),
+
+
+
+        (dimensionsHelper.isDesktop() && ctrl.selectedRestaurant()) ?
+          m.component(DesktopDetailsComponent,
+            {
+              restaurant: ctrl.selectedRestaurant(),
+              ariaParent: ctrl.ariaChild,
+              ariaChild: 'desktop-details-container'
+            }) : '',
+
+
+        ctrl.detailsOpen() ? m.component(Details, {
+          restaurants: ctrl.restaurants,
+          restaurant: ctrl.selectedRestaurant,
+          dimensions: ctrl.dimensions,
+          //element for incard animations
+          element: ctrl.element,
+          originalDimensions: ctrl.originalDimensions,
+          //expanded for swapping rating for address in card
+          isCardExpanded: ctrl.isCardExpanded,
+
+          detailsOpen: ctrl.detailsOpen,
+          // current element index is required so that we knwo what items are
+          // we hidiing in the animation loop, this way we set before/after elements
+          currentElementIndex: ctrl.currentElementIndex
+
+          // ariaParent: 'root',
+          // ariaId: 'list-container'
+        } ) : '',
+
+
+        m(`.${style['list-container']}`,
+          {
+
             style: {
-              // overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll',
+              overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll',
+              position: dimensionsHelper.isMobile() ? 'absolute' : 'relative'
             },
-            config: captureElement.bind(null, 'list-container')
+            'data-aria-id': `${ctrl.ariaParent}-list-container`,
+            tabIndex: Aria.tabIndexDir[ctrl.ariaParent] ? Aria.tabIndexDir[ctrl.ariaParent]['list-container'] : -1,
+            onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ctrl.ariaParent, 'list-container'),
+            config: listContainerConfig.bind(ctrl,
+              {
+                ariaParent: ctrl.ariaChild,
+                ariaChild: 'list-container'
+              }
+            )
           },
           [
-            _.map(ctrl.restaurants(), (restaurant, index) => {
-
-              // pass restaurant object here
-              const data = {
+            dimensionsHelper.isDesktop() ?
+              m(Toolbar, {
                 restaurants: ctrl.restaurants,
-                restaurant: m.prop(restaurant),
-                key: restaurant.place_id,
+                categories: ctrl.categories,
+                unfilteredRestaurants: ctrl.unfilteredRestaurants
+                // restaurant: ctrl.restaurants
+              }) : '',
+          
+            m(`ul`,
+              {
+                style: {
+                  // overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll',
+                },
+                config: captureElement.bind(null, 'list-container')
+              },
+              [
+                _.map(ctrl.restaurants(), (restaurant, index) => {
 
-                element: ctrl.element,
-                selectedRestaurant: ctrl.selectedRestaurant,
-                //dimensions is set via main container config
-                // needs to be changed
-                dimensions: ctrl.dimensions,
-                hide: ctrl.hide,
-                elementInfo: restaurant.elementInfo,
-                elementIndex: m.prop(index),
+                  // pass restaurant object here
+                  const data = {
+                    restaurants: ctrl.restaurants,
+                    restaurant: m.prop(restaurant),
+                    key: restaurant.place_id,
 
-                isCardExpanded: ctrl.isCardExpanded,
-                detailsOpen: ctrl.detailsOpen,
+                    element: ctrl.element,
+                    selectedRestaurant: ctrl.selectedRestaurant,
+                    //dimensions is set via main container config
+                    // needs to be changed
+                    dimensions: ctrl.dimensions,
+                    hide: ctrl.hide,
+                    elementInfo: restaurant.elementInfo,
+                    elementIndex: m.prop(index),
 
-                // clickedElementIndex: index,
-                currentElementIndex: ctrl.currentElementIndex
+                    isCardExpanded: ctrl.isCardExpanded,
+                    detailsOpen: ctrl.detailsOpen,
 
-              }
-              return m.component(Card, data)
-            })
+                    // clickedElementIndex: index,
+                    currentElementIndex: ctrl.currentElementIndex
+
+                  }
+                  return m.component(Card, data)
+                })
+              ]
+            )
+
           ]
-        )
+        ),
 
-      ]),
+        
 
-      ctrl.detailsOpen() ? m.component(Details, {
-        restaurants: ctrl.restaurants,
-        restaurant: ctrl.selectedRestaurant,
-        dimensions: ctrl.dimensions,
-        //element for incard animations
-        element: ctrl.element,
-        originalDimensions: ctrl.originalDimensions,
-        //expanded for swapping rating for address in card
-        isCardExpanded: ctrl.isCardExpanded,
+        // this is the whole filter component, that means the filter button also
+        // if the details are opened there is the writign button wihtin
 
-        detailsOpen: ctrl.detailsOpen,
-        // current element index is required so that we knwo what items are
-        // we hidiing in the animation loop, this way we set before/after elements
-        currentElementIndex: ctrl.currentElementIndex
-      } ) : '',
-
-      // this is the whole filter component, that means the filter button also
-      // if the details are opened there is the writign button wihtin
-
-      !dimensionsHelper.isDesktop() ?
-        m.component(Filter, {
-          restaurants: ctrl.restaurants,
-          unfilteredRestaurants: ctrl.unfilteredRestaurants,
-          categories: ctrl.categories,
-          detailsOpen: ctrl.detailsOpen
-        } ) : '',
-      // !ctrl.detailsOpen() ? 
-      //    : '',
-      ctrl.restaurants().length === 0 ? m(`.${style['no-restults-overlay']}`, [
-        m(''),
-        m(`.${style['content']}`, [
-          m('h1', 'No restaurants found'),
-          m('p', "Hey, why don't you try removing some filters!")
-        ]),
-        m('')
-      ]) : ''
-      //HERE WE NEED A DETAIL COMPONENT AFTER ITEM BEING CLICKED
-    ])
+        !dimensionsHelper.isDesktop() ?
+          m.component(Filter, {
+            restaurants: ctrl.restaurants,
+            unfilteredRestaurants: ctrl.unfilteredRestaurants,
+            categories: ctrl.categories,
+            detailsOpen: ctrl.detailsOpen
+          } ) : '',
+        // !ctrl.detailsOpen() ? 
+        //    : '',
+        ctrl.restaurants().length === 0 ?
+          m(`.${style['no-restults-overlay']}`,
+            [
+              m(''),
+              m(`.${style['content']}`, [
+                m('h1', 'No restaurants found'),
+                m('p', "Hey, why don't you try removing some filters!")
+              ]),
+              m('')
+            ]
+          ) : ''
+        //HERE WE NEED A DETAIL COMPONENT AFTER ITEM BEING CLICKED
+      ]
+    )
   }
 }
 

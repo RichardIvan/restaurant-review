@@ -2,10 +2,19 @@
 
 import m from 'mithril'
 
+//services
+import Aria from '../services/aria.js'
+
 import style from '../../css/desktop-info.scss'
 
 //POLYTHENE COMPONENTS
 import downArrowIcon from '../../icons/rr_down_arrow.js'
+
+const infoHeaderConfig = function(ariaObject, el, init) {
+  if(!init) {
+    Aria.register(ariaObject)
+  }
+}
 
 const InfoComponent = {
   controller() {
@@ -17,10 +26,23 @@ const InfoComponent = {
       }
     }
   },
-  view(ctrl, { address, openingHours, priceTier, categories }) {
+  view(ctrl, { address, openingHours, priceTier, categories, ariaParent, ariaChild }) {
     return m(`.${style['desktop-info-container']}`,
+      {
+        
+      },
       [
         m(`.${style['header']}`,
+          {
+            config: infoHeaderConfig.bind(null,
+              {
+                ariaParent,
+                ariaChild
+              }
+            ),
+            tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
+            onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild)
+          },
           m(`.${style['header-section']}`,
             m(`.${style['flex']}`),
             m(`.${style['info']}`,

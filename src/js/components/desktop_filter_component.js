@@ -102,6 +102,10 @@ const DesktopFilter = {
   },
   view(ctrl, { restaurants, unfilteredRestaurants, categories }) {
     return m(`.${style['container']}`,
+      {
+        tabIndex: -1,
+        autofocus: true
+      },
       [
         m(`.${style['overlay']}`,
           {

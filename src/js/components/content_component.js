@@ -13,7 +13,7 @@ const ContentComponent = {
     //   writingActive
     // }
   },
-  view(ctrl, { restaurant, writingActive, review, indexDBReviews }) {
+  view(ctrl, { restaurant, writingActive, review, indexDBReviews, ariaParent}) {
     return m(`.${style['content-component']}`,
       {
         style: {
@@ -28,7 +28,10 @@ const ContentComponent = {
           [
             m(ReviewsComponent, {
               reviews: restaurant.reviews,
-              indexDBReviews
+              indexDBReviews,
+
+              ariaParent,
+              ariaChild: 'reviews-heading'
             })
           ]
         ),
@@ -40,7 +43,10 @@ const ContentComponent = {
             m(WritingComponent,
               {
                 review,
-                writingActive
+                writingActive,
+
+                ariaParent
+                // ariaChild: 'reviews-heading'
               }
             )
           ]

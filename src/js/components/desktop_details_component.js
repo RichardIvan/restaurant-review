@@ -13,6 +13,9 @@ import dimensionsHelper from '../helpers/screen-dimensions.js'
 import DB from '../services/db.js'
 import loadIndexedDBreviews from '../helpers/load-indexed-db-reviews.js'
 
+//services
+import Aria from '../services/aria.js'
+
 //styles
 import style from '../../css/desktop-details.scss'
 
@@ -48,8 +51,11 @@ const closeWritingSection = function() {
   m.redraw()  
 }
 
-const captureElement = function(namespace, el, init) {
+const desktopDetailsConfig = function(ariaObject, namespace, el, init) {
   if(!init) {
+    Aria.register(ariaObject)
+    Aria.tabIndexDir[ariaObject.ariaParent][ariaObject.ariaChild] = 0
+
     dimensionsHelper.setElement(namespace, el)
     dimensionsHelper.setDimensions(namespace)
   }
@@ -122,7 +128,11 @@ const cancelActionButton = function() {
   })
 }
 
-
+const desktopFabButtonConfig = function(ariaObject, el, init) {
+  if(!init) {
+    Aria.register(ariaObject)
+  }
+}
 
 const DD = {
 
@@ -162,7 +172,7 @@ const DD = {
       currentPlaceID: m.prop(restaurant.place_id)
     }
   },
-  view(ctrl, { restaurant }) {
+  view(ctrl, { restaurant, ariaParent, ariaChild }) {
     if (restaurant.place_id !== ctrl.currentPlaceID()) {
       ctrl.currentPlaceID(restaurant.place_id)
       ctrl.review().props().place_id(restaurant.place_id) 
@@ -171,37 +181,69 @@ const DD = {
 
     return m(`.${style['desktop-details-container']}`,
       {
-        config: captureElement.bind(null, 'desktop-details-container')
+        config: desktopDetailsConfig.bind(null,
+          {
+            ariaParent,
+            ariaChild
+          },
+          'desktop-details-container'
+        ),
+
+        'data-aria-id': `${ariaParent}-${ariaChild}`,
+        tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
+        onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild)
       },
       [
         m(PhotosComponent, {
           photo: restaurant.photos[0],
-          rating: restaurant.rating
+          rating: restaurant.rating,
+          ariaParent: ariaChild,
+          ariaChild: 'desktop-photo-container'
         }),
         m(InfoComponent, {
           address: restaurant.address,
           openingHours: restaurant.opening_hours,
           priceTier: restaurant.priceTier,
-          categories: restaurant.categories
+          categories: restaurant.categories,
+
+          ariaParent: ariaChild,
+          ariaChild: 'info-container'
         }),
         m(ContentComponent, {
           restaurant,
           writingActive: ctrl.writingActive,
           review: ctrl.review,
-          indexDBReviews: ctrl.indexDBReviews
+          indexDBReviews: ctrl.indexDBReviews,
+
+          ariaParent: ariaChild          
         }),
         m(`.${style['fab-button']}`,
           {
             style: {
               right: `${dimensionsHelper.getDimensions('list-container').width() + 44 }px`
             },
-            focused: true
+            config: desktopFabButtonConfig.bind(null,
+              {
+                ariaParent: ariaChild,
+                ariaChild: 'write-review-fab-button'
+              }
+            ),
+            tabIndex: Aria.tabIndexDir[ariaChild] ? Aria.tabIndexDir[ariaChild]['write-review-fab-button'] : -1
           },
           [
             ctrl.review().valid() ? writingMainActionButton.call(ctrl, 'done') : writingMainActionButton.call(ctrl, 'edit'),
             // cancel fab is displaying with little delay, 
             // set in config
-            ctrl.writingActive() ? m(`.${style['desktop-cancel-writing']}`, { config: cancelButtonConfig, style: { opacity: 0 } }, cancelActionButton.call(ctrl)) : ''
+            ctrl.writingActive() ?
+                m(`.${style['desktop-cancel-writing']}`,
+                  {
+                    config: cancelButtonConfig,
+                    style: {
+                      opacity: 0
+                    }
+                  },
+                  cancelActionButton.call(ctrl)
+                ) : ''
           ]
         )
       ]

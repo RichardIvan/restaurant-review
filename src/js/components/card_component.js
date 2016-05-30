@@ -216,8 +216,7 @@ const Card = {
       { 
         config: listItemConfig.bind(ctrl),
         onclick: hide.bind(ctrl, args.elementIndex),
-        class: ctrl.elementInfo.visible() ? style['visible'] : '',
-        tabIndex: 0
+        class: ctrl.elementInfo.visible() ? style['visible'] : ''
       },
       [
         m(`.${style['card-container']}`,

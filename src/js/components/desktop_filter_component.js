@@ -114,9 +114,9 @@ const DesktopFilter = {
       {
         // tabIndex: -1,
         // autofocus: true
-        'data-aria-id': `${ariaParent}-${ariaChild}`,
+        'data-aria-id': `${ariaParent} ${ariaChild}`,
         tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
-        onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild),
+        // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild),
         config: filterButtonConfig.bind(ctrl,
           {
             ariaParent,

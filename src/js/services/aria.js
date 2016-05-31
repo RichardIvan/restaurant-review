@@ -160,6 +160,15 @@ const hasChildren = function(child) {
   return this.parentsDir[child] ? 1 : 0
 }
 
+const extractAttribute = (array, value) => {
+  const attr = _.filter(array, (val) => {
+    if( val.name === value)
+      return 1
+  })
+
+  return attr[0]
+}
+
 const Aria = {
   lastGroupInFocus: m.prop(),
   lastElementInFocus: m.prop(),
@@ -257,16 +266,7 @@ const Aria = {
   },
 
   handleAriaKeyPress: function(e) {
-    console.  log(e)
-
-    const extractAttribute = (array, value) => {
-      const attr = _.filter(array, (val) => {
-        if( val.name === value)
-          return 1
-      })
-
-      return attr[0]
-    }
+    console.log(e)
 
     const nodeAttributes = e.target.attributes
     const attribute = extractAttribute(nodeAttributes, 'data-aria-id')

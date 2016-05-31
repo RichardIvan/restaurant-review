@@ -3,6 +3,8 @@
 import m from 'mithril'
 import _ from 'lodash'
 
+import 'polythene/common/object.assign';
+
 //helpers
 import fltr from '../helpers/filter.js'
 
@@ -15,9 +17,12 @@ import style from '../../css/desktop-filter.scss'
 //polythene
 import menu from 'polythene/menu/menu'
 import list from 'polythene/list/list'
-import listTile from 'polythene/list-tile/list-tile'
+// import listTile from 'polythene/list-tile/list-tile'
 import btn from 'polythene/button/button'
 import iconBtn from 'polythene/icon-button/icon-button'
+
+//custom polythene elements
+import listTile from '../polythene/list-tile.js'
 
 import gIconBack from 'mmsvg/google/msvg/hardware/keyboard-backspace';
 
@@ -54,40 +59,80 @@ const handleMiniButtonClick = function(type) {
 }
 
 
-const filterMenu = function() {
+// 'data-aria-id': `${ariaParent} ${ariaChild}`,
+// tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
+// // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild),
+// config: filterButtonConfig.bind(ctrl,
+//   {
+//     ariaParent,
+//     ariaChild
+//   }
+// )
+
+// 'data-aria-id': `${ariaParent} ${ariaChild}`,
+// tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
+// // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild),
+// config: filterButtonConfig.bind(ctrl,
+//   {
+//     ariaParent,
+//     ariaChild
+//   }
+// ),
+
+// const filterMenuConfig = function(parent, child, el, init) {
+//   if(!init) {
+//     el.setAttribute('data-aria-id', `${parent} ${child}`)
+//   }
+// }
+
+const tileConfig = function(ariaObject, el, init) {
+  if (!init) {
+    Aria.register(ariaObject)
+  }
+}
+
+const tiles = ['Rating', 'Type', 'Price', 'Clear']
+
+const fm = function(parent) {
   const ctrl = this
   return m.component(list, {
-          tiles: [
-            m.component(listTile, {
-              title: 'Rating',
+    tiles: [
+      _.map(tiles, (tileType) => {
+        //code
+        return m.component(listTile,
+          Object.assign(
+            {
+              key: tileType,
+              config: tileConfig.bind(null,
+                {
+                  ariaParent: parent,
+                  ariaChild: tileType
+                }
+              )
+            },
+            {
+              customAttrs: {
+                'data-aria-id': `${parent} ${tileType}`,
+                tabIndex: Aria.tabIndexDir[parent] ? Aria.tabIndexDir[parent][tileType] : -1
+              }
+            },
+            {
+              title: tileType,
               ink: true,
               events: {
-                onclick: handleMiniButtonClick.bind(ctrl, 'rating')
+                onclick: handleMiniButtonClick.bind(ctrl, tileType.toLowerCase()),
+                onkeyup: (e) => {
+                  if(e.keyCode === 13) {
+                    handleMiniButtonClick.call(ctrl, tileType.toLowerCase())
+                  }
+                }
               }
-            }),
-            m.component(listTile, {
-              title: 'Type',
-              ink: true,
-              events: {
-                onclick: handleMiniButtonClick.bind(ctrl, 'type')
-              }
-            }),
-            m.component(listTile, {
-              title: 'Price',
-              ink: true,
-              events: {
-                onclick: handleMiniButtonClick.bind(ctrl, 'price')
-              }
-            }),
-            m.component(listTile, {
-              title: 'Reset',
-              ink: true,
-              events: {
-                onclick: handleMiniButtonClick.bind(ctrl, 'clear')
-              }
-            })
-          ]
-        })
+            }
+          )
+        )
+      })
+    ]
+  })
 }
 
 const filterButtonConfig = function(ariaObject, el, init) {
@@ -122,7 +167,12 @@ const DesktopFilter = {
             ariaParent,
             ariaChild
           }
-        )
+        ),
+        onkeyup: (e) => {
+          if(e.keyCode === 13) {
+            ctrl.open(true)
+          }
+        }
       },
       [
         m(`.${style['overlay']}`,
@@ -198,7 +248,7 @@ const DesktopFilter = {
                 })
               ]
             }) :
-            filterMenu.call(ctrl)
+            fm.call(ctrl, ariaChild)
         })
       ]
     )

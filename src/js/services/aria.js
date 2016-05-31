@@ -301,11 +301,19 @@ const Aria = {
   selectedRestaurant: m.prop({}),
 
   selectRestaurant(parent, child) {
+    const elementToFocus = 'desktop-details-container'
     const ariaObject = {
       ariaParent: parent,
       ariaChild: child
     }
     this.selectedRestaurant(ariaObject)
+
+    disableFocusForChildrenByParent.call(this, parent)
+
+    enableFocusForNewChildrenByParent.call(this, elementToFocus)
+
+    const el = document.querySelector(`[data-aria-id^='${elementToFocus}']`)
+    el.focus()
   },
   deselectRestaurant() {
     const restaurantToSelect = this.selectedRestaurant()
@@ -331,7 +339,7 @@ const Aria = {
   },
   back(parent, child) {
 
-    const condition = (parent === 'root' && !_.isEmpty(this.selectedRestaurant()))
+    const condition = (parent === 'desktop-details-container' && !_.isEmpty(this.selectedRestaurant()))
 
     let newParent = this.childrenDir[parent]
     let newChild
@@ -343,6 +351,7 @@ const Aria = {
       console.log('CONDITION MET')
       newParent = this.selectedRestaurant().ariaParent
       newChild = this.selectedRestaurant().ariaChild
+      this.selectedRestaurant({})
       // return this.deselectRestaurant()
       //
     }

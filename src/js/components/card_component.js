@@ -246,11 +246,20 @@ const Card = {
           {
             ariaParent: args.ariaParent,
             ariaChild: args.ariaChild
-          } ),
+          }
+        ),
         onclick: hide.bind(ctrl, args.elementIndex),
         class: ctrl.elementInfo.visible() ? style['visible'] : '',
         'data-aria-id': `${args.ariaParent} ${args.ariaChild}`,
         tabIndex: Aria.tabIndexDir[args.ariaParent] ? Aria.tabIndexDir[args.ariaParent][args.ariaChild] : -1,
+        onkeyup: (e) => {
+          if(e.keyCode === 13) {
+            e.stopPropagation()
+            hide.call(ctrl, args.elementIndex)
+
+            Aria.selectRestaurant(args.ariaParent, args.ariaChild)
+          }
+        }
         // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, args.ariaParent, args.ariaChild)
       },
       [

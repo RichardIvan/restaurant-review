@@ -141,6 +141,18 @@ const hasOpened = (group) => {
 
 }
 
+//disableFocusForChildrenByParent
+const disableFocusForChildrenByParent = function(parent) {
+  _.forEach(this.parentsDir[parent], (childID) => {
+    this.tabIndexDir[parent][childID] = -1
+  })
+}
+
+const enableFocusForNewChildrenByParent = function(parent) {
+  _.forEach(this.parentsDir[parent], (childID) => {
+    this.tabIndexDir[parent][childID] = 0
+  })
+}
 
 const Aria = {
   lastGroupInFocus: m.prop(),
@@ -285,6 +297,23 @@ const Aria = {
         break
     }
   },
+
+  selectedRestaurant: m.prop({}),
+
+  selectRestaurant(parent, child) {
+    const ariaObject = {
+      ariaParent: parent,
+      ariaChild: child
+    }
+    this.selectedRestaurant(ariaObject)
+  },
+  deselectRestaurant() {
+    const restaurantToSelect = this.selectedRestaurant()
+
+
+
+    this.selectedRestaurant({})
+  },
   select(parent, child) {
     console.log(parent)
     console.log(this.parentsDir[parent])
@@ -305,19 +334,27 @@ const Aria = {
   },
   back(parent, child) {
 
-    _.forEach(this.parentsDir[parent], (childID) => {
-      this.tabIndexDir[parent][childID] = -1
-    })
+    const condition = (parent === 'root' && !_.isEmpty(this.selectedRestaurant()))
 
-    const newParent = this.childrenDir[parent]
+    let newParent = this.childrenDir[parent]
+    let newChild
 
-    _.forEach(this.parentsDir[newParent], (childID) => {
-      this.tabIndexDir[newParent][childID] = 0
-    })
+    disableFocusForChildrenByParent.call(this, parent)
 
+    if (condition) {
+      //returns void
+      console.log('CONDITION MET')
+      newParent = this.selectedRestaurant().ariaParent
+      newChild = this.selectedRestaurant().ariaChild
+      // return this.deselectRestaurant()
+      //
+    }
+
+    enableFocusForNewChildrenByParent.call(this, newParent)
+    
     m.redraw()
 
-    const el = document.querySelector(`[data-aria-id$=${parent}]`)
+    const el = document.querySelector(`[data-aria-id$=${!condition ? parent : newChild}]`)
     console.log(el)
     el.focus()
   },

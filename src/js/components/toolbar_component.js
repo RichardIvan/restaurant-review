@@ -9,8 +9,11 @@ import style from '../../css/toolbar.scss'
 import DesktopFilter from './desktop_filter_component.js'
 
 const Toolbar = {
-  view(ctrl, { restaurants, categories, unfilteredRestaurants }) {
+  view(ctrl, { restaurants, categories, unfilteredRestaurants, ariaParent }) {
     return m(`.${style['toolbar-container']}`,
+      {
+        
+      },
       [
         m(`.${style['flex']}`),
         m(`.${style['content-container']}`,
@@ -27,14 +30,17 @@ const Toolbar = {
               {
                 restaurants,
                 categories,
-                unfilteredRestaurants
+                unfilteredRestaurants,
+
+                ariaParent,
+                ariaChild: 'filter-button'
               }
             )
             // m(`h3`, 'Filter')
 
           ]
         ),
-        m(`.${style['flex']}`),
+        m(`.${style['flex']}`)
       ]
     )
   }

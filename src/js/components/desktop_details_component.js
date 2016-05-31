@@ -189,9 +189,9 @@ const DD = {
           'desktop-details-container'
         ),
 
-        'data-aria-id': `${ariaParent}-${ariaChild}`,
+        'data-aria-id': `${ariaParent} ${ariaChild}`,
         tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
-        onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild)
+        // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild)
       },
       [
         m(PhotosComponent, {

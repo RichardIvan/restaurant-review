@@ -121,7 +121,9 @@ const App = {
             ariaChild: ctrl.ariaChild
           },
           'main-container'
-        )
+        ),
+        onkeyup: Aria.handleAriaKeyPress,
+        'data-aria-id': `${ctrl.ariaParent} ${ctrl.ariaChild}`
       },
       [
         // THIS WHOLE UL MIGHT BECOME A COMPONENT!
@@ -134,7 +136,7 @@ const App = {
           m.component(DesktopDetailsComponent,
             {
               restaurant: ctrl.selectedRestaurant(),
-              ariaParent: ctrl.ariaChild,
+              ariaParent: ctrl.ariaParent,
               ariaChild: 'desktop-details-container'
             }) : '',
 
@@ -166,12 +168,12 @@ const App = {
               overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll',
               position: dimensionsHelper.isMobile() ? 'absolute' : 'relative'
             },
-            'data-aria-id': `${ctrl.ariaParent}-list-container`,
+            'data-aria-id': `${ctrl.ariaParent} list-container`,
             tabIndex: Aria.tabIndexDir[ctrl.ariaParent] ? Aria.tabIndexDir[ctrl.ariaParent]['list-container'] : -1,
-            onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ctrl.ariaParent, 'list-container'),
+            // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ctrl.ariaParent, 'list-container'),
             config: listContainerConfig.bind(ctrl,
               {
-                ariaParent: ctrl.ariaChild,
+                ariaParent: ctrl.ariaParent,
                 ariaChild: 'list-container'
               }
             )
@@ -181,8 +183,9 @@ const App = {
               m(Toolbar, {
                 restaurants: ctrl.restaurants,
                 categories: ctrl.categories,
-                unfilteredRestaurants: ctrl.unfilteredRestaurants
+                unfilteredRestaurants: ctrl.unfilteredRestaurants,
                 // restaurant: ctrl.restaurants
+                ariaParent: 'list-container'
               }) : '',
           
             m(`ul`,
@@ -214,7 +217,10 @@ const App = {
                     detailsOpen: ctrl.detailsOpen,
 
                     // clickedElementIndex: index,
-                    currentElementIndex: ctrl.currentElementIndex
+                    currentElementIndex: ctrl.currentElementIndex,
+
+                    ariaParent: 'list-container',
+                    ariaChild: `restaurant-card-${index}`
 
                   }
                   return m.component(Card, data)

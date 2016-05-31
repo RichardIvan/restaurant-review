@@ -32,8 +32,9 @@ const PhotosComponent = {
           ariaParent,
           ariaChild
         }),
-        'data-aria-id': `${ariaParent}-${ariaChild}`,
-        tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1
+        'data-aria-id': `${ariaParent} ${ariaChild}`,
+        tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
+        onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild)
       },
       [
         d ? 

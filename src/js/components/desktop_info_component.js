@@ -1,6 +1,7 @@
 'use strict'
 
 import m from 'mithril'
+import _ from 'lodash'
 
 //services
 import Aria from '../services/aria.js'
@@ -13,6 +14,27 @@ import downArrowIcon from '../../icons/rr_down_arrow.js'
 const infoHeaderConfig = function(ariaObject, el, init) {
   if(!init) {
     Aria.register(ariaObject)
+  }
+}
+
+const ariaConfig = function(ariaObject, el, init) {
+  if(!init) {
+    console.log(ariaObject)
+    Aria.register(ariaObject)
+  }
+}
+
+const constructAttributes = function(ariaParent, ariaChild) {
+  return {
+    config: ariaConfig.bind(null, { ariaParent, ariaChild }),
+    tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
+    'data-aria-id': `${ariaParent} ${ariaChild}`,
+    // onkeyup(e) {
+    //   e.stopPropagation()
+    //   if (e.keyCode === 27) {
+    //     Aria.handleAriaKeyPress(ariaParent, ariaChild, e)
+    //   }
+    // }
   }
 }
 
@@ -40,8 +62,15 @@ const InfoComponent = {
                 ariaChild
               }
             ),
+            'data-aria-id': `${ariaParent} ${ariaChild}`,
             tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
-            onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild)
+            onkeyup: (e) => {
+              if (e.keyCode === 13) {
+                ctrl.info.state.expanded(true)
+                // Aria.handleAriaKeyPress.call(ctrl, ariaParent, ariaChild, e)
+              }
+              
+            }
           },
           m(`.${style['header-section']}`,
             m(`.${style['flex']}`),
@@ -70,6 +99,7 @@ const InfoComponent = {
           },
           [
             m(`.${style['address']}`,
+              constructAttributes(ariaChild, 'address'),
               [
                 m(`.${style['label']}`, 'Address'),
                 m(`.${style['info']}`,
@@ -78,16 +108,42 @@ const InfoComponent = {
               ]
             ),
             m(`.${style['opening-hours']}`,
-              m(`.${style['label']}`, 'Opening Hours'),
-              m(`.${style['info']}`,
-                m(`ul`, _.map(openingHours, (line) => m(`li.${style['time']}`, line)))
-              )
+              {
+                config: ariaConfig.bind(null,
+                  {
+                    ariaParent: ariaChild,
+                    ariaChild: 'opening-hours'
+                  }
+                ),
+                'data-aria-id': `${ariaChild} ${'opening-hours'}`,
+                tabIndex: Aria.tabIndexDir[ariaChild] ? Aria.tabIndexDir[ariaChild]['opening-hours'] : -1
+              },
+              [
+                m(`.${style['label']}`, 'Opening Hours'),
+                m(`.${style['info']}`,
+                  m(`ul`, _.map(openingHours, (line) => m(`li.${style['time']}`, line)))
+                )
+              ]
+              
             ),
             m(`.${style['categories']}`,
-              m(`.${style['label']}`, 'Categories'),
-              m(`.${style['info']}`,
-                m(`ul`, _.map(categories, (line) => m(`li`, line)))
-              )
+              {
+                config: ariaConfig.bind(null,
+                  {
+                    ariaParent: ariaChild,
+                    ariaChild: 'categories'
+                  }
+                ),
+                'data-aria-id': `${ariaChild} ${'categories'}`,
+                tabIndex: Aria.tabIndexDir[ariaChild] ? Aria.tabIndexDir[ariaChild]['categories'] : -1
+              },
+              [
+                m(`.${style['label']}`, 'Categories'),
+                m(`.${style['info']}`,
+                  m(`ul`, _.map(categories, (line) => m(`li`, line)))
+                )
+              ]
+              
             )
           ]
         ),

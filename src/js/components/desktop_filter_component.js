@@ -6,6 +6,9 @@ import _ from 'lodash'
 //helpers
 import fltr from '../helpers/filter.js'
 
+//services
+import Aria from '../services/aria.js'
+
 //style
 import style from '../../css/desktop-filter.scss'
 
@@ -87,6 +90,12 @@ const filterMenu = function() {
         })
 }
 
+const filterButtonConfig = function(ariaObject, el, init) {
+  if(!init) {
+    Aria.register(ariaObject)
+  }
+}
+
 const DesktopFilter = {
   controller( { restaurants, unfilteredRestaurants ,categories } ) {
     const Ctrl = {
@@ -100,11 +109,20 @@ const DesktopFilter = {
 
     return Ctrl
   },
-  view(ctrl, { restaurants, unfilteredRestaurants, categories }) {
+  view(ctrl, { restaurants, unfilteredRestaurants, categories, ariaParent, ariaChild }) {
     return m(`.${style['container']}`,
       {
-        tabIndex: -1,
-        autofocus: true
+        // tabIndex: -1,
+        // autofocus: true
+        'data-aria-id': `${ariaParent}-${ariaChild}`,
+        tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
+        onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild),
+        config: filterButtonConfig.bind(ctrl,
+          {
+            ariaParent,
+            ariaChild
+          }
+        )
       },
       [
         m(`.${style['overlay']}`,

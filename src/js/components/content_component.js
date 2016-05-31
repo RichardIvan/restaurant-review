@@ -13,7 +13,7 @@ const ContentComponent = {
     //   writingActive
     // }
   },
-  view(ctrl, { restaurant, writingActive, review, indexDBReviews, ariaParent}) {
+  view(ctrl, { restaurant, writingActive, review, indexDBReviews, ariaParent }) {
     return m(`.${style['content-component']}`,
       {
         style: {

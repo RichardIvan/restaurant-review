@@ -238,12 +238,40 @@ const Aria = {
     }
   },
 
-  handleAriaKeyPress: function( parent, child, e) {
-    e.stopPropagation()
+  handleAriaKeyPress: function(e) {
+    console.log(e)
+
+    const extractAttribute = (array, value) => {
+      const attr = _.filter(array, (val) => {
+        if( val.name === value)
+          return 1
+      })
+
+      return attr[0]
+    }
+
+    const nodeAttributes = e.target.attributes
+    const attribute = extractAttribute(nodeAttributes, 'data-aria-id')
+
+
+    if(!attribute)
+      return
+
+    console.log(attribute)
+
+    const attributeValues = attribute.value.split(' ')
+    const [parent, child] = attributeValues
+
+    console.log('PARENT')
+    console.log(parent)
+
+    console.log('CHILD')
+    console.log(child)
+    
+    // e.stopPropagation()
     const ctrl = this
 //     console.log('key pressed')
 //     console.log(e)    
-    console.log(document.activeElement)
     switch(e.keyCode) {
       case 13:
         console.log('pressed enter')
@@ -258,11 +286,10 @@ const Aria = {
     }
   },
   select(parent, child) {
+    console.log(parent)
     console.log(this.parentsDir[parent])
     _.forEach(this.parentsDir[parent], (childID) => {
-      console.log(this.tabIndexDir[parent][childID])
       this.tabIndexDir[parent][childID] = -1
-      console.log(this.tabIndexDir[parent][childID])
     })
 
     _.forEach(this.parentsDir[child], (childID) => {
@@ -271,7 +298,7 @@ const Aria = {
 
     m.redraw()
 
-    const el = document.activeElement.querySelector(`[data-aria-id]`)
+    const el = document.querySelector(`[data-aria-id^='${child}']`)
     console.log(el)
     el.focus()
     
@@ -291,18 +318,25 @@ const Aria = {
     const newParent = this.childrenDir[parent]
 
     console.log(newParent)
+    console.log(this.parentsDir[newParent])
 
     _.forEach(this.parentsDir[newParent], (childID) => {
       console.log('ON')
-      console.log(newParent, '-', childID)
+      console.  log(newParent, '-', childID)
       this.tabIndexDir[newParent][childID] = 0
     })
 
     m.redraw()
 
-    console.log(newParent, ' ', parent)
+    console.log(newParent, ' ', this.parentsDir[newParent][0])
 
-    const el = document.querySelector(`[data-aria-id=${newParent}-${parent}]`)
+    console.log(parent)
+    console.log(parent)
+    console.log(parent)
+
+
+    const el = document.querySelector(`[data-aria-id$=${parent}]`)
+    console.log(el)
     el.focus()
   },
   tabIndex: function(parent, child) {
@@ -321,8 +355,6 @@ const Aria = {
     } else if (_.indexOf(this.parentsDir[parent], child) === -1) {
       this.parentsDir[parent].push(child)
     }
-    console.log(this.parentsDir[parent])
-    console.log(this.parentsDir)
   },
   registerTabIndex: function(parent, child) {
     if (!this.tabIndexDir[parent]) {

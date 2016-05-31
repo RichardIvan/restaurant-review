@@ -7,6 +7,9 @@ import _ from 'lodash'
 import hide from '../helpers/hide-elements.js'
 import dimensionsHelper from '../helpers/screen-dimensions.js'
 
+//services
+import Aria from '../services/aria.js'
+
 import style from '../../css/card.scss'
 
 // const fullStar = require('../../icons/rr_full_star.js')
@@ -68,32 +71,56 @@ const renderHeading = function() {
 const renderAddress = function() {
   const ctrl = this
   return [
-    m(`.${style['address-container']}`, { style: { width: ctrl.addressLineWidth() } }, [
-          m(`.${style['address-line1']}`, [
-            m('h3', { config: (el, inited) => {
-              if(!inited) {
-                const addressWidth = el.offsetWidth + 25
-                ctrl.addressLineOneWidth(addressWidth)
-              }
-            } }, ctrl.address),
-            m(`.${style['address-heading-background1']}`),
-            m(`.${style['address-heading-background2']}`)
-          ]),
-          m(`.${style['address-line2']}`, [
-            m('h3', { config: (el, inited) => {
-              if(!inited) {
-                const addressWidth = el.offsetWidth + 25
-                if ( ctrl.addressLineOneWidth() <= addressWidth ) {
-                  ctrl.addressLineWidth(`${addressWidth}px`)
-                } else {
-                  ctrl.addressLineWidth(`${ctrl.addressLineOneWidth()}px`)
+    m(`.${style['address-container']}`,
+      {
+        style: {
+          width: ctrl.addressLineWidth()
+        }
+      },
+      [
+        m(`.${style['address-line1']}`,
+          [
+            m('h3',
+              {
+                config: (el, inited) => {
+                  if(!inited) {
+                    const addressWidth = el.offsetWidth + 25
+                    ctrl.addressLineOneWidth(addressWidth)
+                  }
                 }
-              }
-            } }, ctrl.sortCode),
-            m(`.${style['address-heading-background1']}`),
-            m(`.${style['address-heading-background2']}`)
-          ])
-        ])
+              },
+              ctrl.address
+            ),
+            [
+              m(`.${style['address-heading-background1']}`),
+              m(`.${style['address-heading-background2']}`)
+            ]
+          ]
+        ),
+        m(`.${style['address-line2']}`,
+          [
+            m('h3',
+              {
+                config: (el, inited) => {
+                  if(!inited) {
+                    const addressWidth = el.offsetWidth + 25
+                    if ( ctrl.addressLineOneWidth() <= addressWidth ) {
+                      ctrl.addressLineWidth(`${addressWidth}px`)
+                    } else {
+                      ctrl.addressLineWidth(`${ctrl.addressLineOneWidth()}px`)
+                    }
+                  }
+                }
+              },
+              ctrl.sortCode
+            ),
+            [
+              m(`.${style['address-heading-background1']}`),
+              m(`.${style['address-heading-background2']}`)
+            ]
+          ]
+        )
+      ])
 
   ]
 }
@@ -109,9 +136,10 @@ const renderRating = function(stars) {
     ])
 }
 
-const listItemConfig = function(el, inited) {
+const listItemConfig = function(ariaObject, el, inited) {
   const ctrl = this
   if(!inited) {
+    Aria.register(ariaObject)
     ctrl.cardElement(el)
     if (dimensionsHelper.isDesktop()) {
       dimensionsHelper.setDimensions('list-container')
@@ -214,9 +242,16 @@ const Card = {
     !ctrl.isCardExpanded() ? ctrl.thisCardExpanded(false) : null
     return m(`li.${style['list-item']}`,
       { 
-        config: listItemConfig.bind(ctrl),
+        config: listItemConfig.bind(ctrl,
+          {
+            ariaParent: args.ariaParent,
+            ariaChild: args.ariaChild
+          } ),
         onclick: hide.bind(ctrl, args.elementIndex),
-        class: ctrl.elementInfo.visible() ? style['visible'] : ''
+        class: ctrl.elementInfo.visible() ? style['visible'] : '',
+        'data-aria-id': `${args.ariaParent} ${args.ariaChild}`,
+        tabIndex: Aria.tabIndexDir[args.ariaParent] ? Aria.tabIndexDir[args.ariaParent][args.ariaChild] : -1,
+        // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, args.ariaParent, args.ariaChild)
       },
       [
         m(`.${style['card-container']}`,

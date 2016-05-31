@@ -27,7 +27,6 @@ const renderStars = (rating) => {
 const reviewConfig = function(ariaObject, el, init) {
 
   if(!init) {
-    console.log(ariaObject)
     Aria.register(ariaObject)
   }
 }
@@ -37,9 +36,9 @@ const renderReview = (ariaObject, review, indexDB) => {
     {
       key: review.time,
       config: reviewConfig.bind(null, ariaObject),
-      'data-aria-id': `${ariaObject.ariaParent}-${ariaObject.ariaChild}`,
+      'data-aria-id': `${ariaObject.ariaParent} ${ariaObject.ariaChild}`,
       tabIndex: Aria.tabIndexDir[ariaObject.ariaParent] ? Aria.tabIndexDir[ariaObject.ariaParent][ariaObject.ariaChild] : -1,
-      onkeyup: Aria.handleAriaKeyPress.bind(null, ariaObject.ariaParent, ariaObject.ariaChild)
+      // onkeyup: Aria.handleAriaKeyPress.bind(null, ariaObject.ariaParent, ariaObject.ariaChild)
     },
     [
       m(`.${style['line-one']}`, [
@@ -64,7 +63,6 @@ const renderReview = (ariaObject, review, indexDB) => {
 
 const reviewsComponentConfig = function(ariaObject, el, init) {
   if(!init) {
-    console.log(ariaObject)
     Aria.register(ariaObject)
   }
 }
@@ -79,9 +77,9 @@ const ReviewsComponent = {
             ariaChild
           }
         ),
-        'data-aria-id': `${ariaParent}-${ariaChild}`,
+        'data-aria-id': `${ariaParent} ${ariaChild}`,
         tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
-        onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild)
+        // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild)
       },
       [
         m(`.${style['reviews-heading']}`,

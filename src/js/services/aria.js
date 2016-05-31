@@ -4,9 +4,9 @@ import m from 'mithril'
 import _ from 'lodash'
 
 // this function is run in case the user clicks enter on a currently focused element
-const hasChildren = function(endpoint) {
-  return endpoint.children ? 1 : 0
-}
+// const hasChildren = function(endpoint) {
+//   return endpoint.children ? 1 : 0
+// }
 
 //accepts status of if the children search is dynamic
 const selectChild = function(status) {
@@ -129,6 +129,8 @@ const selectNext = () => {
     .then(Aria.setLastInFocus)
 }
 
+
+
 const selectPrevious = () => {
 
 }
@@ -152,6 +154,10 @@ const enableFocusForNewChildrenByParent = function(parent) {
   _.forEach(this.parentsDir[parent], (childID) => {
     this.tabIndexDir[parent][childID] = 0
   })
+}
+
+const hasChildren = function(child) {
+  return this.parentsDir[child] ? 1 : 0
 }
 
 const Aria = {
@@ -325,6 +331,9 @@ const Aria = {
   select(parent, child) {
     console.log(parent)
     console.log(this.parentsDir[parent])
+
+    if(!hasChildren.call(this, child))
+      return
 
     disableFocusForChildrenByParent.call(this, parent)
 

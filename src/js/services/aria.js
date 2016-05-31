@@ -317,13 +317,10 @@ const Aria = {
   select(parent, child) {
     console.log(parent)
     console.log(this.parentsDir[parent])
-    _.forEach(this.parentsDir[parent], (childID) => {
-      this.tabIndexDir[parent][childID] = -1
-    })
 
-    _.forEach(this.parentsDir[child], (childID) => {
-      this.tabIndexDir[child][childID] = 0
-    })
+    disableFocusForChildrenByParent.call(this, parent)
+
+    enableFocusForNewChildrenByParent.call(this, child)
 
     m.redraw()
 

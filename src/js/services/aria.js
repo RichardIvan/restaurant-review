@@ -239,7 +239,7 @@ const Aria = {
   },
 
   handleAriaKeyPress: function(e) {
-    console.log(e)
+    console.  log(e)
 
     const extractAttribute = (array, value) => {
       const attr = _.filter(array, (val) => {
@@ -304,36 +304,18 @@ const Aria = {
     
   },
   back(parent, child) {
-    console.log(parent)
-    console.log(child)
-
-    console.log(this.parentsDir)
 
     _.forEach(this.parentsDir[parent], (childID) => {
-      console.log('OFF')
-      console.log(parent, '-', childID)
       this.tabIndexDir[parent][childID] = -1
     })
 
     const newParent = this.childrenDir[parent]
 
-    console.log(newParent)
-    console.log(this.parentsDir[newParent])
-
     _.forEach(this.parentsDir[newParent], (childID) => {
-      console.log('ON')
-      console.  log(newParent, '-', childID)
       this.tabIndexDir[newParent][childID] = 0
     })
 
     m.redraw()
-
-    console.log(newParent, ' ', this.parentsDir[newParent][0])
-
-    console.log(parent)
-    console.log(parent)
-    console.log(parent)
-
 
     const el = document.querySelector(`[data-aria-id$=${parent}]`)
     console.log(el)

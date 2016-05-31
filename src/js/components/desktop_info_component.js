@@ -25,16 +25,17 @@ const ariaConfig = function(ariaObject, el, init) {
 }
 
 const constructAttributes = function(ariaParent, ariaChild) {
+  const ctrl = this
   return {
     config: ariaConfig.bind(null, { ariaParent, ariaChild }),
     tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
     'data-aria-id': `${ariaParent} ${ariaChild}`,
-    // onkeyup(e) {
-    //   e.stopPropagation()
-    //   if (e.keyCode === 27) {
-    //     Aria.handleAriaKeyPress(ariaParent, ariaChild, e)
-    //   }
-    // }
+    onkeyup(e) {
+      if (e.keyCode === 27) {
+        ctrl.info.state.expanded(false)
+        Aria.handleAriaKeyPress(ariaParent, ariaChild, e)
+      }
+    }
   }
 }
 
@@ -69,7 +70,6 @@ const InfoComponent = {
                 ctrl.info.state.expanded(true)
                 // Aria.handleAriaKeyPress.call(ctrl, ariaParent, ariaChild, e)
               }
-              
             }
           },
           m(`.${style['header-section']}`,
@@ -99,7 +99,7 @@ const InfoComponent = {
           },
           [
             m(`.${style['address']}`,
-              constructAttributes(ariaChild, 'address'),
+              constructAttributes.call(ctrl, ariaChild, 'address'),
               [
                 m(`.${style['label']}`, 'Address'),
                 m(`.${style['info']}`,
@@ -108,16 +108,7 @@ const InfoComponent = {
               ]
             ),
             m(`.${style['opening-hours']}`,
-              {
-                config: ariaConfig.bind(null,
-                  {
-                    ariaParent: ariaChild,
-                    ariaChild: 'opening-hours'
-                  }
-                ),
-                'data-aria-id': `${ariaChild} ${'opening-hours'}`,
-                tabIndex: Aria.tabIndexDir[ariaChild] ? Aria.tabIndexDir[ariaChild]['opening-hours'] : -1
-              },
+              constructAttributes.call(ctrl ,ariaChild, 'opening-hours'),
               [
                 m(`.${style['label']}`, 'Opening Hours'),
                 m(`.${style['info']}`,
@@ -127,16 +118,7 @@ const InfoComponent = {
               
             ),
             m(`.${style['categories']}`,
-              {
-                config: ariaConfig.bind(null,
-                  {
-                    ariaParent: ariaChild,
-                    ariaChild: 'categories'
-                  }
-                ),
-                'data-aria-id': `${ariaChild} ${'categories'}`,
-                tabIndex: Aria.tabIndexDir[ariaChild] ? Aria.tabIndexDir[ariaChild]['categories'] : -1
-              },
+              constructAttributes.call(ctrl, ariaChild, 'categories'),
               [
                 m(`.${style['label']}`, 'Categories'),
                 m(`.${style['info']}`,

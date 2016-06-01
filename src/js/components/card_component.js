@@ -297,6 +297,7 @@ const Card = {
             m('img',
               {
                 src: `${ctrl.restaurant().photos[0].prefix}${width}x${dimensionsHelper.getDimensions('list-container').height()}${ctrl.restaurant().photos[0].suffix}`,
+                alt: `${ctrl.restaurant().photos[0].alt}`
                 // style: {
                 //   height: `${height}px`,
                 //   width: (!dimensionsHelper.isMobile() || dimensionsHelper.isDesktop()) ? `${width / 2 - 16}px` : `${width - 16}px` 

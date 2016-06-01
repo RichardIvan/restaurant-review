@@ -47,7 +47,8 @@ const PhotosComponent = {
             },
             m('img',
               {
-                src: `${photo.prefix}${d.width()}x${d.height()}${photo.suffix}`
+                src: `${photo.prefix}${d.width()}x${d.height()}${photo.suffix}`,
+                alt: `${photo.alt}`
               }
             )
           ) : ''

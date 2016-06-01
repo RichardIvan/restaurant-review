@@ -131,12 +131,7 @@ const fm = function(parent) {
                     if (tileType.toLowerCase() === 'clear') {
                       e.stopPropagation()
                       Aria.back(parent, tileType.toLowerCase())
-                      // ctrl.clickedFilterSection('')
-                      // ctrl.open(false)
-                    } 
-                    // else {
-                    //   Aria.select(parent, tileType.toLowerCase())
-                    // }
+                    }
                   } else if ( e.keyCode === 27 ) {
                     ctrl.clickedFilterSection('')
                     ctrl.open(false)

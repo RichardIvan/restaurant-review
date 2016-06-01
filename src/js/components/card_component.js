@@ -287,13 +287,22 @@ const Card = {
             style: {
               //the dimensions or height might be comming dynamically from the args
               // instead of the initiated conponent
-              backgroundImage: `url('${ctrl.restaurant().photos[0].prefix}${width}x${dimensionsHelper.getDimensions('list-container').height()}${ctrl.restaurant().photos[0].suffix}')`,
+              // backgroundImage: `url('${ctrl.restaurant().photos[0].prefix}${width}x${dimensionsHelper.getDimensions('list-container').height()}${ctrl.restaurant().photos[0].suffix}')`,
 
               height: `${height}px`,
               width: (!dimensionsHelper.isMobile() || dimensionsHelper.isDesktop()) ? `${width / 2 - 16}px` : `${width - 16}px`
             }
           },
-          [
+          [ 
+            m('img',
+              {
+                src: `${ctrl.restaurant().photos[0].prefix}${width}x${dimensionsHelper.getDimensions('list-container').height()}${ctrl.restaurant().photos[0].suffix}`,
+                // style: {
+                //   height: `${height}px`,
+                //   width: (!dimensionsHelper.isMobile() || dimensionsHelper.isDesktop()) ? `${width / 2 - 16}px` : `${width - 16}px` 
+                // }
+              }
+            ),
             renderHeading.call(ctrl, args.elementIndex()),
 
             ctrl.isCardExpanded() && ctrl.thisCardExpanded() ? renderAddress.call(ctrl) : renderRating(ctrl.stars(), ctrl.rating(), args.elementIndex())

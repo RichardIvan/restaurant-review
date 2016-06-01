@@ -52,10 +52,6 @@ const data = firebase.child('data').child('places').once('value')
 
 app.get('/data/', (req, res) => {
   console.log('DATA REQUESTED')
-  // data.then((data) => {
-  //   console.log(data)
-  //   return data
-  // })
   data.then((data) => res.json(data))
 })
 

@@ -43,3 +43,7 @@
     outline: -webkit-focus-ring-color auto 5px;
   }
 }
+
+.desktop-details-container::-webkit-scrollbar { 
+  display: none; 
+}

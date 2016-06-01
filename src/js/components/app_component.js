@@ -161,7 +161,7 @@ const App = {
         } ) : '',
 
 
-        m(`.${style['list-container']}`,
+        m(`aside.${style['list-container']}`,
           {
 
             style: {
@@ -176,7 +176,8 @@ const App = {
                 ariaParent: ctrl.ariaParent,
                 ariaChild: 'list-container'
               }
-            )
+            ),
+            role: 'complementary'
           },
           [
             dimensionsHelper.isDesktop() ?

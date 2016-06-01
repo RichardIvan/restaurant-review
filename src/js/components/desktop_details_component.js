@@ -273,6 +273,7 @@ const DD = {
 
         'data-aria-id': `${ariaParent} ${ariaChild}`,
         tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
+        role: 'main'
         // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild)
       },
       [

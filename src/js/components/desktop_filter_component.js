@@ -124,15 +124,21 @@ const fm = function(parent) {
               events: {
                 onclick: handleMiniButtonClick.bind(ctrl, tileType.toLowerCase()),
                 onkeyup: (e) => {
+                  e.stopPropagation()
                   if(e.keyCode === 13) {
                     handleMiniButtonClick.call(ctrl, tileType.toLowerCase())
-                  } else if ( e.keyCode === 27 ) {
-                    ctrl.clickedFilterSection('')
-                    ctrl.open(false)
 
                     if (tileType.toLowerCase() === 'clear') {
                       Aria.back(parent, tileType.toLowerCase())
+                      ctrl.clickedFilterSection('')
+                      ctrl.open(false)
+                    } else {
+                      Aria.select(parent, tileType.toLowerCase())
                     }
+                  } else if ( e.keyCode === 27 ) {
+                    ctrl.clickedFilterSection('')
+                    ctrl.open(false)
+                    Aria.back(parent, tileType.toLowerCase())
                   }
                 }
               }

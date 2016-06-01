@@ -105,9 +105,9 @@ const renderOptions = function(menuType) {
             'data-aria-id': `${ariaParent} ${aChild}-${index}`,
             tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][`${aChild}-${index}`] : -1,
             'role': 'menuitem',
-            'title': `use ${anncouncement} rating filter of ${numberOfIcons} ${numberOfIcons > 3 ? 'or more' : ''}. Filter is ${ctrl.filter.status(menuType) ? '' : 'not'} applied`,
-            'aria-label': `use ${anncouncement} rating filter of ${numberOfIcons} ${numberOfIcons > 3 ? 'or more' : ''}. Filter is ${ctrl.filter.status(menuType) ? '' : 'not'} applied`,
-            'aria-checked': ctrl.filter.status(menuType) ? true : false
+            'title': `use ${anncouncement} rating filter of ${numberOfIcons} ${numberOfIcons > 3 ? 'or more' : ''}. Filter is ${activeStatus() ? '' : 'not'} applied`,
+            'aria-label': `use ${anncouncement} rating filter of ${numberOfIcons} ${numberOfIcons > 3 ? 'or more' : ''}. Filter is ${activeStatus() ? '' : 'not'} applied`,
+            'aria-checked': activeStatus() ? true : false
           }
         ),
         [

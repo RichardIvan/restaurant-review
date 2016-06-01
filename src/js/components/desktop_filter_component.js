@@ -39,23 +39,29 @@ import FilterMenuComponent from './filter_menu_component.js'
 const handleMiniButtonClick = function(type) {
   const ctrl = this
 
-  if (type === 'clear') {
+  return new Promise((resolve, reject) => {
 
-    console.log('CLICKE CLEAR BUTTON')
-    console.log(ctrl)
-    ctrl.filter.reset()
-    ctrl.open(!ctrl.open())
-    ctrl.clickedFilterSection('')
-    return
-  }
+    if (type === 'clear') {
 
-  console.log(type)
+      console.log('CLICKE CLEAR BUTTON')
+      console.log(ctrl)
+      ctrl.filter.reset()
+      ctrl.open(!ctrl.open())
+      ctrl.clickedFilterSection('')
+      return
+    }
 
-  if (type === ctrl.clickedFilterSection()) {
-    ctrl.clickedFilterSection('')
-  } else {
-    ctrl.clickedFilterSection(type)
-  }
+    console.log(type)
+
+    if (type === ctrl.clickedFilterSection()) {
+      ctrl.clickedFilterSection('')
+    } else {
+      ctrl.clickedFilterSection(type)
+    }
+
+    resolve()
+  });
+  
 }
 
 
@@ -127,14 +133,16 @@ const fm = function(parent) {
                   e.stopPropagation()
                   if(e.keyCode === 13) {
                     handleMiniButtonClick.call(ctrl, tileType.toLowerCase())
-
-                    if (tileType.toLowerCase() === 'clear') {
-                      Aria.back(parent, tileType.toLowerCase())
-                      ctrl.clickedFilterSection('')
-                      ctrl.open(false)
-                    } else {
-                      Aria.select(parent, tileType.toLowerCase())
-                    }
+                      .then(() => {
+                        if (tileType.toLowerCase() === 'clear') {
+                          Aria.back(parent, tileType.toLowerCase())
+                          ctrl.clickedFilterSection('')
+                          ctrl.open(false)
+                        } else {
+                          Aria.select(parent, tileType.toLowerCase())
+                        }
+                      })
+                    
                   } else if ( e.keyCode === 27 ) {
                     ctrl.clickedFilterSection('')
                     ctrl.open(false)

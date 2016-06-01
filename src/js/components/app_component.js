@@ -129,7 +129,13 @@ const App = {
         // THIS WHOLE UL MIGHT BECOME A COMPONENT!
         // config: ulConfig,
         // console.log(ctrl.selectedRestaurant()),
-
+        m('span',
+          {
+            id: 'aria-select-control-description',
+            class: 'aria-hide'             
+          },
+          'select item by pressing enter'
+        ),
 
 
         (dimensionsHelper.isDesktop() && ctrl.selectedRestaurant()) ?
@@ -178,9 +184,9 @@ const App = {
               }
             ),
             role: 'region',
-            'aria-labelledby': 'h3-region-label'
+            'aria-labelledby': 'h3-region-label aria-select-control-description'
           },
-          [
+          [ 
             dimensionsHelper.isDesktop() ?
               m(Toolbar, {
                 restaurants: ctrl.restaurants,

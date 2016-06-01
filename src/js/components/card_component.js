@@ -25,7 +25,7 @@ const getRandomImage = (photos) => {
   return photos[Math.floor(Math.random() * max)]
 }
 
-const renderHeading = function() {
+const renderHeading = function(index) {
   const ctrl = this
   return [  
             m(`.${style['heading-container']}`, { style: { width: ctrl.lineOneWidth() } }, [
@@ -54,7 +54,7 @@ const renderHeading = function() {
                     style: { 
                       width: 'auto'
                     },
-                    id: 'restaurant-name'
+                    id: `restaurant-name-${index}`
                   },
                   ctrl.title()
                 ),
@@ -134,11 +134,12 @@ const renderAddress = function() {
   ]
 }
 
-const renderRating = function(stars, rating) {
+const renderRating = function(stars, rating, index) {
   return m(`.${style['rating-container']}`, [
       m('span',
         {
-          id: 'restaurant-rating'
+          id: `restaurant-rating-${index}`,
+          class: 'aria-hide'
         },
         `${Math.round(rating)} stars`
       ),
@@ -276,7 +277,8 @@ const Card = {
           }
         },
         role: 'listitem',
-        'aria-labelledby': 'restaurant-name restaurant-rating'
+        'aria-labelledby': `restaurant-name-${args.elementIndex()} restaurant-rating-${args.elementIndex()} aria-select-control-description`,
+        'title': `${ctrl.title()} ${Math.round(ctrl.rating())}`
         // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, args.ariaParent, args.ariaChild)
       },
       [
@@ -292,9 +294,9 @@ const Card = {
             }
           },
           [
-            renderHeading.call(ctrl),
+            renderHeading.call(ctrl, args.elementIndex()),
 
-            ctrl.isCardExpanded() && ctrl.thisCardExpanded() ? renderAddress.call(ctrl) : renderRating(ctrl.stars(), ctrl.rating())
+            ctrl.isCardExpanded() && ctrl.thisCardExpanded() ? renderAddress.call(ctrl) : renderRating(ctrl.stars(), ctrl.rating(), args.elementIndex())
 
             // ctrl.expanded() ? '' : renderExpandButton.call(ctrl)
           ]

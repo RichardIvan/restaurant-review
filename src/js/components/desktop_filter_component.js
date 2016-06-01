@@ -175,7 +175,9 @@ const DesktopFilter = {
           if(e.keyCode === 13) {
             ctrl.open(true)
           }
-        }
+        },
+        'role': 'button',
+        'aria-title': 'filter'
       },
       [
         m(`.${style['overlay']}`,

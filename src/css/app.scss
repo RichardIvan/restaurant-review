@@ -1,3 +1,9 @@
+:global(.aria-hide) {
+  position: fixed;
+  left: -100000px;
+  // display: none;
+}
+
 .list-container .non-overflow {
   overflow-y: hidden !important;
 }

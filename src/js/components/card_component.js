@@ -276,6 +276,9 @@ const Card = {
             Aria.selectRestaurant(args.ariaParent, args.ariaChild)
           }
         },
+        style: {
+          height: `${height}px`
+        },
         role: 'listitem',
         'aria-labelledby': `restaurant-name-${args.elementIndex()} restaurant-rating-${args.elementIndex()} aria-select-control-description`,
         'title': `Name of the place is ${ctrl.title()} and overall rating is ${Math.round(ctrl.rating())} stars`

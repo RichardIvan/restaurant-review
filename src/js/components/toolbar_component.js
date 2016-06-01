@@ -22,7 +22,11 @@ const Toolbar = {
             m(`.${style['h3-container']}`,
               [
                 m(`.${style['flex']}`),
-                m(`h3`, 'Restaurant Listing'),
+                m(`h3`,
+                  {
+                    id: 'h3-region-label'
+                  },
+                  'Restaurant Listing'),
                 m(`.${style['flex']}`)
               ]
             ),

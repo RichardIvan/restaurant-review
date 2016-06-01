@@ -29,26 +29,35 @@ const renderHeading = function() {
   const ctrl = this
   return [  
             m(`.${style['heading-container']}`, { style: { width: ctrl.lineOneWidth() } }, [
-                m('h1', { config: (el, inited) => {
-                  if(!inited) {
-                    let h1Width = el.offsetWidth + 60
-                    // console.log(h1Width)
-                    if (h1Width > 360) {
-                      const tittleArr = ctrl.title().split(' ')
-                      
-                      ctrl.titleLine2(tittleArr.splice(2).join(' '))
-                      ctrl.title(tittleArr.splice(0, 2).join(' '))
+                m('h1',
+                  {
+                    config: (el, inited) => {
+                      if(!inited) {
+                        let h1Width = el.offsetWidth + 60
+                        // console.log(h1Width)
+                        if (h1Width > 360) {
+                          const tittleArr = ctrl.title().split(' ')
+                          
+                          ctrl.titleLine2(tittleArr.splice(2).join(' '))
+                          ctrl.title(tittleArr.splice(0, 2).join(' '))
 
-                      setTimeout(() => {
-                        h1Width = el.offsetWidth + 60
-                        ctrl.lineOneWidth(`${h1Width}px`)
-                      }, 0)
-                    } else {
-                      ctrl.lineOneWidth(`${h1Width}px`)
-                    }
-                    setTimeout(() => m.redraw(), 0)
-                  }
-                }, style: { width: 'auto' } }, ctrl.title()),
+                          setTimeout(() => {
+                            h1Width = el.offsetWidth + 60
+                            ctrl.lineOneWidth(`${h1Width}px`)
+                          }, 0)
+                        } else {
+                          ctrl.lineOneWidth(`${h1Width}px`)
+                        }
+                        setTimeout(() => m.redraw(), 0)
+                      }
+                    }, 
+                    style: { 
+                      width: 'auto'
+                    },
+                    id: 'restaurant-name'
+                  },
+                  ctrl.title()
+                ),
                 m(`.${style['heading-background1']}`),
                 m(`.${style['heading-background2']}`),
               ]),
@@ -125,8 +134,14 @@ const renderAddress = function() {
   ]
 }
 
-const renderRating = function(stars) {
+const renderRating = function(stars, rating) {
   return m(`.${style['rating-container']}`, [
+      m('span',
+        {
+          id: 'restaurant-rating'
+        },
+        `${Math.round(rating)} stars`
+      ),
       m(`ul.${style['stars-container']}`,
         _.map(stars, (item, i) => {
           return m('li', { key: i }, item)
@@ -259,7 +274,9 @@ const Card = {
 
             Aria.selectRestaurant(args.ariaParent, args.ariaChild)
           }
-        }
+        },
+        role: 'listitem',
+        'aria-labelledby': 'restaurant-name restaurant-rating'
         // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, args.ariaParent, args.ariaChild)
       },
       [
@@ -277,7 +294,7 @@ const Card = {
           [
             renderHeading.call(ctrl),
 
-            ctrl.isCardExpanded() && ctrl.thisCardExpanded() ? renderAddress.call(ctrl) : renderRating(ctrl.stars())
+            ctrl.isCardExpanded() && ctrl.thisCardExpanded() ? renderAddress.call(ctrl) : renderRating(ctrl.stars(), ctrl.rating())
 
             // ctrl.expanded() ? '' : renderExpandButton.call(ctrl)
           ]

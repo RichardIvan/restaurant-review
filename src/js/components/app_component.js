@@ -177,7 +177,8 @@ const App = {
                 ariaChild: 'list-container'
               }
             ),
-            role: 'complementary'
+            role: 'region',
+            'aria-labelledby': 'h3-region-label'
           },
           [
             dimensionsHelper.isDesktop() ?
@@ -194,7 +195,8 @@ const App = {
                 style: {
                   // overflowY: ctrl.detailsOpen() ? 'hidden' : 'scroll',
                 },
-                config: captureElement.bind(null, 'list-container')
+                config: captureElement.bind(null, 'list-container'),
+                role: 'list'
               },
               [
                 _.map(ctrl.restaurants(), (restaurant, index) => {

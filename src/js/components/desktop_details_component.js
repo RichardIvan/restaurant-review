@@ -151,7 +151,7 @@ const writingMainActionButton = function(type, ariaParent) {
             Aria.select(ariaParent, ariaChild, e)
             console.log(Aria.tabIndexDir)
           } else {
-            Aria.select(wActiveAriaParent, wActiveAriaChild, e)
+            Aria.back(wActiveAriaParent, wActiveAriaChild, e)
           }
           // ctrl.writingActive() ? Aria.select(wActiveAriaParent, wActiveAriaChild, e) : Aria.select(ariaParent, ariaChild, e)
           

@@ -127,7 +127,20 @@ const createView = (ctrl, args) => {
               { 
                 class: star() ? `${style['selected']}` : '',
                 onclick: handleStarClick.bind(ctrl, index),
-                key: index
+                onkeyup: (e) => {
+                  e.stopPropagation()
+                  if(e.keyCode === 13) {
+                    handleStarClick.call(ctrl, index)
+                  }
+                },
+                key: index,
+                tabIndex: 0
+                // config: () => {
+                //   Aria.register({
+                //     ariaParent: 'writing-section',
+                //     ariaChild: `star-${index + 1}`
+                //   })
+                // }
               },
               starIcon
             )

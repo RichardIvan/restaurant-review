@@ -39,29 +39,23 @@ import FilterMenuComponent from './filter_menu_component.js'
 const handleMiniButtonClick = function(type) {
   const ctrl = this
 
-  return new Promise((resolve, reject) => {
+  if (type === 'clear') {
 
-    if (type === 'clear') {
+    console.log('CLICKE CLEAR BUTTON')
+    console.log(ctrl)
+    ctrl.filter.reset()
+    ctrl.open(!ctrl.open())
+    ctrl.clickedFilterSection('')
+    return
+  }
 
-      console.log('CLICKE CLEAR BUTTON')
-      console.log(ctrl)
-      ctrl.filter.reset()
-      ctrl.open(!ctrl.open())
-      ctrl.clickedFilterSection('')
-      return
-    }
+  console.log(type)
 
-    console.log(type)
-
-    if (type === ctrl.clickedFilterSection()) {
-      ctrl.clickedFilterSection('')
-    } else {
-      ctrl.clickedFilterSection(type)
-    }
-
-    resolve()
-  });
-  
+  if (type === ctrl.clickedFilterSection()) {
+    ctrl.clickedFilterSection('')
+  } else {
+    ctrl.clickedFilterSection(type)
+  }
 }
 
 
@@ -130,19 +124,19 @@ const fm = function(parent) {
               events: {
                 onclick: handleMiniButtonClick.bind(ctrl, tileType.toLowerCase()),
                 onkeyup: (e) => {
-                  e.stopPropagation()
+                  // e.stopPropagation()
                   if(e.keyCode === 13) {
                     handleMiniButtonClick.call(ctrl, tileType.toLowerCase())
-                      .then(() => {
-                        if (tileType.toLowerCase() === 'clear') {
-                          Aria.back(parent, tileType.toLowerCase())
-                          ctrl.clickedFilterSection('')
-                          ctrl.open(false)
-                        } else {
-                          Aria.select(parent, tileType.toLowerCase())
-                        }
-                      })
-                    
+
+                    if (tileType.toLowerCase() === 'clear') {
+                      e.stopPropagation()
+                      Aria.back(parent, tileType.toLowerCase())
+                      // ctrl.clickedFilterSection('')
+                      // ctrl.open(false)
+                    } 
+                    // else {
+                    //   Aria.select(parent, tileType.toLowerCase())
+                    // }
                   } else if ( e.keyCode === 27 ) {
                     ctrl.clickedFilterSection('')
                     ctrl.open(false)

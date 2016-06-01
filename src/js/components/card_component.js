@@ -278,7 +278,7 @@ const Card = {
         },
         role: 'listitem',
         'aria-labelledby': `restaurant-name-${args.elementIndex()} restaurant-rating-${args.elementIndex()} aria-select-control-description`,
-        'title': `${ctrl.title()} ${Math.round(ctrl.rating())}`
+        'title': `${ctrl.title()}, ${Math.round(ctrl.rating())} stars`
         // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, args.ariaParent, args.ariaChild)
       },
       [

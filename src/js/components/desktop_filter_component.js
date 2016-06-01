@@ -177,7 +177,7 @@ const DesktopFilter = {
           }
         },
         'role': 'button',
-        'aria-title': 'filter'
+        'title': 'filter'
       },
       [
         m(`.${style['overlay']}`,

@@ -18,7 +18,7 @@ import style from '../../css/desktop-filter.scss'
 import menu from 'polythene/menu/menu'
 import list from 'polythene/list/list'
 // import listTile from 'polythene/list-tile/list-tile'
-import btn from 'polythene/button/button'
+import btn from '../polythene/button.js'
 import iconBtn from 'polythene/icon-button/icon-button'
 
 //custom polythene elements
@@ -91,7 +91,7 @@ const tileConfig = function(ariaObject, el, init) {
   }
 }
 
-const tiles = ['Rating', 'Type', 'Price', 'Clear']
+const tiles = ['Rating', 'Category', 'Price', 'Clear']
 
 const fm = function(parent) {
   const ctrl = this
@@ -113,7 +113,9 @@ const fm = function(parent) {
             {
               customAttrs: {
                 'data-aria-id': `${parent} ${tileType.toLowerCase()}`,
-                tabIndex: Aria.tabIndexDir[parent] ? Aria.tabIndexDir[parent][tileType.toLowerCase()] : -1
+                tabIndex: Aria.tabIndexDir[parent] ? Aria.tabIndexDir[parent][tileType.toLowerCase()] : -1,
+                title: `${tileType} filter, ${Aria.announcements.selectAnnouncement}`,
+                role: 'menuitem'
               }
             },
             {
@@ -124,9 +126,13 @@ const fm = function(parent) {
                 onkeyup: (e) => {
                   if(e.keyCode === 13) {
                     handleMiniButtonClick.call(ctrl, tileType.toLowerCase())
-                  } else if ( e.keyCode === 27) {
+                  } else if ( e.keyCode === 27 ) {
                     ctrl.clickedFilterSection('')
                     ctrl.open(false)
+
+                    if (tileType.toLowerCase() === 'clear') {
+                      Aria.back(parent, tileType.toLowerCase())
+                    }
                   }
                 }
               }
@@ -176,7 +182,7 @@ const DesktopFilter = {
             ctrl.open(true)
           }
         },
-        'role': 'button',
+        'role': 'menu',
         'title': 'filter'
       },
       [
@@ -194,6 +200,9 @@ const DesktopFilter = {
           raised: false,
           events: {
             onclick: () => (ctrl.open(true))
+          },
+          customAttrs: {
+            tabIndex: -1
           }
         }),
         m.component(menu, {

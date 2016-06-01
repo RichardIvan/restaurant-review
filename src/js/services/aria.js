@@ -265,6 +265,10 @@ const Aria = {
     }
   },
 
+  announcements: {
+    selectAnnouncement: 'select item by pressing enter'
+  },
+
   handleAriaKeyPress: function(e) {
 
     const nodeAttributes =  e.target.attributes

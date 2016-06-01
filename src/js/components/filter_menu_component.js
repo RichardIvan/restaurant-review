@@ -63,16 +63,19 @@ const renderOptions = function(menuType) {
   const ariaParent = ctrl.clickedFilterSection()
   console.log(ariaParent)
   const aChild = `${menuType}-row`
+  let anncouncement
   if (menuType === 'rating') {
     icon = starIcon
     clickHandler = ratingClickHandler
     cls = style['star-icon']
     rows = ctrl.ratingRows
+    anncouncement = 'price'
   } else {
     icon = dollarIcon
     clickHandler = priceClickHandler
     cls = style['price-icon']
     rows = ctrl.priceRows
+    anncouncement = 'star'
   }
 
   return m(`ul.${style['menu-rows']}`, [
@@ -101,6 +104,10 @@ const renderOptions = function(menuType) {
           {
             'data-aria-id': `${ariaParent} ${aChild}-${index}`,
             tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][`${aChild}-${index}`] : -1,
+            'role': 'menuitem',
+            'title': `use ${anncouncement} rating filter of ${numberOfIcons} ${numberOfIcons > 3 ? 'or more' : ''}. Filter is ${ctrl.filter.status(menuType) ? '' : 'not'} applied`,
+            'aria-label': `use ${anncouncement} rating filter of ${numberOfIcons} ${numberOfIcons > 3 ? 'or more' : ''}. Filter is ${ctrl.filter.status(menuType) ? '' : 'not'} applied`,
+            'aria-checked': ctrl.filter.status(menuType) ? true : false
           }
         ),
         [
@@ -125,6 +132,7 @@ const renderTypeMenu = function() {
   const ctrl = this
   const ariaParent = ctrl.clickedFilterSection()
   const aChild = `${ctrl.clickedFilterSection()}-row`
+
   return m(`ul.${style['food-menu']}`, [
     _.map(ctrl.categories(), (category, index) => {
       return m(`li.${style['menu-row']}`,
@@ -144,7 +152,11 @@ const renderTypeMenu = function() {
               ariaParent,
               ariaChild: `${aChild}-${index}`
             }
-          )
+          ),
+          'role': 'menuitem',
+          title: `${category.name()} category filter is ${category.active() ? '' : 'not'} applied, press enter to ${category.active() ? 'remove' : 'apply'} filter`,
+          'aria-label': `${category.name()} category filter is ${category.active() ? '' : 'not'} applied, press enter to ${category.active() ? 'remove' : 'apply'} filter`,
+          'aria-checked': category.active()
         },
         m('span',
           {
@@ -188,7 +200,7 @@ const renderFilterMenu = function(args) {
     },
     [
       (ctrl.clickedFilterSection() === 'rating') ? renderOptions.call(ctrl, 'rating') : null,
-      (ctrl.clickedFilterSection() === 'type') ? renderTypeMenu.call(ctrl) : null,
+      (ctrl.clickedFilterSection() === 'category') ? renderTypeMenu.call(ctrl) : null,
       (ctrl.clickedFilterSection() === 'price') ? renderOptions.call(ctrl, 'price') : null
     ]
     )

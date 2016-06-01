@@ -88,7 +88,7 @@ const createView = (ctrl, args) => {
             oninput: () => {}, // only update on blur
             onchange: (e) => (changeReviewProp.call(ctrl, 'author_name', e.target.value))
         },
-        tabindex: -1,
+        tabindex: 0,
         // maxlength: 3,
         min: 0,
         max: 255,
@@ -108,11 +108,11 @@ const createView = (ctrl, args) => {
         },
         multiline: true,
         rows: 10,
-        tabindex: -1,
+        tabindex: 0,
         // maxlength: 3,
         min: 0,
         max: 255,
-        hideValidation: true // don't show red line
+        hideValidation: true // don't show red line,
       })
     ]),
 

@@ -331,11 +331,15 @@ const Aria = {
   select(parent, child) {
     console.log(parent)
     console.log(this.parentsDir[parent])
+    console.log(child)
+    console.log(hasChildren.call(this, child))
 
     if(!hasChildren.call(this, child))
       return
 
     disableFocusForChildrenByParent.call(this, parent)
+
+    console.log(this.tabIndexDir[child])
 
     enableFocusForNewChildrenByParent.call(this, child)
 
@@ -364,6 +368,9 @@ const Aria = {
       // return this.deselectRestaurant()
       //
     }
+
+    console.log(parent)
+    console.log(newParent)
 
     enableFocusForNewChildrenByParent.call(this, newParent)
     
@@ -399,6 +406,10 @@ const Aria = {
   register: function(ariaObject) {
     const parent = ariaObject.ariaParent
     const child = ariaObject.ariaChild
+
+    if ( parent === 'rating') {
+      console.log(child)
+    }
 
     this.registerToChildDir(parent, child)
     this.registerToParentDir(parent, child)

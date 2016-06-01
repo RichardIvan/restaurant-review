@@ -106,14 +106,14 @@ const fm = function(parent) {
               config: tileConfig.bind(null,
                 {
                   ariaParent: parent,
-                  ariaChild: tileType
+                  ariaChild: tileType.toLowerCase()
                 }
               )
             },
             {
               customAttrs: {
-                'data-aria-id': `${parent} ${tileType}`,
-                tabIndex: Aria.tabIndexDir[parent] ? Aria.tabIndexDir[parent][tileType] : -1
+                'data-aria-id': `${parent} ${tileType.toLowerCase()}`,
+                tabIndex: Aria.tabIndexDir[parent] ? Aria.tabIndexDir[parent][tileType.toLowerCase()] : -1
               }
             },
             {
@@ -124,6 +124,9 @@ const fm = function(parent) {
                 onkeyup: (e) => {
                   if(e.keyCode === 13) {
                     handleMiniButtonClick.call(ctrl, tileType.toLowerCase())
+                  } else if ( e.keyCode === 27) {
+                    ctrl.clickedFilterSection('')
+                    ctrl.open(false)
                   }
                 }
               }
@@ -142,7 +145,7 @@ const filterButtonConfig = function(ariaObject, el, init) {
 }
 
 const DesktopFilter = {
-  controller( { restaurants, unfilteredRestaurants ,categories } ) {
+  controller( { restaurants, unfilteredRestaurants, categories } ) {
     const Ctrl = {
       open: m.prop(false),
       clickedFilterSection: m.prop(''),

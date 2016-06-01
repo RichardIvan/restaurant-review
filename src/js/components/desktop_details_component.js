@@ -19,7 +19,9 @@ import Aria from '../services/aria.js'
 //styles
 import style from '../../css/desktop-details.scss'
 
-import fab from 'polythene/fab/fab'
+import fab from '../polythene/fab.js'
+
+// import fab from 'polythene/fab/fab'
 import editIcon from 'mmsvg/google/msvg/editor/mode-edit'
 import doneIcon from 'mmsvg/google/msvg/action/done'
 import clearIcon from 'mmsvg/google/msvg/content/clear'
@@ -89,10 +91,48 @@ const handleWritingFabClick = function(type) {
   }
 }
 
-const writingMainActionButton = function(type) {
+const writingButtonConfig = function(ariaObject, el, inited) {
+  if(!inited) {
+    Aria.register(ariaObject)
+    Aria.register({
+      ariaParent: 'writing-section',
+      ariaChild: 'edit-button'
+    })
+    Aria.register({
+      ariaParent: 'writing-section',
+      ariaChild: 'done'
+    })
+  }
+}
+
+const writingMainActionButton = function(type, ariaParent) {
   const ctrl = this
 
   const icon = (type === 'edit') ? editIcon : doneIcon
+  // let icon
+  const ariaChild = 'writing-section'
+
+  console.log(ariaParent)
+  console.log(ariaChild)
+
+  // if (type === 'edit') {
+  //   icon = editIcon
+  // } else {
+  //   icon = doneIcon
+  // }
+
+  let wActiveAriaParent
+  let wActiveAriaChild
+
+  if(ctrl.writingActive()) {
+    wActiveAriaParent = 'writing-section'
+    wActiveAriaChild = `${type}-button`
+
+    // Aria.register({
+    //   ariaParent: wActiveAriaParent,
+    //   ariaChild: wActiveAriaChild
+    // })
+  }
   
   return m.component(fab, {
     icon: {
@@ -100,13 +140,51 @@ const writingMainActionButton = function(type) {
     },
     class: [style['writing-action-button'], style[type]].join(' '),
     events: {
-      onclick: handleWritingFabClick.bind(ctrl, type)
+      onclick: handleWritingFabClick.bind(ctrl, type),
+      onkeyup: (e) => {
+        console.log('totally keyup')
+        console.log(e)
+        if(e.keyCode === 13) {
+          e.stopPropagation()
+          handleWritingFabClick.call(ctrl, type)
+          if ( wActiveAriaParent === undefined) {
+            Aria.select(ariaParent, ariaChild, e)
+            console.log(Aria.tabIndexDir)
+          } else {
+            Aria.select(wActiveAriaParent, wActiveAriaChild, e)
+          }
+          // ctrl.writingActive() ? Aria.select(wActiveAriaParent, wActiveAriaChild, e) : Aria.select(ariaParent, ariaChild, e)
+          
+        }
+      }
+    },
+    config: writingButtonConfig.bind(ctrl,
+      {
+        ariaParent,
+        ariaChild
+      }
+    ),
+    customAttrs: {
+      'data-aria-id': ctrl.writingActive() ? `${wActiveAriaParent} ${wActiveAriaChild}` : `${ariaParent} ${ariaChild}`,
+      tabIndex: ctrl.writingActive() ? Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[wActiveAriaParent][wActiveAriaChild] : -1 : Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1
     }
   })
 }
 
 const cancelButtonConfig = (el, inited) => {
   if(!inited) {
+
+    //this is registration for clear button
+    // this needs to be registered in the outer div, so it is
+    // ready to have the tabIndex changed properly
+    const ariaParent = 'writing-section'
+    const ariaChild = 'clear-button'
+
+    Aria.register({
+      ariaParent,
+      ariaChild
+    })
+
     el.style.transition = 'opacity .3s ease-in-out'
     setTimeout(() => {
       el.style.opacity = 1
@@ -116,6 +194,10 @@ const cancelButtonConfig = (el, inited) => {
 
 const cancelActionButton = function() {
   const ctrl = this
+
+  const ariaParent = 'writing-section'
+  const ariaChild = 'clear-button'
+
   return m.component(fab, {
     icon: {
       msvg: clearIcon
@@ -123,7 +205,26 @@ const cancelActionButton = function() {
     mini: true,
     class: style['cancel-action-button-mini'],
     events: {
-      onclick: handleClearClick.bind(ctrl)
+      onclick: handleClearClick.bind(ctrl),
+      onkeyup: (e) => {
+        console.log('totally keyup')
+        console.log(e)
+        e.stopPropagation()
+        if(e.keyCode === 13) {
+          const evt = {
+            keyCode: 27,
+            target: {
+              attributes: e.target.attributes
+            }
+          }
+          handleClearClick.call(ctrl)
+          Aria.handleAriaKeyPress(evt)
+        }
+      }
+    },
+    customAttrs: {
+      'data-aria-id': `${ariaParent} ${ariaChild}`,
+      tabIndex: 0
     }
   })
 }
@@ -221,17 +322,17 @@ const DD = {
           {
             style: {
               right: `${dimensionsHelper.getDimensions('list-container').width() + 44 }px`
-            },
-            config: desktopFabButtonConfig.bind(null,
-              {
-                ariaParent: ariaChild,
-                ariaChild: 'write-review-fab-button'
-              }
-            ),
-            tabIndex: Aria.tabIndexDir[ariaChild] ? Aria.tabIndexDir[ariaChild]['write-review-fab-button'] : -1
+            }
+            // config: desktopFabButtonConfig.bind(null,
+            //   {
+            //     ariaParent: ariaChild,
+            //     ariaChild: 'write-review-fab-button'
+            //   }
+            // ),
+            // tabIndex: Aria.tabIndexDir[ariaChild] ? Aria.tabIndexDir[ariaChild]['write-review-fab-button'] : -1
           },
           [
-            ctrl.review().valid() ? writingMainActionButton.call(ctrl, 'done') : writingMainActionButton.call(ctrl, 'edit'),
+            ctrl.review().valid() ? writingMainActionButton.call(ctrl, 'done', ariaChild) : writingMainActionButton.call(ctrl, 'edit', ariaChild),
             // cancel fab is displaying with little delay, 
             // set in config
             ctrl.writingActive() ?

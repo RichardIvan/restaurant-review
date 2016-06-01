@@ -5,6 +5,13 @@ import m from 'mithril'
 import _ from 'lodash'
 import Velocity from 'velocity-animate'
 
+
+//helpers
+import 'polythene/common/object.assign';
+
+//services
+import Aria from '../services/aria.js'
+
 //stles
 import style from '../../css/filter.scss'
 
@@ -40,6 +47,12 @@ const categoryClickHandler = function(category) {
   ctrl.filter.add('category', category.name())
 }
 
+const rowConfig = function(ariaObject, el, init) {
+  if(!init) {
+    Aria.register(ariaObject)
+  }
+}
+
 const renderOptions = function(menuType) {
   const ctrl = this
 
@@ -47,6 +60,9 @@ const renderOptions = function(menuType) {
   let clickHandler
   let cls
   let rows
+  const ariaParent = ctrl.clickedFilterSection()
+  console.log(ariaParent)
+  const aChild = `${menuType}-row`
   if (menuType === 'rating') {
     icon = starIcon
     clickHandler = ratingClickHandler
@@ -63,24 +79,80 @@ const renderOptions = function(menuType) {
     _.map(rows(), (activeStatus, index) => {
       const numberOfIcons = index + 1
       const iconsArr = new Array(numberOfIcons)
-      return m(`li.${style['menu-row']}`, { key: index, onclick: clickHandler.bind(ctrl, index) }, [
-        m(`ul`, { class: activeStatus() ? `${style['filter--active']}` : '' } ,[
-          _.map(iconsArr, (_, i) => {
-            if (i === 3)
-              return m(`li.${style['plus-icon']}`, { key: i }, m('span', plusIcon))
-            return m(`li.${cls}`, { key: i }, m('span', icon))
-          })
-      ])])
+      return m(`li.${style['menu-row']}`, Object.assign(
+          {
+            key: index,
+            onclick: clickHandler.bind(ctrl, index),
+            onkeyup: (e) => {
+              if(e.keyCode === 13) {
+                clickHandler.call(ctrl, index)
+              } else if (e.keyCode === 27) {
+                ctrl.clickedFilterSection('')
+              }
+            }
+          },
+          {
+            config: rowConfig.bind(ctrl,
+              {
+                ariaParent,
+                ariaChild: `${aChild}-${index}`
+              })
+          },
+          {
+            'data-aria-id': `${ariaParent} ${aChild}-${index}`,
+            tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][`${aChild}-${index}`] : -1,
+          }
+        ),
+        [
+          m(`ul`, 
+            { 
+              class: activeStatus() ? `${style['filter--active']}` : ''
+            },
+            [
+              _.map(iconsArr, (nothing, i) => {
+                if (i === 3)
+                  return m(`li.${style['plus-icon']}`, { key: i }, m('span', plusIcon))
+                return m(`li.${cls}`, { key: i }, m('span', icon))
+              })
+            ]
+          )
+        ])
     })
   ])
 } 
 
 const renderTypeMenu = function() {
   const ctrl = this
-
+  const ariaParent = ctrl.clickedFilterSection()
+  const aChild = `${ctrl.clickedFilterSection()}-row`
   return m(`ul.${style['food-menu']}`, [
-    _.map(ctrl.categories(), (category) => {
-      return m(`li.${style['menu-row']}`, { onclick: categoryClickHandler.bind(ctrl,category) }, m('span', { class: category.active() ? `${style['active']}` : '' }, category.name()))
+    _.map(ctrl.categories(), (category, index) => {
+      return m(`li.${style['menu-row']}`,
+        { 
+          onclick: categoryClickHandler.bind(ctrl, category),
+          onkeyup: (e) => {
+            if(e.keyCode === 13) {
+              categoryClickHandler.call(ctrl, category)
+            } else if( e.keyCode === 27) {
+              ctrl.clickedFilterSection('')
+            }
+          },
+          'data-aria-id': `${ctrl.clickedFilterSection()} ${ctrl.clickedFilterSection()}-row-${index}`,
+            tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][`${aChild}-${index}`] : -1,
+          config: rowConfig.bind(ctrl,
+            {
+              ariaParent,
+              ariaChild: `${aChild}-${index}`
+            }
+          )
+        },
+        m('span',
+          {
+            class: category.active() ? `${style['active']}` : ''
+          },
+          category.name()
+        )
+      )
     })
   ])
 
@@ -115,9 +187,9 @@ const renderFilterMenu = function(args) {
       id: 'filter-menu'
     },
     [
-      (ctrl.clickedFilterSection() === 'rating') ? renderOptions.call(ctrl, 'rating') : '',
-      (ctrl.clickedFilterSection() === 'type') ? renderTypeMenu.call(ctrl) : '',
-      (ctrl.clickedFilterSection() === 'price') ? renderOptions.call(ctrl, 'price') : ''
+      (ctrl.clickedFilterSection() === 'rating') ? renderOptions.call(ctrl, 'rating') : null,
+      (ctrl.clickedFilterSection() === 'type') ? renderTypeMenu.call(ctrl) : null,
+      (ctrl.clickedFilterSection() === 'price') ? renderOptions.call(ctrl, 'price') : null
     ]
     )
 }

@@ -27,11 +27,19 @@
       color: #FCF7F4;
     }
 
+    .writing-action-button:focus   {
+      outline: -webkit-focus-ring-color auto 5px;
+    }
+
   }
 
   .desktop-cancel-writing {
     left: 8px;
     bottom: 72px;
-    position: absolute
+    position: absolute;
+  }
+
+  .desktop-cancel-writing > :global(a):focus {
+    outline: -webkit-focus-ring-color auto 5px;
   }
 }

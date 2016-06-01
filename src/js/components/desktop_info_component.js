@@ -19,7 +19,6 @@ const infoHeaderConfig = function(ariaObject, el, init) {
 
 const ariaConfig = function(ariaObject, el, init) {
   if(!init) {
-    console.log(ariaObject)
     Aria.register(ariaObject)
   }
 }
@@ -33,7 +32,7 @@ const constructAttributes = function(ariaParent, ariaChild) {
     onkeyup(e) {
       if (e.keyCode === 27) {
         ctrl.info.state.expanded(false)
-        Aria.handleAriaKeyPress(ariaParent, ariaChild, e)
+        Aria.back(ariaParent, ariaChild)
       }
     }
   }

@@ -109,17 +109,7 @@ const writingMainActionButton = function(type, ariaParent) {
   const ctrl = this
 
   const icon = (type === 'edit') ? editIcon : doneIcon
-  // let icon
   const ariaChild = 'writing-section'
-
-  console.log(ariaParent)
-  console.log(ariaChild)
-
-  // if (type === 'edit') {
-  //   icon = editIcon
-  // } else {
-  //   icon = doneIcon
-  // }
 
   let wActiveAriaParent
   let wActiveAriaChild
@@ -127,11 +117,6 @@ const writingMainActionButton = function(type, ariaParent) {
   if(ctrl.writingActive()) {
     wActiveAriaParent = 'writing-section'
     wActiveAriaChild = `${type}-button`
-
-    // Aria.register({
-    //   ariaParent: wActiveAriaParent,
-    //   ariaChild: wActiveAriaChild
-    // })
   }
   
   return m.component(fab, {
@@ -142,8 +127,6 @@ const writingMainActionButton = function(type, ariaParent) {
     events: {
       onclick: handleWritingFabClick.bind(ctrl, type),
       onkeyup: (e) => {
-        console.log('totally keyup')
-        console.log(e)
         if(e.keyCode === 13) {
           e.stopPropagation()
           handleWritingFabClick.call(ctrl, type)
@@ -153,8 +136,6 @@ const writingMainActionButton = function(type, ariaParent) {
           } else {
             Aria.back(wActiveAriaParent, wActiveAriaChild, e)
           }
-          // ctrl.writingActive() ? Aria.select(wActiveAriaParent, wActiveAriaChild, e) : Aria.select(ariaParent, ariaChild, e)
-          
         }
       }
     },

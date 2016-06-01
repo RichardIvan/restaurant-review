@@ -266,30 +266,18 @@ const Aria = {
   },
 
   handleAriaKeyPress: function(e) {
-    console.log(e)
 
-    const nodeAttributes = e.target.attributes
+    const nodeAttributes =  e.target.attributes
     const attribute = extractAttribute(nodeAttributes, 'data-aria-id')
 
 
     if(!attribute)
       return
 
-    console.log(attribute)
-
     const attributeValues = attribute.value.split(' ')
     const [parent, child] = attributeValues
-
-    console.log('PARENT')
-    console.log(parent)
-
-    console.log('CHILD')
-    console.log(child)
     
-    // e.stopPropagation()
     const ctrl = this
-//     console.log('key pressed')
-//     console.log(e)    
     switch(e.keyCode) {
       case 13:
         console.log('pressed enter')
@@ -321,32 +309,18 @@ const Aria = {
     const el = document.querySelector(`[data-aria-id^='${elementToFocus}']`)
     el.focus()
   },
-  deselectRestaurant() {
-    const restaurantToSelect = this.selectedRestaurant()
-
-
-
-    this.selectedRestaurant({})
-  },
   select(parent, child) {
-    console.log(parent)
-    console.log(this.parentsDir[parent])
-    console.log(child)
-    console.log(hasChildren.call(this, child))
 
     if(!hasChildren.call(this, child))
       return
 
     disableFocusForChildrenByParent.call(this, parent)
 
-    console.log(this.tabIndexDir[child])
-
     enableFocusForNewChildrenByParent.call(this, child)
 
     m.redraw()
 
     const el = document.querySelector(`[data-aria-id^='${child}']`)
-    console.log(el)
     el.focus()
     
   },
@@ -369,15 +343,11 @@ const Aria = {
       //
     }
 
-    console.log(parent)
-    console.log(newParent)
-
     enableFocusForNewChildrenByParent.call(this, newParent)
     
     m.redraw()
 
     const el = document.querySelector(`[data-aria-id$=${!condition ? parent : newChild}]`)
-    console.log(el)
     el.focus()
   },
   tabIndex: function(parent, child) {

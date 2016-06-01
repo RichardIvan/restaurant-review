@@ -20,7 +20,7 @@
 
   margin: 8px 8px 0 8px;
   
-  color: #DEDEDE;
+  color: #FFF;
 
   overflow: hidden;
 
@@ -122,13 +122,15 @@
   height: 100%;
 }
 
-.heading-background1, .address-heading-background1, .rating-background1 {  
-  background-image: linear-gradient(90deg, #000000 100%, #000000 78%);
-  opacity: 0.4
+.heading-background1, .address-heading-background1, .rating-background1 {
+  background: #181614;
+  // background-image: linear-gradient(90deg, #000000 100%, #000000 78%);
+  // opacity: 0.4
 }
-.heading-background2, .address-heading-background2, .rating-background2 {  
-  background-image: linear-gradient(90deg, #000000 0%, #D8D8D8 45%);
-  opacity: 0.3
+.heading-background2, .address-heading-background2, .rating-background2 { 
+  background: #181614;
+  // background-image: linear-gradient(90deg, #000000 0%, #D8D8D8 45%);
+  // opacity: 0.3
 }
 
 .address-heading-background1, .address-heading-background2, .heading-container h3 {

@@ -41,11 +41,15 @@ const PhotosComponent = {
           m(`.${style['photo']}`,
             {
               style: {
-                backgroundImage: `url('${photo.prefix}${d.width()}x${d.height()}${photo.suffix}')`,
                 height: `${d.height() - 32}px`,
                 width: `${d.width() - 32}px`
               }
-            }
+            },
+            m('img',
+              {
+                src: `${photo.prefix}${d.width()}x${d.height()}${photo.suffix}`
+              }
+            )
           ) : ''
       ])
   }

@@ -8,4 +8,10 @@
   .photo {
     background: white;
   }
+
+  :global(img) {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
 }

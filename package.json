@@ -8,7 +8,7 @@
     "build": "webpack --config webpack.config.prod.js",
     "dev": "webpack-dev-server --inline --hot --config webpack.config.dev.js",
     "lint": "eslint src",
-    "serve": "node --harmony_destructuring server.js -p 3000"
+    "serve": "node --harmony_destructuring ./server.js -p 1337"
   },
   "repository": {
     "type": "git",

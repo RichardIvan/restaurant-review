@@ -8,7 +8,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   // devtool: 'source-map',
   entry: {
-    s: './src/js/s.js',
+    // s: './src/js/s.js',
     index: './src/js/index.js'
   },
   output: {
@@ -51,7 +51,7 @@ module.exports = {
       include: path.join(__dirname, 'src')
     },
     {
-      test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'
+      test: /\.(png|jpg|ttf)$/, loader: 'url-loader?limit=8192'
     }],
     postcss: [
       require('postcss-cssnext'),

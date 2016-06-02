@@ -20,7 +20,7 @@ module.exports = {
     // 'dev-server': 'webpack-dev-server/client?http://localhost:8080',
     // 'dev-server': 'webpack-dev-server/client?http://localhost:8080/',
     // 'hot-dev-server': 'webpack/hot/dev-server',
-    s: './src/js/s.js',
+    // s: './src/js/s.js',
     index: './src/js/index.js'
     // common: [
     //   'lodash'

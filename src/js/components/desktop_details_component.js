@@ -147,7 +147,10 @@ const writingMainActionButton = function(type, ariaParent) {
     ),
     customAttrs: {
       'data-aria-id': ctrl.writingActive() ? `${wActiveAriaParent} ${wActiveAriaChild}` : `${ariaParent} ${ariaChild}`,
-      tabIndex: ctrl.writingActive() ? Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[wActiveAriaParent][wActiveAriaChild] : -1 : Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1
+      tabIndex: ctrl.writingActive() ? Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[wActiveAriaParent][wActiveAriaChild] : -1 : Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
+      role: 'button',
+      'aria-label': ctrl.writingActive() ? wActiveAriaChild : ariaChild,
+      title: ctrl.writingActive() ? wActiveAriaChild : ariaChild
     }
   })
 }

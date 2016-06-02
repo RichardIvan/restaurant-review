@@ -156,7 +156,7 @@ const InfoComponent = {
                       id: `${openingHoursTitle}-description`
                     },
                     [
-                      _.map(openingHours, (line) => m(`li.${style['time']}`, line))
+                      _.map(openingHours, (line) => m(`li`, line))
                     ]
                   )
                 )

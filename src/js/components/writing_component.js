@@ -75,7 +75,7 @@ const createView = (ctrl, args) => {
 
   const content = [
 
-    m(`.${style['name-section']}`, [
+    m(`.`, [
 
       m.component(textfield, {
         label: 'Your name',

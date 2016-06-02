@@ -53,12 +53,12 @@ const renderReview = (ariaObject, review, indexDB) => {
       ]),
       m(`.${style['line-two']}`, [
         m(`.${style['clear']}`),
-        m(`ul.${style['user-stars']}`, _.map(renderStars(review.rating), (star, i) => {
+        m(`ul`, _.map(renderStars(review.rating), (star, i) => {
           switch(star) {
             case true:
-              return m(`li.${style['star']}`, { key: i }, fullStar)
+              return m(`li`, { key: i }, fullStar)
             case false:
-              return m(`li.${style['star']}`, { key: i }, emptyStar)
+              return m(`li`, { key: i }, emptyStar)
           }
         })),
         m(`p`, review.text) 

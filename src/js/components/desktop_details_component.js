@@ -132,8 +132,9 @@ const writingMainActionButton = function(type, ariaParent) {
           handleWritingFabClick.call(ctrl, type)
           if ( wActiveAriaParent === undefined) {
             Aria.select(ariaParent, ariaChild, e)
-            console.log(Aria.tabIndexDir)
           } else {
+            if (wActiveAriaChild === 'edit-button')
+              return
             Aria.back(wActiveAriaParent, wActiveAriaChild, e)
           }
         }
@@ -149,8 +150,8 @@ const writingMainActionButton = function(type, ariaParent) {
       'data-aria-id': ctrl.writingActive() ? `${wActiveAriaParent} ${wActiveAriaChild}` : `${ariaParent} ${ariaChild}`,
       tabIndex: ctrl.writingActive() ? Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[wActiveAriaParent][wActiveAriaChild] : -1 : Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
       role: 'button',
-      'aria-label': ctrl.writingActive() ? wActiveAriaChild : ariaChild,
-      title: ctrl.writingActive() ? wActiveAriaChild : ariaChild
+      'aria-label': ctrl.writingActive() ? wActiveAriaChild : 'Write Review',
+      title: ctrl.writingActive() ? wActiveAriaChild : 'Write Review'
     }
   })
 }

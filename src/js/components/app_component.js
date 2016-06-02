@@ -252,7 +252,7 @@ const App = {
             unfilteredRestaurants: ctrl.unfilteredRestaurants,
             categories: ctrl.categories,
             detailsOpen: ctrl.detailsOpen
-          } ) : '',
+          } ) : null,
         // !ctrl.detailsOpen() ? 
         //    : '',
         ctrl.restaurants().length === 0 ?
@@ -265,7 +265,7 @@ const App = {
               ]),
               m('')
             ]
-          ) : ''
+          ) : null
         //HERE WE NEED A DETAIL COMPONENT AFTER ITEM BEING CLICKED
       ]
     )

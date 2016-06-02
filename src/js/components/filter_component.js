@@ -102,7 +102,7 @@ const typeActionButton = function() {
     class: classnames(style['filter-action-button-mini'], ctrl.filter.status('category') ? style['type-fab--active'] : '' ),
     mini: true,
     events: {
-      onclick: handleMiniButtonClick.bind(ctrl, 'type')
+      onclick: handleMiniButtonClick.bind(ctrl, 'category')
     }
   });
 }

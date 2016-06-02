@@ -30,7 +30,7 @@ View demo in the browser at 'http://localhost:1337'
 
 ## Aria Navigation
 
-To navigate the page, use Tab, Shift + Tab, Enter and Esc keys.
+To navigate the page using only keyboard, use Tab, Shift + Tab, Enter and Esc keys.
  
 ## License
 

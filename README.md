@@ -1,5 +1,5 @@
 # Restaurant Review App
-Udacity project #no. 3 - Restaurant review project focusing on accessibility
+Udacity project #no. 3 - Restaurant review project focusing on accessibility. All reviews data and images are were constructed by combining Foursquare and Google places api calls.
 
 ## Features & Technologies
 

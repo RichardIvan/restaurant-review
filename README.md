@@ -10,6 +10,7 @@ Udacity project #no. 3 - Restaurant review project focusing on accessibility
 * Accessibility
 * HTML 5
 * Mithril
+* Firebase
 
 
 ## Installation

@@ -32,13 +32,19 @@ const reviewConfig = function(ariaObject, el, init) {
 }
 
 const renderReview = (ariaObject, review, indexDB) => {
+
+  const ariaTitle = `Review by ${review.author_name} with rating of ${review.rating} stars. Date of writing: ${moment(review.time * 1000).format('dddd, MMMM Do, YYYY')}: ${review.text}`
+
   return m(`li.${style['review-item']}.single-review`,
     {
       key: review.time,
       config: reviewConfig.bind(null, ariaObject),
       'data-aria-id': `${ariaObject.ariaParent} ${ariaObject.ariaChild}`,
       tabIndex: Aria.tabIndexDir[ariaObject.ariaParent] ? Aria.tabIndexDir[ariaObject.ariaParent][ariaObject.ariaChild] : -1,
-      // onkeyup: Aria.handleAriaKeyPress.bind(null, ariaObject.ariaParent, ariaObject.ariaChild)
+      // onkeyup: Aria.handleAriaKeyPress.bind(null, ariaObject.ariaParent, ariaObject.ariaChild),
+      role: 'listitem',
+      'title': ariaTitle,
+      'aria-label': ariaTitle
     },
     [
       m(`.${style['line-one']}`, [
@@ -79,13 +85,16 @@ const ReviewsComponent = {
         ),
         'data-aria-id': `${ariaParent} ${ariaChild}`,
         tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
+        role: 'list',
+        'title': 'Reviews',
+        'aria-labelledby': 'reviews-title'
         // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild)
       },
       [
         m(`.${style['reviews-heading']}`,
           [
             m(`.${style['flex']}`),
-            m(`h3`, 'Reviews'),
+            m(`h3`, { id: 'reviews-title'}, 'Reviews'),
             m(`.${style['flex']}`)
           ]
         ),

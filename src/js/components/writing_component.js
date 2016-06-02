@@ -7,7 +7,7 @@ import dimensionsHelper from '../helpers/screen-dimensions.js'
 
 
 //POLYTHENE
-import textfield from 'polythene/textfield/textfield';
+import textfield from '../polythene/textfield.js';
 
 import style from '../../css/writing_component.scss'
 
@@ -92,7 +92,12 @@ const createView = (ctrl, args) => {
         // maxlength: 3,
         min: 0,
         max: 255,
-        hideValidation: true // don't show red line
+        hideValidation: true, // don't show red line
+        customAttrs: {
+          role: 'textbox',
+          'aria-label': 'Name',
+          title: 'Name'
+        }
       })
 
     ]),
@@ -112,7 +117,12 @@ const createView = (ctrl, args) => {
         // maxlength: 3,
         min: 0,
         max: 255,
-        hideValidation: true // don't show red line,
+        hideValidation: true, // don't show red line,
+        customAttrs: {
+          role: 'textbox',
+          'aria-label': 'Review Text',
+          title: 'Review Text'
+        }
       })
     ]),
 
@@ -134,7 +144,8 @@ const createView = (ctrl, args) => {
                   }
                 },
                 key: index,
-                tabIndex: 0
+                tabIndex: 0,
+
                 // config: () => {
                 //   Aria.register({
                 //     ariaParent: 'writing-section',

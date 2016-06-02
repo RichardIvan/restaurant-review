@@ -131,32 +131,43 @@ const createView = (ctrl, args) => {
         top: (dimensionsHelper.getDimensions('desktop-details-container')) ? `${dimensionsHelper.getDimensions('desktop-details-container').height() - 24}px` : ''
       },
       [
-        m(`ul`, [
-          _.map(ctrl.stars(), (star, index) => {
-            return m(`li.${style['star']}`,
-              { 
-                class: star() ? `${style['selected']}` : '',
-                onclick: handleStarClick.bind(ctrl, index),
-                onkeyup: (e) => {
-                  e.stopPropagation()
-                  if(e.keyCode === 13) {
-                    handleStarClick.call(ctrl, index)
-                  }
-                },
-                key: index,
-                tabIndex: 0,
+        m(`ul`, 
+          {
+            role: 'radiogroup',
+            'aria-owns': 'star-0 star-1 star-2 star-3 star-4 star-5'
+          },
+          [
+            _.map(ctrl.stars(), (star, index) => {
+              return m(`li.${style['star']}`,
+                { 
+                  class: star() ? `${style['selected']}` : '',
+                  onclick: handleStarClick.bind(ctrl, index),
+                  onkeyup: (e) => {
+                    e.stopPropagation()
+                    if(e.keyCode === 13) {
+                      handleStarClick.call(ctrl, index)
+                    }
+                  },
+                  key: index,
+                  id: `star-${index}`,
+                  tabIndex: 0,
+                  role: 'radio',
+                  'aria-checked': star() ? true : false,
+                  'aria-label': `${index + 1} star${index > 0 ? 's' : ''}`,
+                  title: `${index + 1} star${index > 0 ? 's' : ''}`
 
-                // config: () => {
-                //   Aria.register({
-                //     ariaParent: 'writing-section',
-                //     ariaChild: `star-${index + 1}`
-                //   })
-                // }
-              },
-              starIcon
-            )
-          })
-        ])
+                  // config: () => {
+                  //   Aria.register({
+                  //     ariaParent: 'writing-section',
+                  //     ariaChild: `star-${index + 1}`
+                  //   })
+                  // }
+                },
+                starIcon
+              )
+            })
+          ]
+        )
       ]
     )
 

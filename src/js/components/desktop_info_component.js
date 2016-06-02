@@ -23,20 +23,24 @@ const ariaConfig = function(ariaObject, el, init) {
   }
 }
 
-const constructAttributes = function(ariaParent, ariaChild) {
+const constructAttributes = function(ariaParent, ariaChild, content) {
   const ctrl = this
 
   let title
 
   switch(ariaChild) {
     case 'address':
-      title = ctrl.data.address
+      title = content
       break
     case 'opening-hours':
-      title = ctrl.data.openingHours.join(', ')
+      if(typeof content === 'string') {
+        title = content
+        break
+      }
+      title = content.join(', ')
       break
     default:
-      title = ctrl.data.categories.join(', ')
+      title = content.join(', ')
       break
   }
   return {
@@ -62,8 +66,7 @@ const InfoComponent = {
         state: {
           expanded: m.prop(false)
         }
-      },
-      data: args
+      }
     }
   },
   view(ctrl, { address, openingHours, priceTier, categories, ariaParent, ariaChild }) {
@@ -122,7 +125,7 @@ const InfoComponent = {
           },
           [
             m(`.${style[addressTitle]}`,
-              constructAttributes.call(ctrl, ariaChild, addressTitle),
+              constructAttributes.call(ctrl, ariaChild, addressTitle, address),
               [
                 m(`.${style['label']}`, { id: `${addressTitle}-description-label` },'Address'),
                 m(`.${style['info']}`,
@@ -144,7 +147,7 @@ const InfoComponent = {
               ]
             ),
             m(`.${style[openingHoursTitle]}`,
-              constructAttributes.call(ctrl, ariaChild, openingHoursTitle),
+              constructAttributes.call(ctrl, ariaChild, openingHoursTitle, openingHours),
               [
                 m(`.${style['label']}`, { id: `${openingHoursTitle}-description-label` }, 'Opening Hours'),
                 m(`.${style['info']}`,
@@ -160,8 +163,8 @@ const InfoComponent = {
               ]
               
             ),
-            m(`.${style['categories']}`,
-              constructAttributes.call(ctrl, ariaChild, 'categories'),
+            m(`.${style[categoriesTitle]}`,
+              constructAttributes.call(ctrl, ariaChild, categoriesTitle, categories),
               [
                 m(`.${style['label']}`, { id: `${categoriesTitle}-description-label` },'Categories'),
                 m(`.${style['info']}`,

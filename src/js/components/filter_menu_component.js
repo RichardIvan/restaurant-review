@@ -107,7 +107,8 @@ const renderOptions = function(menuType) {
             'role': 'menuitem',
             'title': `use ${anncouncement} rating filter of ${numberOfIcons} ${numberOfIcons > 3 ? 'or more' : ''}. Filter is ${activeStatus() ? '' : 'not'} applied`,
             'aria-label': `use ${anncouncement} rating filter of ${numberOfIcons} ${numberOfIcons > 3 ? 'or more' : ''}. Filter is ${activeStatus() ? '' : 'not'} applied`,
-            'aria-checked': activeStatus() ? true : false
+            'aria-checked': activeStatus() ? true : false,
+            'aria-selected': activeStatus() ? true : false
           }
         ),
         [

@@ -184,7 +184,8 @@ const App = {
               }
             ),
             role: 'region',
-            'aria-labelledby': 'h3-region-label aria-select-control-description'
+            'aria-labelledby': 'h3-region-label aria-select-control-description',
+            title: `Restaurant Listing, ${Aria.announcements.selectAnnouncement}, ${Aria.announcements.backAnnouncement}`
           },
           [ 
             dimensionsHelper.isDesktop() ?

@@ -274,7 +274,8 @@ const DD = {
         'data-aria-id': `${ariaParent} ${ariaChild}`,
         tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
         role: 'main',
-        'aria-labelledby': 'aria-select-control-description'
+        'aria-label': `Restaurant Details of ${restaurant.name}, ${Aria.announcements.selectAnnouncement}, ${Aria.announcements.backAnnouncement}`,
+        title: `Restaurant Details of ${restaurant.name}, ${Aria.announcements.selectAnnouncement}, ${Aria.announcements.backAnnouncement}`
         // onkeyup: Aria.handleAriaKeyPress.bind(ctrl, ariaParent, ariaChild)
       },
       [

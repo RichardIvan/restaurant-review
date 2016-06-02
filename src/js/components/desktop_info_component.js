@@ -34,7 +34,9 @@ const constructAttributes = function(ariaParent, ariaChild) {
         ctrl.info.state.expanded(false)
         Aria.back(ariaParent, ariaChild)
       }
-    }
+    },
+    'role': 'listitem',
+    'aria-labelledby': `${ariaChild}-description`
   }
 }
 
@@ -49,9 +51,15 @@ const InfoComponent = {
     }
   },
   view(ctrl, { address, openingHours, priceTier, categories, ariaParent, ariaChild }) {
+
+    const addressTitle = 'address'
+    const openingHoursTitle = 'opening-hours'
+    const categoriesTitle = 'categories'
+
     return m(`.${style['desktop-info-container']}`,
       {
-        
+        'role': 'group',
+        'aria-expanded': ctrl.info.state.expanded() ? true : false
       },
       [
         m(`.${style['header']}`,
@@ -97,21 +105,41 @@ const InfoComponent = {
             class: ctrl.info.state.expanded() ? `${style['open']} ${style['visible']}` : ''
           },
           [
-            m(`.${style['address']}`,
-              constructAttributes.call(ctrl, ariaChild, 'address'),
+            m(`.${style[addressTitle]}`,
+              constructAttributes.call(ctrl, ariaChild, addressTitle),
               [
                 m(`.${style['label']}`, 'Address'),
                 m(`.${style['info']}`,
-                  m(`ul`, _.map(address.split(','), (line) => m(`li`, line)))
+                  m(`ul`,
+                    {
+                      id: `${addressTitle}-description`
+                    },
+                    [
+                      _.map(address.split(','),
+                        (line) => {
+                          return m(`li`,
+                            line
+                          )
+                        }
+                      )
+                    ]
+                  )
                 )
               ]
             ),
-            m(`.${style['opening-hours']}`,
-              constructAttributes.call(ctrl ,ariaChild, 'opening-hours'),
+            m(`.${style[openingHoursTitle]}`,
+              constructAttributes.call(ctrl, ariaChild, openingHoursTitle),
               [
                 m(`.${style['label']}`, 'Opening Hours'),
                 m(`.${style['info']}`,
-                  m(`ul`, _.map(openingHours, (line) => m(`li.${style['time']}`, line)))
+                  m(`ul`,
+                    {
+                      id: `${openingHoursTitle}-description`
+                    },
+                    [
+                      _.map(openingHours, (line) => m(`li.${style['time']}`, line))
+                    ]
+                  )
                 )
               ]
               
@@ -121,7 +149,17 @@ const InfoComponent = {
               [
                 m(`.${style['label']}`, 'Categories'),
                 m(`.${style['info']}`,
-                  m(`ul`, _.map(categories, (line) => m(`li`, line)))
+                  {
+                    id: `${openingHoursTitle}-description`
+                  },
+                  [
+                    m(`ul`,
+                      [
+                        _.map(categories, (line) => m(`li`, line))
+                      ]
+                    )
+                  ]
+                  
                 )
               ]
               

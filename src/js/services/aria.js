@@ -266,7 +266,8 @@ const Aria = {
   },
 
   announcements: {
-    selectAnnouncement: 'select item by pressing enter'
+    selectAnnouncement: 'select item by pressing enter',
+    backAnnouncement: 'go back by pressing escape'
   },
 
   handleAriaKeyPress: function(e) {

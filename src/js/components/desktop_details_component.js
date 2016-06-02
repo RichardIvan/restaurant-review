@@ -208,7 +208,10 @@ const cancelActionButton = function() {
     },
     customAttrs: {
       'data-aria-id': `${ariaParent} ${ariaChild}`,
-      tabIndex: 0
+      tabIndex: 0,
+      'role': 'button',
+      'aria-label': ariaChild,
+      'title': ariaChild
     }
   })
 }

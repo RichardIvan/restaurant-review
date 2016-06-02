@@ -25,6 +25,20 @@ const ariaConfig = function(ariaObject, el, init) {
 
 const constructAttributes = function(ariaParent, ariaChild) {
   const ctrl = this
+
+  let title
+
+  switch(ariaChild) {
+    case 'address':
+      title = ctrl.data.address
+      break
+    case 'opening-hours':
+      title = ctrl.data.openingHours.join(', ')
+      break
+    default:
+      title = ctrl.data.categories.join(', ')
+      break
+  }
   return {
     config: ariaConfig.bind(null, { ariaParent, ariaChild }),
     tabIndex: Aria.tabIndexDir[ariaParent] ? Aria.tabIndexDir[ariaParent][ariaChild] : -1,
@@ -36,18 +50,20 @@ const constructAttributes = function(ariaParent, ariaChild) {
       }
     },
     'role': 'listitem',
-    'aria-labelledby': `${ariaChild}-description`
+    'aria-labelledby': `${ariaChild}-description-label ${ariaChild}-description`,
+    'title': `${ariaChild}: ${title}`
   }
 }
 
 const InfoComponent = {
-  controller() {
+  controller(args) {
     return {
       info: {
         state: {
           expanded: m.prop(false)
         }
-      }
+      },
+      data: args
     }
   },
   view(ctrl, { address, openingHours, priceTier, categories, ariaParent, ariaChild }) {
@@ -108,7 +124,7 @@ const InfoComponent = {
             m(`.${style[addressTitle]}`,
               constructAttributes.call(ctrl, ariaChild, addressTitle),
               [
-                m(`.${style['label']}`, 'Address'),
+                m(`.${style['label']}`, { id: `${addressTitle}-description-label` },'Address'),
                 m(`.${style['info']}`,
                   m(`ul`,
                     {
@@ -130,7 +146,7 @@ const InfoComponent = {
             m(`.${style[openingHoursTitle]}`,
               constructAttributes.call(ctrl, ariaChild, openingHoursTitle),
               [
-                m(`.${style['label']}`, 'Opening Hours'),
+                m(`.${style['label']}`, { id: `${openingHoursTitle}-description-label` }, 'Opening Hours'),
                 m(`.${style['info']}`,
                   m(`ul`,
                     {
@@ -147,10 +163,10 @@ const InfoComponent = {
             m(`.${style['categories']}`,
               constructAttributes.call(ctrl, ariaChild, 'categories'),
               [
-                m(`.${style['label']}`, 'Categories'),
+                m(`.${style['label']}`, { id: `${categoriesTitle}-description-label` },'Categories'),
                 m(`.${style['info']}`,
                   {
-                    id: `${openingHoursTitle}-description`
+                    id: `${categoriesTitle}-description`
                   },
                   [
                     m(`ul`,

@@ -12,7 +12,7 @@ const Toolbar = {
   view(ctrl, { restaurants, categories, unfilteredRestaurants, ariaParent }) {
     return m(`.${style['toolbar-container']}`,
       {
-        role: 'banner'
+        role: 'toolbar'
       },
       [
         m(`.${style['flex']}`),

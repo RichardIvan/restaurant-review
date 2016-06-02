@@ -186,14 +186,17 @@ const DesktopFilter = {
           }
         },
         'role': 'menu',
-        'title': 'filter'
+        'title': `Filter ${Aria.announcements.selectAnnouncement}`,
+        'aria-label': `Filter ${Aria.announcements.selectAnnouncement}`,
+        'aria-haspopup': true
       },
       [
         m(`.${style['overlay']}`,
           {
             class: ctrl.open() ? `${style['open']}` : `${style['closed']}`,
             onclick: () => {
-              console.log('duck this')
+              ctrl.open(false)
+              ctrl.clickedFilterSection('')
             }
           }
         ),

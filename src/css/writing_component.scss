@@ -12,6 +12,10 @@
   .text-section :global(.pe-textfield__input-area:after) {
     opacity: 0 !important;
   }
+
+  :global(label.pe-textfield__label) {
+    color: #767676;
+  }
 }
 
 .rating-banner {

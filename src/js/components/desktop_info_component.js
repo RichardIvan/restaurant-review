@@ -55,7 +55,8 @@ const constructAttributes = function(ariaParent, ariaChild, content) {
     },
     'role': 'listitem',
     'aria-labelledby': `${ariaChild}-description-label ${ariaChild}-description`,
-    'title': `${ariaChild}: ${title}`
+    'title': `${ariaChild}: ${title}`,
+    'aria-hidden': ctrl.info.state.expanded() ? false : true
   }
 }
 
@@ -121,7 +122,8 @@ const InfoComponent = {
         ),
         m(`.${style['content']}`,
           {
-            class: ctrl.info.state.expanded() ? `${style['open']} ${style['visible']}` : ''
+            class: ctrl.info.state.expanded() ? `${style['open']} ${style['visible']}` : '',
+            role: 'list'
           },
           [
             m(`.${style[addressTitle]}`,

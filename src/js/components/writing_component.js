@@ -133,8 +133,7 @@ const createView = (ctrl, args) => {
       [
         m(`ul`, 
           {
-            role: 'radiogroup',
-            'aria-owns': 'star-0 star-1 star-2 star-3 star-4 star-5'
+            role: 'radiogroup'
           },
           [
             _.map(ctrl.stars(), (star, index) => {

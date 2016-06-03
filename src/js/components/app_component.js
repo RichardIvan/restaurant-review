@@ -134,7 +134,7 @@ const App = {
             id: 'aria-select-control-description',
             class: 'aria-hide'             
           },
-          'select item by pressing enter'
+          'select item by pressing enter key, go back by pressing escape key'
         ),
 
 
